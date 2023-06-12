@@ -8,3 +8,4 @@ about = "HTTP server which allow searchs on images ( via EXIF data )"
 
 [dependencies]
 clap = { version = "~4.3.3", features = ["derive"] }
+walkdir = "~2"

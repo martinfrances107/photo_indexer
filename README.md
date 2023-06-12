@@ -8,4 +8,12 @@ Provides a HTTP Server which provides searching of a images hold in local storag
 
 * A root directory is specified and the indexer collects data from all images from the root downwards.
 
+## Quick Start
+
+```console
+$ cargo run ./folder/ 8080
+$ brave http://localhost:8080/
+```
+
+brave is a web-browser, other browsers are availble!
 
