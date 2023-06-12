@@ -1,0 +1,10 @@
+[package]
+name = "photo_indexer"
+version = "0.1.0"
+edition = "2021"
+about = "HTTP server which allow searchs on images ( via EXIF data )"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+clap = { version = "~4.3.3", features = ["derive"] }
