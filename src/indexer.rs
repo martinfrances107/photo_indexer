@@ -9,9 +9,9 @@ use walkdir::DirEntry;
 use walkdir::WalkDir;
 
 #[derive(Debug)]
-struct DocLink {
-    de: DirEntry,
-    doc: String,
+pub(crate) struct DocLink {
+    pub de: DirEntry,
+    pub doc: String,
 }
 
 impl Display for DocLink {

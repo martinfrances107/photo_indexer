@@ -4,9 +4,12 @@ use photo_indexer::app::App;
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     use actix_files::Files;
-    use actix_web::*;
-    use leptos::*;
-    use leptos_actix::{generate_route_list, LeptosRoutes};
+    use actix_web::App;
+    use actix_web::HttpServer;
+    use leptos::get_configuration;
+    use leptos::view;
+    use leptos_actix::generate_route_list;
+    use leptos_actix::LeptosRoutes;
 
     let conf = get_configuration(None).await.unwrap();
     let addr = conf.leptos_options.site_addr;
@@ -40,20 +43,20 @@ pub fn main() {
     // see optional feature `ssg` instead
 }
 
-#[cfg(all(not(feature = "ssr"), feature = "csr"))]
-pub fn main() {
-    use leptos::*;
-    use leptos_start::app::*;
-    use wasm_bindgen::prelude::wasm_bindgen;
-    // a client-side main function is required for using `trunk serve`
-    // prefer using `cargo leptos serve` instead
-    // to run: `trunk serve --open --features ssg`
+// #[cfg(all(not(feature = "ssr"), feature = "csr"))]
+// pub fn main() {
+//     use leptos::*;
+//     use leptos_start::app::*;
+//     use wasm_bindgen::prelude::wasm_bindgen;
+//     // a client-side main function is required for using `trunk serve`
+//     // prefer using `cargo leptos serve` instead
+//     // to run: `trunk serve --open --features ssg`
 
-    console_error_panic_hook::set_once();
+//     console_error_panic_hook::set_once();
 
-    leptos::mount_to_body(move |cx| {
-        // note: for testing it may be preferrable to replace this with a
-        // more specific component, although leptos_router should still work
-        view! {cx, <App/> }
-    });
-}
+//     leptos::mount_to_body(move |cx| {
+//         // note: for testing it may be preferrable to replace this with a
+//         // more specific component, although leptos_router should still work
+//         view! {cx, <App/> }
+//     });
+// }

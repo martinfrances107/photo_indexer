@@ -1,6 +1,17 @@
-use leptos::*;
-use leptos_meta::*;
-use leptos_router::*;
+use leptos::component;
+use leptos::create_signal;
+use leptos::view;
+use leptos::IntoView;
+use leptos::Scope;
+use leptos::SignalUpdate;
+
+use leptos_meta::provide_meta_context;
+use leptos_meta::Stylesheet;
+use leptos_meta::Title;
+
+use leptos_router::Route;
+use leptos_router::Router;
+use leptos_router::Routes;
 
 #[component]
 pub fn App(cx: Scope) -> impl IntoView {
