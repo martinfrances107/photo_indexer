@@ -1,21 +1,33 @@
+mod indexer;
+
+use crate::indexer::Indexer;
 use photo_indexer::app::App;
 
 #[cfg(feature = "ssr")]
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    use std::path::Path;
+
     use actix_files::Files;
     use actix_web::App;
     use actix_web::HttpServer;
     use leptos::get_configuration;
     use leptos::view;
+    use leptos::*;
     use leptos_actix::generate_route_list;
     use leptos_actix::LeptosRoutes;
-    use log::log;
+
+    simple_logger::init_with_level(log::Level::Info).expect("couldn't initialize logging");
 
     let conf = get_configuration(None).await.unwrap();
     let addr = conf.leptos_options.site_addr;
     // Generate the list of routes in your Leptos App
     let routes = generate_route_list(|cx| view! { cx, <App/> });
+
+    log::info!("starting indexer");
+    let root = Path::new("./exif-samples");
+    let indexer = Indexer::new(&root)?;
+    log::info!("indexer complete");
 
     match HttpServer::new(move || {
         let leptos_options = &conf.leptos_options;
@@ -34,8 +46,7 @@ async fn main() -> std::io::Result<()> {
     .bind(&addr)
     {
         Ok(server) => {
-            log::info!("hello");
-            println!("Server started on  {addr}");
+            log::info!("Server started on  {addr}");
             server.run().await
         }
         Err(e) => {
