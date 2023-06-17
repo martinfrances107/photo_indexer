@@ -21,7 +21,7 @@ leptos_meta = { version = "0.3", default-features = false }
 leptos_actix = { version = "0.3", optional = true }
 leptos_router = { version = "0.3", default-features = false }
 tracing = "0.1"
-wasm-bindgen = "=0.2.86"
+wasm-bindgen = "=0.2.87"
 walkdir = "~2"
 
 
