@@ -17,3 +17,9 @@ $ brave http://localhost:8080/
 
 brave is a web-browser, other browsers are availble!
 
+Outline of test stratergy
+
+* Invalid root directory
+* No matching file in root, with a text file ignored.
+* Invalid exif data.
+

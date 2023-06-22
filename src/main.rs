@@ -1,19 +1,16 @@
 mod indexer;
 
-use crate::indexer::Indexer;
 use photo_indexer::app::App;
 
 #[cfg(feature = "ssr")]
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    use std::path::Path;
 
     use actix_files::Files;
     use actix_web::App;
     use actix_web::HttpServer;
     use leptos::get_configuration;
     use leptos::view;
-    use leptos::*;
     use leptos_actix::generate_route_list;
     use leptos_actix::LeptosRoutes;
 
@@ -24,9 +21,9 @@ async fn main() -> std::io::Result<()> {
     // Generate the list of routes in your Leptos App
     let routes = generate_route_list(|cx| view! { cx, <App/> });
 
-    log::info!("starting indexer");
-    let root = Path::new("./exif-samples");
-    let indexer = Indexer::new(&root)?;
+    // log::info!("starting indexer");
+    // let root = Path::new("./exif-samples");
+    // let indexer = Index::new(cx, &root);
     log::info!("indexer complete");
 
     match HttpServer::new(move || {
@@ -40,6 +37,9 @@ async fn main() -> std::io::Result<()> {
                 routes.to_owned(),
                 |cx| view! { cx, <App/> },
             )
+            // TODO can I filter by extension rather than expose
+            // all files from this directory.
+            .service(Files::new("/exif-samples/", "../exif-samples/"))
             .service(Files::new("/", site_root))
         //.wrap(middleware::Compress::default())
     })
