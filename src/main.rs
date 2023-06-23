@@ -1,11 +1,8 @@
 mod indexer;
 
-use photo_indexer::app::App;
-
 #[cfg(feature = "ssr")]
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-
     use actix_files::Files;
     use actix_web::App;
     use actix_web::HttpServer;
@@ -13,6 +10,7 @@ async fn main() -> std::io::Result<()> {
     use leptos::view;
     use leptos_actix::generate_route_list;
     use leptos_actix::LeptosRoutes;
+    use photo_indexer::app::App;
 
     simple_logger::init_with_level(log::Level::Info).expect("couldn't initialize logging");
 

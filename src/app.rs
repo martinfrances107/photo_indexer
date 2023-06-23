@@ -17,7 +17,6 @@ use leptos_router::Router;
 use leptos_router::Routes;
 
 use crate::gallery::GalleryItem;
-use crate::indexer::DocLink;
 use crate::indexer::Index;
 use log::info;
 
@@ -47,9 +46,6 @@ pub fn App(cx: Scope) -> impl IntoView {
 /// Renders the home page of your application.
 #[component]
 fn HomePage(cx: Scope) -> impl IntoView {
-    // Creates a reactive value to update the button
-    // let (count, set_count) = create_signal(cx, 0);
-
     let input_ref = create_node_ref::<Input>(cx);
 
     let root = Path::new(&"../exif-samples");
@@ -59,12 +55,6 @@ fn HomePage(cx: Scope) -> impl IntoView {
 
     // Initially apply no filter
     let filtered = move || index.with(|index| index.doc_links.to_vec());
-    // dbg!(filtered());
-    // let filtered = move || {
-    //     return vec!["Mary", "had", "a", "little", "lamb"];
-    // };
-
-    // dbg!(filtered());
 
     view! { cx,
     <main>
@@ -83,7 +73,6 @@ fn HomePage(cx: Scope) -> impl IntoView {
            view=move |cx, doc_link| {
              view! {
                cx,
-               <p>{"Hello"}</p>
                <GalleryItem doc_link/>
              }
            }

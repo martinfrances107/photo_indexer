@@ -1,5 +1,4 @@
 use core::fmt::Display;
-use std::fmt::format;
 use std::fmt::Formatter;
 use std::path::Path;
 
@@ -10,7 +9,6 @@ use leptos::SignalGet;
 
 use exif::Tag;
 use log::info;
-use log::log;
 use uuid::Uuid;
 use walkdir::DirEntry;
 use walkdir::WalkDir;
@@ -56,7 +54,6 @@ impl Index {
         root: &Path,
         extensions: [&str; N],
     ) -> Self {
-        dbg!(&root);
         // I think much of this is the same as let glob = glob("**/*.{png, jpg}");
         let files = WalkDir::new(root)
             .follow_links(true)
@@ -74,11 +71,9 @@ impl Index {
             })
             .collect::<Vec<DirEntry>>();
 
-        dbg!(&files);
         info!("indexing complete about to start server");
 
         let n_files = files.len();
-        dbg!(&n_files);
         info!("{}", format!("n files {}", n_files));
 
         let mut doc_links: Vec<DocLink> = Vec::with_capacity(n_files);
@@ -124,7 +119,6 @@ impl Index {
                                     }
                                 })
                                 .collect::<Vec<String>>();
-                            // dbg!(&fragments.concat());
                             let doc = create_rw_signal(cx, fragments.concat());
                             doc_links.push(DocLink {
                                 uuid: Uuid::new_v4(),
@@ -144,7 +138,6 @@ impl Index {
             }
         }
 
-        dbg!(&doc_links);
         Self { doc_links }
     }
 }
