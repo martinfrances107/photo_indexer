@@ -8,7 +8,7 @@ about = "HTTP server which allow searchs on images ( via EXIF data )"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-leptos = { version = "~0.3", default-features = false }
+leptos = { version = "~0.3", features = ["stable"] }
 actix-files = { version = "0.6", optional = true }
 actix-web = { version = "4", optional = true, features = ["macros"] }
 cfg-if = "1"
@@ -17,9 +17,9 @@ console_error_panic_hook = "0.1.7"
 clap = { version = "~4.3.3", features = ["derive"] }
 kamadak-exif = "0.5.5"
 log = "0.4"
-leptos_meta = { version = "0.3", default-features = false }
+leptos_meta = { version = "0.3", features = ["stable"] }
 leptos_actix = { version = "0.3", optional = true }
-leptos_router = { version = "0.3", default-features = false }
+leptos_router = { version = "0.3", features = ["stable"] }
 tracing = "0.1"
 wasm-bindgen = "0.2.87"
 walkdir = "~2"
