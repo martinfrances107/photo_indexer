@@ -20,9 +20,9 @@ pub(crate) fn GalleryItem(cx: Scope, doc_link: DocLink) -> impl IntoView {
            />
 
 
-          <h1>{doc_link.filename}</h1>
+          <h1>{doc_link.filename.get()}</h1>
           <p>
-            {doc_link.description}
+            {doc_link.description.get()}
           </p>
 
       </div>
