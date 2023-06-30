@@ -2,22 +2,35 @@ use core::fmt::Display;
 use std::fmt::Formatter;
 use std::path::Path;
 
-use leptos::create_rw_signal;
-use leptos::RwSignal;
-use leptos::Scope;
-use leptos::SignalGet;
-
 use exif::Tag;
 use log::info;
 use uuid::Uuid;
 use walkdir::DirEntry;
 use walkdir::WalkDir;
 
+use leptos::create_rw_signal;
+use leptos::RwSignal;
+use leptos::Scope;
+use leptos::SignalGet;
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub(crate) struct DocLink {
     uuid: Uuid,
     pub de: RwSignal<String>,
+    /// doc: Merges all exif data, this is the string
+    /// from which the index computes TF/IDF
     pub doc: RwSignal<String>,
+    /// filename: The last section of the fully qualifed path
+    /// if
+    ///
+    /// Path =  a/b/foo/bar.txt
+    ///
+    /// then
+    ///
+    /// filename  = bar.txt
+    pub filename: RwSignal<String>,
+    /// The EXIF tag "ImageDescription" appears under the image, if present
+    pub description: RwSignal<String>,
 }
 
 /// Read only field, so only getter
@@ -78,7 +91,10 @@ impl Index {
 
         let mut doc_links: Vec<DocLink> = Vec::with_capacity(n_files);
         for de in files {
+            // Can ALWAYS unwrap the file inside the loop containing valid filenames?
+            let filename = format!("{:?}", de.path().file_name().unwrap());
             let de_str = de.path().to_str().unwrap().to_string();
+
             match std::fs::File::open(de.path()) {
                 Err(_) => return Self { doc_links: vec![] },
                 Ok(file) => {
@@ -87,10 +103,19 @@ impl Index {
 
                     match exifreader.read_from_container(&mut bufreader) {
                         Ok(exif) => {
+                            let mut description = String::from("No description");
                             let fragments = exif
                                 .fields()
                                 .map(|field| {
                                     match field.tag {
+                                        Tag::ImageDescription => {
+                                            description = format!("{}", field.display_value());
+                                            format!(
+                                                " {} {}",
+                                                field.tag,
+                                                field.display_value().with_unit(&exif)
+                                            )
+                                        }
                                         Tag::MakerNote => {
                                             // TODO Do I decode this as u8 strngs???
                                             format!(" {}", field.tag)
@@ -119,11 +144,13 @@ impl Index {
                                     }
                                 })
                                 .collect::<Vec<String>>();
-                            let doc = create_rw_signal(cx, fragments.concat());
+
                             doc_links.push(DocLink {
                                 uuid: Uuid::new_v4(),
                                 de: create_rw_signal(cx, de_str),
-                                doc,
+                                description: create_rw_signal(cx, description),
+                                doc: create_rw_signal(cx, fragments.concat()),
+                                filename: create_rw_signal(cx, filename),
                             });
                         }
                         Err(e) => {

@@ -1,3 +1,4 @@
+mod doc_links;
 mod indexer;
 
 #[cfg(feature = "ssr")]

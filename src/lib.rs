@@ -1,4 +1,5 @@
 pub mod app;
+mod doc_links;
 mod gallery;
 mod indexer;
 use cfg_if::cfg_if;
