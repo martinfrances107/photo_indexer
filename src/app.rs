@@ -28,8 +28,7 @@ pub fn App(cx: Scope) -> impl IntoView {
 
     view! {
         cx,
-        <Stylesheet id="leptos" href="/pkg/tailwind.css"/>
-        <Stylesheet id="leptos" href="/pkg/leptos_start.css"/>
+        <Stylesheet id="leptos" href="/pkg/pi.css"/>
 
         // sets the document title
         <Title text="Photo Indexer"/>
