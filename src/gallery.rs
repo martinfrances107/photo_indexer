@@ -11,11 +11,11 @@ use crate::indexer::DocLink;
 #[component]
 pub(crate) fn GalleryItem(cx: Scope, doc_link: DocLink) -> impl IntoView {
     view! { cx,
-      <div class="gallery-item bg-slate-900">
+      <div class="gallery-item bg-slate-600">
 
         <img
-          width="175ps" height="175px"
-          class="radius"
+
+          class="object-fill h-48 w-96 radius"
           src=doc_link.de.get()
            />
 

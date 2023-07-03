@@ -1,4 +1,6 @@
 mod doc_links;
+mod gallery;
+mod homepage;
 mod indexer;
 
 #[cfg(feature = "ssr")]

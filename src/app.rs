@@ -18,6 +18,7 @@ use leptos_router::Router;
 use leptos_router::Routes;
 
 use crate::gallery::GalleryItem;
+use crate::homepage::HomePage;
 use crate::indexer::Index;
 use log::info;
 
@@ -41,53 +42,4 @@ pub fn App(cx: Scope) -> impl IntoView {
             </main>
         </Router>
     }
-}
-
-/// Renders the home page of your application.
-#[component]
-fn HomePage(cx: Scope) -> impl IntoView {
-    let input_ref = create_node_ref::<Input>(cx);
-
-    let root = Path::new(&"../exif-samples");
-
-    let (index, _set_index) = create_signal::<Index>(cx, Index::new(cx, root));
-    info!("indexing complete about to start server");
-
-    // Initially apply no filter
-    let filtered = move || index.with(|index| index.doc_links.to_vec());
-
-    view! { cx,
-    <main class="bg-slate-900" >
-      <Style>
-        "body { font-weight: bold; }"
-        ".gallery {
-            display: grid;
-            grid-template-columns: repeat( auto-fill, minmax(250px, 1fr) );
-            background-color: #fff;
-          }"
-
-      </Style>
-
-      <section>
-        <h1>"Photo Indexer"</h1>
-        <input
-        placeholder = "Search EXIF data"
-        autofocus
-        node_ref=input_ref
-        />
-      </section>
-      <section class="gallery">
-         <For
-           each=filtered
-           key=|doc_link| doc_link.uuid()
-           view=move |cx, doc_link| {
-             view! {
-               cx,
-               <GalleryItem doc_link/>
-             }
-           }
-        />
-      </section>
-    </main>
-      }
 }

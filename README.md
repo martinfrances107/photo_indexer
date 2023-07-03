@@ -28,9 +28,9 @@ cargo run ./folder/ 8080
 brave http://localhost:8080/
 ```
 
-brave is a web-browser, other browsers are availble!
+brave is a web-browser, other browsers are available!
 
-Outline of test stratergy
+Outline of test strategy
 
 * Invalid root directory
 * No matching file in root, with a text file ignored.
