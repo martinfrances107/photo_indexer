@@ -84,7 +84,7 @@ impl Index {
             })
             .collect::<Vec<DirEntry>>();
 
-        info!("indexing complete about to start server");
+        info!("Indexing complete: About to start server");
 
         let n_files = files.len();
         info!("{}", format!("n files {}", n_files));
@@ -154,7 +154,6 @@ impl Index {
                             });
                         }
                         Err(e) => {
-                            // log!("skipping invalid field entry");
                             info!("skipping invalid field entry");
                             eprintln!("---- Skipping invalid field entry ---");
                             eprintln!("{e}");

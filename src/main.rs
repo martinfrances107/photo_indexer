@@ -42,7 +42,7 @@ async fn main() -> std::io::Result<()> {
     .bind(&addr)
     {
         Ok(server) => {
-            log::info!("Server started on  {addr}");
+            log::info!("Server started on  http://{addr}");
             server.run().await
         }
         Err(e) => {
