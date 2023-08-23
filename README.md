@@ -8,7 +8,7 @@ Provides a HTTP Server which provides searching of a images hold in local storag
 
 * A root directory is specified and the indexer collects data from all images from the root downwards.
 
-# Development
+## Development
 
 ```bash
 cd photo_indexer
@@ -16,6 +16,7 @@ npx tailwindcss -i ./input.css -o ./style/output.css --watch
 ```
 
 and
+
 ```bash
 cargo leptos watch
 ```
@@ -35,4 +36,3 @@ Outline of test strategy
 * Invalid root directory
 * No matching file in root, with a text file ignored.
 * Invalid exif data.
-
