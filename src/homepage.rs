@@ -68,9 +68,9 @@ pub fn HomePage(cx: Scope) -> impl IntoView {
 
           <Transition
             fallback =move || view!{ cx, <p>"Loading"</p>}
+          >
             {move || {
               view!{cx,
-                <p>"Go"</p>
                 <For
                 each=filtered
                 key=|doc_link| doc_link.uuid()
@@ -83,6 +83,7 @@ pub fn HomePage(cx: Scope) -> impl IntoView {
               />
               }
             }
+          }
           >
           </Transition>
          </section>
