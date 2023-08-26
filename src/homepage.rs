@@ -1,9 +1,7 @@
 use std::path::Path;
 
 use leptos::component;
-use leptos::create_node_ref;
 use leptos::create_signal;
-use leptos::html::Input;
 use leptos::view;
 use leptos::For;
 use leptos::IntoView;
@@ -12,10 +10,8 @@ use leptos::ServerFnError;
 use leptos::SignalWith;
 use leptos::*;
 use leptos_meta::Style;
-use leptos_router::FromFormData;
 use leptos_router::MultiActionForm;
 use log::info;
-use serde::{Deserialize, Serialize};
 
 use crate::gallery::GalleryItem;
 use crate::indexer::Index;
@@ -69,16 +65,26 @@ pub fn HomePage(cx: Scope) -> impl IntoView {
 
          </section>
          <section class="gallery">
-           <For
-             each=filtered
-             key=|doc_link| doc_link.uuid()
-             view=move |cx, doc_link| {
-               view! {
-                 cx,
-                 <GalleryItem doc_link/>
-               }
-             }
-           />
+
+          <Transition
+            fallback =move || view!{ cx, <p>"Loading"</p>}
+            {move || {
+              view!{cx,
+                <p>"Go"</p>
+                <For
+                each=filtered
+                key=|doc_link| doc_link.uuid()
+                view=move |cx, doc_link| {
+                  view! {
+                    cx,
+                    <GalleryItem doc_link/>
+                  }
+                }
+              />
+              }
+            }
+          >
+          </Transition>
          </section>
 
        </main>
