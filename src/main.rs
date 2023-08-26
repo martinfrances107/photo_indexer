@@ -19,8 +19,18 @@ async fn main() -> std::io::Result<()> {
     use leptos_actix::generate_route_list;
     use leptos_actix::LeptosRoutes;
     use photo_indexer::app::App;
+    use tracing::log;
+    use tracing::Level;
+    use tracing_subscriber::FmtSubscriber;
 
-    simple_logger::init_with_level(log::Level::Info).expect("couldn't initialize logging");
+    // simple_logger::init_with_level(log::Level::Info).expect("couldn't initialize logging");
+    // a builder for `FmtSubscriber`.
+    let subscriber = FmtSubscriber::builder()
+        // all spans/events with a level higher than TRACE (e.g, debug, info, warn, etc.)
+        // will be written to stdout.
+        .with_max_level(Level::TRACE)
+        // completes the builder.
+        .finish();
 
     let conf = get_configuration(None).await.unwrap();
     let addr = conf.leptos_options.site_addr;

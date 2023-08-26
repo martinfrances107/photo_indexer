@@ -5,8 +5,8 @@ use std::sync::Arc;
 use std::sync::Mutex;
 
 use exif::Tag;
-use log::info;
 use seroost_lib::model::Model;
+use tracing::info;
 use uuid::Uuid;
 use walkdir::DirEntry;
 use walkdir::WalkDir;

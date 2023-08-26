@@ -534,6 +534,10 @@ video {
   aspect-ratio: 1 / 1;
 }
 
+.grid-cols-\[200px_minmax\(900px\2c _1fr\)_100px\] {
+  grid-template-columns: 200px minmax(900px, 1fr) 100px;
+}
+
 .rounded {
   border-radius: 0.25rem;
 }

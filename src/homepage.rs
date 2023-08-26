@@ -11,7 +11,7 @@ use leptos::SignalWith;
 use leptos::*;
 use leptos_meta::Style;
 use leptos_router::MultiActionForm;
-use log::info;
+use tracing::info;
 
 use crate::gallery::GalleryItem;
 use crate::indexer::Index;
@@ -19,8 +19,6 @@ use crate::indexer::Index;
 #[server(SearchImages, "/api", "Cbor")]
 pub async fn search_images(title: String) -> Result<(), ServerFnError> {
     log!("in search {title}");
-
-    log!("in server");
 
     Ok(())
 }
@@ -44,8 +42,9 @@ pub fn HomePage(cx: Scope) -> impl IntoView {
        <main class="bg-slate-950">
          <Style>
            "body { font-weight: bold; }"
+           // TODO move this to tailwind.config.js
+           // or use value like ... grid-cols-[200px_minmax(900px,_1fr)_100px]
            ".gallery {
-              display: grid;
               grid-template-columns: repeat( auto-fill, minmax(320px, 1fr) );
             }"
          </Style>
@@ -64,13 +63,9 @@ pub fn HomePage(cx: Scope) -> impl IntoView {
 
          </section>
 
-         <section class="
-               gallery bg-slate-600
-               display: grid;
-               grid-template-columns: repeat( auto-fill, minmax(320px, 1fr) );"
-             >
+         <section class="gallery rounded grid bg-slate-600" >
          <Transition
-         fallback =move || view!{ cx, <p>"Loading"</p>}
+           fallback =move || view!{ cx, <p>"Loading"</p>}
          >
          {move || {
            view!{cx,

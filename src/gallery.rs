@@ -11,7 +11,7 @@ use crate::indexer::DocLink;
 #[component]
 pub(crate) fn GalleryItem(cx: Scope, doc_link: DocLink) -> impl IntoView {
     view! { cx,
-      <div class="gallery-item rounded bg-slate-600">
+      <div class="gallery-item rounded">
 
         /// Default tailwindcss css settings override width and height.
         /// aspect-ratio is required here!!!
