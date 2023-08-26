@@ -84,7 +84,6 @@ pub fn HomePage(cx: Scope) -> impl IntoView {
               }
             }
           }
-          >
           </Transition>
          </section>
 
