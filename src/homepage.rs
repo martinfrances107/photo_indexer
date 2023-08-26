@@ -8,17 +8,33 @@ use leptos::view;
 use leptos::For;
 use leptos::IntoView;
 use leptos::Scope;
+use leptos::ServerFnError;
 use leptos::SignalWith;
+use leptos::*;
 use leptos_meta::Style;
+use leptos_router::FromFormData;
+use leptos_router::MultiActionForm;
 use log::info;
+use serde::{Deserialize, Serialize};
 
 use crate::gallery::GalleryItem;
 use crate::indexer::Index;
 
+#[server(SearchImages, "/api", "Cbor")]
+pub async fn search_images(title: String) -> Result<(), ServerFnError> {
+    log!("in search {title}");
+
+    log!("in server");
+
+    Ok(())
+}
+
 /// Holds main search bar and results.
 #[component]
 pub fn HomePage(cx: Scope) -> impl IntoView {
-    let input_ref = create_node_ref::<Input>(cx);
+    let search_images = create_server_multi_action::<SearchImages>(cx);
+
+    // let input_ref = create_node_ref::<Input>(cx);
 
     let root = Path::new(&"../exif-samples");
 
@@ -40,12 +56,17 @@ pub fn HomePage(cx: Scope) -> impl IntoView {
          </Style>
 
          <section>
+
            <h1>"Photo Indexer"</h1>
-           <input
-           placeholder = "Search EXIF data"
-           autofocus
-           node_ref=input_ref
-           />
+
+           <MultiActionForm action=search_images >
+             <label>
+               "Search EXIF data"
+               <input type="text" name="title"/>
+             </label>
+             <input type="submit" value="Add"/>
+           </MultiActionForm>
+
          </section>
          <section class="gallery">
            <For
@@ -59,6 +80,7 @@ pub fn HomePage(cx: Scope) -> impl IntoView {
              }
            />
          </section>
+
        </main>
     }
 }

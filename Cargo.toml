@@ -23,6 +23,8 @@ wasm-bindgen = "0.2.87"
 walkdir = "~2"
 simple_logger = "4.2.0"
 uuid = { version = "1", features = ["v4", "js", "serde"] }
+seroost_lib = { path = "../seroost/lib" }
+serde = { version = "1", features = ["derive"] }
 
 [features]
 csr = ["leptos/csr", "leptos_meta/csr", "leptos_router/csr"]

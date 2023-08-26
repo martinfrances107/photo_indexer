@@ -4,6 +4,8 @@ mod gallery;
 mod homepage;
 mod indexer;
 
+extern crate seroost_lib;
+
 use cfg_if::cfg_if;
 
 cfg_if! {

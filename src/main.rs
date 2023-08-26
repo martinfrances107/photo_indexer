@@ -3,6 +3,12 @@ mod gallery;
 mod homepage;
 mod indexer;
 
+extern crate seroost_lib;
+
+use seroost_lib::model::Model;
+use seroost_lib::lexer::Lexer;
+
+
 #[cfg(feature = "ssr")]
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

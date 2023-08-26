@@ -1,9 +1,12 @@
 use core::fmt::Display;
 use std::fmt::Formatter;
 use std::path::Path;
+use std::sync::Arc;
+use std::sync::Mutex;
 
 use exif::Tag;
 use log::info;
+use seroost_lib::model::Model;
 use uuid::Uuid;
 use walkdir::DirEntry;
 use walkdir::WalkDir;
@@ -20,7 +23,7 @@ pub(crate) struct DocLink {
     /// doc: Merges all exif data, this is the string
     /// from which the index computes TF/IDF
     pub doc: RwSignal<String>,
-    /// filename: The last section of the fully qualifed path
+    /// filename: The last section of the fully qualified path
     /// if
     ///
     /// Path =  a/b/foo/bar.txt
@@ -67,8 +70,11 @@ impl Index {
         root: &Path,
         extensions: [&str; N],
     ) -> Self {
-        // I think much of this is the same as let glob = glob("**/*.{png, jpg}");
-        let files = WalkDir::new(root)
+        // I think much of
+        let model: Arc<Mutex<Model>> = Arc::new(Mutex::new(Default::default()));
+
+        //this is the same as let glob = glob("**/*.{png, jpg}");
+        let image_entries = WalkDir::new(root)
             .follow_links(true)
             .into_iter()
             .filter_map(|e| e.ok())
@@ -86,11 +92,14 @@ impl Index {
 
         info!("Indexing complete: About to start server");
 
-        let n_files = files.len();
+        let n_files = image_entries.len();
         info!("{}", format!("n files {}", n_files));
 
         let mut doc_links: Vec<DocLink> = Vec::with_capacity(n_files);
-        for de in files {
+
+        // TODO Make multithreaded
+        // Given a list of files spawn a new thread for each file loading.
+        for de in image_entries {
             // Can ALWAYS unwrap the file inside the loop containing valid filenames?
             let filename = format!("{:?}", de.path().file_name().unwrap());
             let de_str = de.path().to_str().unwrap().to_string();
@@ -117,7 +126,7 @@ impl Index {
                                             )
                                         }
                                         Tag::MakerNote => {
-                                            // TODO Do I decode this as u8 strngs???
+                                            // TODO Do I decode this as u8 strings???
                                             format!(" {}", field.tag)
                                         }
                                         Tag::UserComment => {

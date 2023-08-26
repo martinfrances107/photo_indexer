@@ -15,17 +15,19 @@ pub(crate) fn GalleryItem(cx: Scope, doc_link: DocLink) -> impl IntoView {
 
         /// Default tailwindcss css settings override width and height.
         /// aspect-ratio is required here!!!
-        <img
-          width="280" height="280"
-          class="aspect-square"
-          src=doc_link.de.get()
-           />
-
-
-          <h1 class="text-center">{doc_link.filename.get()}</h1>
-          <p>
-            {doc_link.description.get()}
-          </p>
+        <figure>
+          <img
+            width="280" height="280"
+            class="aspect-square"
+            src=doc_link.de.get()
+          />
+          <figcaption class="text-center">
+            {doc_link.filename.get()}
+          </figcaption>
+        </figure>
+        <p>
+          {doc_link.description.get()}
+        </p>
 
       </div>
     }
