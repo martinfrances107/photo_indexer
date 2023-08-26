@@ -47,7 +47,6 @@ pub fn HomePage(cx: Scope) -> impl IntoView {
            ".gallery {
               display: grid;
               grid-template-columns: repeat( auto-fill, minmax(320px, 1fr) );
-              background-color: #fff;
             }"
          </Style>
 
@@ -64,29 +63,34 @@ pub fn HomePage(cx: Scope) -> impl IntoView {
            </MultiActionForm>
 
          </section>
-         <section class="gallery">
 
-          <Transition
-            fallback =move || view!{ cx, <p>"Loading"</p>}
-          >
-            {move || {
-              view!{cx,
-                <For
-                each=filtered
-                key=|doc_link| doc_link.uuid()
-                view=move |cx, doc_link| {
-                  view! {
-                    cx,
-                    <GalleryItem doc_link/>
-                  }
-                }
-              />
+         <section class="
+               gallery bg-slate-600
+               display: grid;
+               grid-template-columns: repeat( auto-fill, minmax(320px, 1fr) );"
+             >
+         <Transition
+         fallback =move || view!{ cx, <p>"Loading"</p>}
+         >
+         {move || {
+           view!{cx,
+
+               <For
+                 each=filtered
+                 key=|doc_link| doc_link.uuid()
+                 view=move |cx, doc_link| {
+                   view! {
+                     cx,
+                     <GalleryItem doc_link/>
+                   }
+                 }
+               />
+
               }
             }
           }
           </Transition>
-         </section>
-
+          </section>
        </main>
     }
 }

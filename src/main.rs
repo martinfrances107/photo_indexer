@@ -5,9 +5,8 @@ mod indexer;
 
 extern crate seroost_lib;
 
-use seroost_lib::model::Model;
 use seroost_lib::lexer::Lexer;
-
+use seroost_lib::model::Model;
 
 #[cfg(feature = "ssr")]
 #[actix_web::main]
