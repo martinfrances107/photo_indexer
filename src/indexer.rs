@@ -1,77 +1,32 @@
-use core::fmt::Display;
-use std::fmt::Formatter;
 use std::path::Path;
-use std::sync::Arc;
-use std::sync::Mutex;
+use std::time::SystemTime;
 
 use exif::Tag;
+
 use seroost_lib::model::Model;
 use tracing::info;
-use uuid::Uuid;
 use walkdir::DirEntry;
 use walkdir::WalkDir;
 
-use leptos::create_rw_signal;
-use leptos::RwSignal;
-use leptos::Scope;
-use leptos::SignalGet;
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub(crate) struct DocLink {
-    uuid: Uuid,
-    pub de: RwSignal<String>,
-    /// doc: Merges all exif data, this is the string
-    /// from which the index computes TF/IDF
-    pub doc: RwSignal<String>,
-    /// filename: The last section of the fully qualified path
-    /// if
-    ///
-    /// Path =  a/b/foo/bar.txt
-    ///
-    /// then
-    ///
-    /// filename  = bar.txt
-    pub filename: RwSignal<String>,
-    /// The EXIF tag "ImageDescription" appears under the image, if present
-    pub description: RwSignal<String>,
-}
-
-/// Read only field, so only getter
-impl DocLink {
-    #[inline]
-    pub(crate) fn uuid(&self) -> Uuid {
-        self.uuid
-    }
-}
-
-impl Display for DocLink {
-    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
-        writeln!(f, "{:?}", self.de.get())?;
-        writeln!(f, "{:?}", self.doc)
-    }
-}
-
 #[derive(Clone, Debug)]
 pub(crate) struct Index {
-    pub doc_links: Vec<DocLink>,
+    // pub doc_links: Vec<DocLink>,
+    pub model: Model,
 }
 
 /// Will error if the root directory is invalid.
 impl Index {
-    pub(crate) fn new(cx: Scope, root: &Path) -> Self {
+    pub(crate) fn new(root: &Path) -> Self {
         let extensions = [".jpg", ".gif", ".png", ".jpeg"];
-        Self::new_with_extension(cx, root, extensions)
+        Self::new_with_extension(root, extensions)
     }
 
     /// Equivalent to "find . -name *.extension"
     ///
-    pub(crate) fn new_with_extension<const N: usize>(
-        cx: Scope,
-        root: &Path,
-        extensions: [&str; N],
-    ) -> Self {
-        // I think much of
-        let model: Arc<Mutex<Model>> = Arc::new(Mutex::new(Default::default()));
+    pub(crate) fn new_with_extension<const N: usize>(root: &Path, extensions: [&str; N]) -> Self {
+        // TODO If availble load model from file.
+        // let model: Arc<Mutex<Model>> = Arc::new(Mutex::new(Default::default()));
+        let mut model = Model::default();
 
         //this is the same as let glob = glob("**/*.{png, jpg}");
         let image_entries = WalkDir::new(root)
@@ -95,72 +50,91 @@ impl Index {
         let n_files = image_entries.len();
         info!("{}", format!("n files {}", n_files));
 
-        let mut doc_links: Vec<DocLink> = Vec::with_capacity(n_files);
-
         // TODO Make multithreaded
         // Given a list of files spawn a new thread for each file loading.
         for de in image_entries {
             // Can ALWAYS unwrap the file inside the loop containing valid filenames?
-            let filename = format!("{:?}", de.path().file_name().unwrap());
-            let de_str = de.path().to_str().unwrap().to_string();
-
+            let filename = de.path().to_path_buf();
             match std::fs::File::open(de.path()) {
-                Err(_) => return Self { doc_links: vec![] },
+                Err(_) => {
+                    return Self {
+                        model: Model::default(),
+                    }
+                }
                 Ok(file) => {
                     let mut bufreader = std::io::BufReader::new(&file);
                     let exifreader = exif::Reader::new();
 
+                    // info!("File {:#?}", file);
                     match exifreader.read_from_container(&mut bufreader) {
                         Ok(exif) => {
                             let mut description = String::from("No description");
-                            let fragments = exif
-                                .fields()
-                                .map(|field| {
-                                    match field.tag {
-                                        Tag::ImageDescription => {
-                                            description = format!("{}", field.display_value());
-                                            format!(
-                                                " {} {}",
-                                                field.tag,
-                                                field.display_value().with_unit(&exif)
-                                            )
-                                        }
-                                        Tag::MakerNote => {
-                                            // TODO Do I decode this as u8 strings???
-                                            format!(" {}", field.tag)
-                                        }
-                                        Tag::UserComment => {
-                                            // TODO Do I decode this as u8 strings??
-                                            format!(" {}", field.tag)
-                                        }
-
-                                        Tag::Sharpness => " ".to_string(),
-                                        Tag::Saturation => " ".to_string(),
-                                        Tag::ExifVersion => " ".to_string(),
-                                        Tag::InteroperabilityVersion => "".to_string(),
-                                        Tag::ImageUniqueID => {
-                                            // Todo
-                                            // ImageUniqueID: "77c6274bd589ad50395891e84a8b673b\"
-                                            " ".to_string()
-                                        }
-                                        _ => {
-                                            format!(
-                                                " {} {}",
-                                                field.tag,
-                                                field.display_value().with_unit(&exif)
-                                            )
-                                        }
+                            let mut content: Vec<char> = vec![];
+                            for field in exif.fields() {
+                                match field.tag {
+                                    Tag::ImageDescription => {
+                                        description = format!("{}", field.display_value());
+                                        let mut other = format!(
+                                            " {} {}",
+                                            field.tag,
+                                            field.display_value().with_unit(&exif)
+                                        )
+                                        .chars()
+                                        .collect();
+                                        content.append(&mut other);
                                     }
-                                })
-                                .collect::<Vec<String>>();
+                                    Tag::MakerNote => {
+                                        // TODO Do I decode this as u8 strings???
+                                        let mut other = format!(" {}", field.tag).chars().collect();
+                                        content.append(&mut other);
+                                    }
+                                    Tag::UserComment => {
+                                        // TODO Do I decode this as u8 strings??
+                                        let mut other =
+                                            format!(" {} ", field.tag).chars().collect();
+                                        // info!("UserComment {}", other);
+                                        content.append(&mut other);
+                                    }
 
-                            doc_links.push(DocLink {
-                                uuid: Uuid::new_v4(),
-                                de: create_rw_signal(cx, de_str),
-                                description: create_rw_signal(cx, description),
-                                doc: create_rw_signal(cx, fragments.concat()),
-                                filename: create_rw_signal(cx, filename),
-                            });
+                                    Tag::Sharpness => {
+                                        let mut other = " sharpess".chars().collect();
+                                        content.append(&mut other);
+                                    }
+                                    Tag::Saturation => {
+                                        let mut other = " sharpess".chars().collect();
+                                        content.append(&mut other);
+                                    }
+                                    Tag::ExifVersion => {
+                                        let mut other = " version".chars().collect();
+                                        content.append(&mut other);
+                                    }
+                                    Tag::InteroperabilityVersion => {
+                                        // let mut other = " Interop !!! ".to_string();
+                                        // content.append(other);
+                                    }
+                                    Tag::ImageUniqueID => {
+                                        // Todo
+                                        // ImageUniqueID: "77c6274bd589ad50395891e84a8b673b\"
+
+                                        // let mut other = " ID !!! ".into();
+                                        // content.append(&other);
+                                        //
+                                        // seroost::Lexer how are alphanumerics handled?
+                                    }
+                                    _ => {
+                                        let mut other = format!(
+                                            " {} {}",
+                                            field.tag,
+                                            field.display_value().with_unit(&exif)
+                                        )
+                                        .chars()
+                                        .collect();
+                                        content.append(&mut other);
+                                    }
+                                }
+                            }
+
+                            model.add_document(filename, SystemTime::now(), &content);
                         }
                         Err(e) => {
                             info!("skipping invalid field entry");
@@ -173,6 +147,6 @@ impl Index {
             }
         }
 
-        Self { doc_links }
+        Self { model }
     }
 }

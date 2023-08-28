@@ -1,12 +1,8 @@
-mod doc_links;
 mod gallery;
 mod homepage;
 mod indexer;
 
 extern crate seroost_lib;
-
-use seroost_lib::lexer::Lexer;
-use seroost_lib::model::Model;
 
 #[cfg(feature = "ssr")]
 #[actix_web::main]
@@ -20,22 +16,11 @@ async fn main() -> std::io::Result<()> {
     use leptos_actix::LeptosRoutes;
     use photo_indexer::app::App;
     use tracing::log;
-    use tracing::Level;
-    use tracing_subscriber::FmtSubscriber;
-
-    // simple_logger::init_with_level(log::Level::Info).expect("couldn't initialize logging");
-    // a builder for `FmtSubscriber`.
-    let subscriber = FmtSubscriber::builder()
-        // all spans/events with a level higher than TRACE (e.g, debug, info, warn, etc.)
-        // will be written to stdout.
-        .with_max_level(Level::TRACE)
-        // completes the builder.
-        .finish();
 
     let conf = get_configuration(None).await.unwrap();
     let addr = conf.leptos_options.site_addr;
     // Generate the list of routes in your Leptos App
-    let routes = generate_route_list(|cx| view! { cx, <App/> });
+    let routes = generate_route_list(|| view! { <App/> });
 
     match HttpServer::new(move || {
         let leptos_options = &conf.leptos_options;
@@ -46,7 +31,7 @@ async fn main() -> std::io::Result<()> {
             .leptos_routes(
                 leptos_options.to_owned(),
                 routes.to_owned(),
-                |cx| view! { cx, <App/> },
+                || view! {  <App/> },
             )
             // TODO can I filter by extension rather than expose
             // all files from this directory.

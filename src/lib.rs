@@ -1,5 +1,4 @@
 pub mod app;
-mod doc_links;
 mod gallery;
 mod homepage;
 mod indexer;
@@ -7,6 +6,8 @@ mod indexer;
 extern crate seroost_lib;
 
 use cfg_if::cfg_if;
+use tracing::Level;
+use tracing_subscriber::FmtSubscriber;
 
 cfg_if! {
 if #[cfg(feature = "hydrate")] {
@@ -18,9 +19,16 @@ if #[cfg(feature = "hydrate")] {
     #[wasm_bindgen]
     pub fn hydrate() {
       console_error_panic_hook::set_once();
-
-      leptos::mount_to_body(move |cx| {
-          view! { cx, <App/> }
+    // simple_logger::init_with_level(log::Level::Info).expect("couldn't initialize logging");
+    // a builder for `FmtSubscriber`.
+    let subscriber = FmtSubscriber::builder()
+        // all spans/events with a level higher than TRACE (e.g, debug, info, warn, etc.)
+        // will be written to stdout.
+        .with_max_level(Level::TRACE)
+        // completes the builder.
+        .finish();
+      leptos::mount_to_body(move || {
+          view! { <App/> }
       });
     }
 }

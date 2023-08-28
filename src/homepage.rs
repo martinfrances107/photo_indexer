@@ -1,45 +1,45 @@
 use std::path::Path;
+use std::time::Instant;
 
 use leptos::component;
 use leptos::create_signal;
 use leptos::view;
 use leptos::For;
 use leptos::IntoView;
-use leptos::Scope;
-use leptos::ServerFnError;
-use leptos::SignalWith;
 use leptos::*;
 use leptos_meta::Style;
-use leptos_router::MultiActionForm;
 use tracing::info;
 
-use crate::gallery::GalleryItem;
 use crate::indexer::Index;
-
-#[server(SearchImages, "/api", "Cbor")]
-pub async fn search_images(title: String) -> Result<(), ServerFnError> {
-    log!("in search {title}");
-
-    Ok(())
-}
 
 /// Holds main search bar and results.
 #[component]
-pub fn HomePage(cx: Scope) -> impl IntoView {
-    let search_images = create_server_multi_action::<SearchImages>(cx);
-
-    // let input_ref = create_node_ref::<Input>(cx);
+pub fn HomePage() -> impl IntoView {
+    // let search_images = create_server_multi_action::<SearchImages>();
 
     let root = Path::new(&"../exif-samples");
+    println!("signal starting");
+    let start = Instant::now();
+    let (index_get, _index_set) = create_signal(Index::new(&root));
+    let duration = start.elapsed();
+    println!(" signal done");
+    println!("Time elapsed in expensive_function() is: {:?}", duration);
 
-    let (index, _set_index) = create_signal::<Index>(cx, Index::new(cx, root));
-    info!("Indexing complete about to start server.");
+    let (search_query_get, search_query_set) = create_signal::<Vec<char>>(vec![]);
 
-    // Initially apply no filter
-    let filtered = move || index.with(|index| index.doc_links.to_vec());
+    // A derived signal
+    // query and image are signal
+    // so images changes when they are updated.
+    let images = create_memo(move |_| {
+        let query = search_query_get.get();
+        println!("inside memo");
+        let index = index_get.get();
+        index.model.search_query(&query)
+    });
 
-    view! { cx,
-       <main class="bg-slate-950">
+    view! {
+      //  <main class="bg-slate-950">
+       <main class="">
          <Style>
            "body { font-weight: bold; }"
            // TODO move this to tailwind.config.js
@@ -50,40 +50,45 @@ pub fn HomePage(cx: Scope) -> impl IntoView {
          </Style>
 
          <section>
-
            <h1>"Photo Indexer"</h1>
 
-           <MultiActionForm action=search_images >
-             <label>
-               "Search EXIF data"
-               <input type="text" name="title"/>
-             </label>
-             <input type="submit" value="Add"/>
-           </MultiActionForm>
+           <form
+            class="m-2"
+            on:submit=|ev| ev.prevent_default()
+           >
+
+             <input
+               on:change=move |ev|{
+                 let val = event_target_value(&ev);
+                 log!("pressed enter");
+                 search_query_set.set(val.chars().collect());
+               }
+               type="text"
+             />
+
+           </form>
 
          </section>
 
          <section class="gallery rounded grid bg-slate-600" >
          <Transition
-           fallback =move || view!{ cx, <p>"Loading"</p>}
+           fallback =move || view!{ <p>"Loading"</p> }
          >
-         {move || {
-           view!{cx,
+         <p>"Go"</p>
+         <p>{move || {search_query_get.get()}}</p>
 
-               <For
-                 each=filtered
-                 key=|doc_link| doc_link.uuid()
-                 view=move |cx, doc_link| {
-                   view! {
-                     cx,
-                     <GalleryItem doc_link/>
-                   }
-                 }
-               />
-
+          <For
+            each=move || images.get()
+            key=|r_img| r_img.1 as usize // rank
+            view=move | ri| {
+             view!{
+               <h1>Next</h1>
+               <p>rank {move || {ri.1}}</p>
+               <p>value{move || {ri.clone().0.into_os_string().into_string().unwrap()}}</p>
               }
             }
-          }
+          />
+
           </Transition>
           </section>
        </main>
