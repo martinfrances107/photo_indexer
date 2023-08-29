@@ -9,7 +9,8 @@ use leptos_router::Router;
 use leptos_router::Routes;
 use tracing::info;
 
-use crate::homepage::HomePage;
+use crate::pages::about::About;
+use crate::pages::search::Search;
 
 #[component]
 pub fn App() -> impl IntoView {
@@ -17,15 +18,16 @@ pub fn App() -> impl IntoView {
     provide_meta_context();
     view! {
         <Stylesheet id="leptos" href="/pkg/pi.css"/>
-        // sets the document title
         <Title text="Photo Indexer"/>
 
+        <h1>"About the router"</h1>
         <Router>
-            <main>
-                <Routes>
-                    <Route path="" view=|| view! { <HomePage /> }/>
-                </Routes>
-            </main>
+
+          <Routes>
+              <Route path="" view=|| view! { <Search /> }/>
+              <Route path="/about" view=|| view! { <About /> }/>
+          </Routes>
+
         </Router>
     }
 }

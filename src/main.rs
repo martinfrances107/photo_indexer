@@ -1,5 +1,5 @@
-mod homepage;
 mod indexer;
+mod pages;
 
 extern crate seroost_lib;
 

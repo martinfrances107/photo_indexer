@@ -13,8 +13,11 @@ use tracing::info;
 use crate::indexer::Index;
 
 /// Holds main search bar and results.
+///
+///
+
 #[component]
-pub fn HomePage() -> impl IntoView {
+pub fn Search() -> impl IntoView {
     // let search_images = create_server_multi_action::<SearchImages>();
 
     let root = Path::new(&"../exif-samples");
@@ -30,17 +33,18 @@ pub fn HomePage() -> impl IntoView {
     // A derived signal
     // query and image are signal
     // so images changes when they are updated.
-    let images = create_memo(move |_| {
+    let images = move || {
         let query = search_query_get.get();
-        println!("inside memo");
+        println!("inside derived {query:#?} ");
         let index = index_get.get();
+        // let query = "sky".chars().collect::<Vec<char>>();
         index.model.search_query(&query)
-    });
+    };
 
-    let n_found = move || format!("{} images found", images.get().len());
+    let n_found = move || format!("{} images found", images().len());
+
     view! {
-      //  <main class="bg-slate-950">
-      <body class="dark:bg-slate-950 dark:text-white my-0 mx-auto font-roboto">
+      <div class="dark:bg-slate-950 dark:text-white my-0 mx-auto font-roboto">
 
          <Style>
            "body { font-weight: bold; }"
@@ -53,23 +57,21 @@ pub fn HomePage() -> impl IntoView {
 
          <h1 class="p-6 font-light text-8xl">"Photo Indexer"</h1>
 
-          <form
-          class="px-6 py-2 dark:text-slate-950"
-          on:submit=|ev| ev.prevent_default()
-          >
+         <form
+           class="px-6 py-2 dark:text-slate-950"
+          //  on:submit=|ev| ev.prevent_default()
+         >
 
-            <input
+           <input
+             on:change=move |ev|{
+               let val = event_target_value(&ev).chars().collect();
+               log!("pressed enter {:#?}", &val);
+               search_query_set.set(val);
+             }
+             type="text"
+           />
 
-              on:change=move |ev|{
-                let val = event_target_value(&ev);
-                log!("pressed enter");
-                search_query_set.set(val.chars().collect());
-              }
-              type="text"
-            />
-
-          </form>
-
+         </form>
          <p>{move || n_found()}</p>
 
          <section class="gallery rounded grid bg-slate-600" >
@@ -78,7 +80,7 @@ pub fn HomePage() -> impl IntoView {
          >
 
           <For
-            each=move || images.get()
+            each=move || images()
             key=|r_img| r_img.1 as usize // rank
             view=move |ri| {
               let src = ri.clone().0.into_os_string().into_string().unwrap();
@@ -105,6 +107,6 @@ pub fn HomePage() -> impl IntoView {
 
           </Transition>
           </section>
-       </body>
+       </div>
     }
 }
