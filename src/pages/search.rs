@@ -1,5 +1,4 @@
 use std::path::Path;
-use std::time::Instant;
 
 use leptos::component;
 use leptos::create_signal;
@@ -12,22 +11,11 @@ use tracing::info;
 
 use crate::indexer::Index;
 
-/// Holds main search bar and results.
-///
-///
-
 #[component]
 pub fn Search() -> impl IntoView {
-    // let search_images = create_server_multi_action::<SearchImages>();
-
     let root = Path::new(&"../exif-samples");
-    // println!("signal starting");
-    // let start = Instant::now();
-    let (index_get, _index_set) = create_signal(Index::new(&root));
-    // let duration = start.elapsed();
-    // println!(" signal done");
-    // println!("Time elapsed in expensive_function() is: {:?}", duration);
 
+    let (index_get, _index_set) = create_signal(Index::new(&root));
     let (search_query_get, search_query_set) = create_signal::<Vec<char>>(vec![]);
 
     // A derived signal
@@ -37,7 +25,6 @@ pub fn Search() -> impl IntoView {
         let query = search_query_get.get();
         println!("inside derived {query:#?} ");
         let index = index_get.get();
-        // let query = "sky".chars().collect::<Vec<char>>();
         index.model.search_query(&query)
     };
 
@@ -57,10 +44,7 @@ pub fn Search() -> impl IntoView {
 
          <h1 class="p-6 font-light text-8xl">"Photo Indexer"</h1>
 
-         <form
-           class="px-6 py-2 dark:text-slate-950"
-          //  on:submit=|ev| ev.prevent_default()
-         >
+         <form class="px-6 py-2 dark:text-slate-950" >
 
            <input
              on:change=move |ev|{

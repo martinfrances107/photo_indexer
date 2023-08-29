@@ -20,7 +20,6 @@ pub fn App() -> impl IntoView {
         <Stylesheet id="leptos" href="/pkg/pi.css"/>
         <Title text="Photo Indexer"/>
 
-        <h1>"About the router"</h1>
         <Router>
 
           <Routes>

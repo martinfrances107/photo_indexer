@@ -1,16 +1,7 @@
-use std::path::Path;
-use std::time::Instant;
-
 use leptos::component;
-use leptos::create_signal;
 use leptos::view;
-use leptos::For;
 use leptos::IntoView;
 use leptos::*;
-use leptos_meta::Style;
-use tracing::info;
-
-use crate::indexer::Index;
 
 /// Holds main search bar and results.
 #[component]
