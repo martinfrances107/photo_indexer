@@ -18,12 +18,12 @@ pub fn HomePage() -> impl IntoView {
     // let search_images = create_server_multi_action::<SearchImages>();
 
     let root = Path::new(&"../exif-samples");
-    println!("signal starting");
-    let start = Instant::now();
+    // println!("signal starting");
+    // let start = Instant::now();
     let (index_get, _index_set) = create_signal(Index::new(&root));
-    let duration = start.elapsed();
-    println!(" signal done");
-    println!("Time elapsed in expensive_function() is: {:?}", duration);
+    // let duration = start.elapsed();
+    // println!(" signal done");
+    // println!("Time elapsed in expensive_function() is: {:?}", duration);
 
     let (search_query_get, search_query_set) = create_signal::<Vec<char>>(vec![]);
 
@@ -37,9 +37,11 @@ pub fn HomePage() -> impl IntoView {
         index.model.search_query(&query)
     });
 
+    let n_found = move || format!("{} images found", images.get().len());
     view! {
       //  <main class="bg-slate-950">
-       <main class="">
+      <body class="dark:bg-slate-950 dark:text-white my-0 mx-auto font-roboto">
+
          <Style>
            "body { font-weight: bold; }"
            // TODO move this to tailwind.config.js
@@ -49,48 +51,60 @@ pub fn HomePage() -> impl IntoView {
             }"
          </Style>
 
-         <section>
-           <h1>"Photo Indexer"</h1>
+         <h1 class="p-6 font-light text-8xl">"Photo Indexer"</h1>
 
-           <form
-            class="m-2"
-            on:submit=|ev| ev.prevent_default()
-           >
+          <form
+          class="px-6 py-2 dark:text-slate-950"
+          on:submit=|ev| ev.prevent_default()
+          >
 
-             <input
-               on:change=move |ev|{
-                 let val = event_target_value(&ev);
-                 log!("pressed enter");
-                 search_query_set.set(val.chars().collect());
-               }
-               type="text"
-             />
+            <input
 
-           </form>
+              on:change=move |ev|{
+                let val = event_target_value(&ev);
+                log!("pressed enter");
+                search_query_set.set(val.chars().collect());
+              }
+              type="text"
+            />
 
-         </section>
+          </form>
+
+         <p>{move || n_found()}</p>
 
          <section class="gallery rounded grid bg-slate-600" >
          <Transition
            fallback =move || view!{ <p>"Loading"</p> }
          >
-         <p>"Go"</p>
-         <p>{move || {search_query_get.get()}}</p>
 
           <For
             each=move || images.get()
             key=|r_img| r_img.1 as usize // rank
-            view=move | ri| {
-             view!{
-               <h1>Next</h1>
-               <p>rank {move || {ri.1}}</p>
-               <p>value{move || {ri.clone().0.into_os_string().into_string().unwrap()}}</p>
-              }
+            view=move |ri| {
+              let src = ri.clone().0.into_os_string().into_string().unwrap();
+               view!{
+                 <div class="gallery-item rounded">
+                 <figure>
+                   <img
+                     width="280" height="280"
+                     class="aspect-square"
+                     src={src}
+                   />
+                   <figcaption class="text-center">
+                     // {doc_link.filename.get()}
+                   </figcaption>
+                 </figure>
+                 <p>
+                   // {doc_link.description.get()}
+                 </p>
+
+                 </div>
+                }
             }
           />
 
           </Transition>
           </section>
-       </main>
+       </body>
     }
 }

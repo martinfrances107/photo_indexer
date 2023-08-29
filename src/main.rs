@@ -1,4 +1,3 @@
-mod gallery;
 mod homepage;
 mod indexer;
 

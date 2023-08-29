@@ -1,5 +1,4 @@
 pub mod app;
-mod gallery;
 mod homepage;
 mod indexer;
 
