@@ -38,7 +38,7 @@ pub fn Search() -> impl IntoView {
     };
 
     view! {
-      <div class="dark:bg-slate-950 dark:text-white my-0 mx-auto font-roboto">
+      <div class="my-0 mx-auto">
 
          <Style>
            // TODO move this to tailwind.config.js
@@ -48,7 +48,7 @@ pub fn Search() -> impl IntoView {
             }"
          </Style>
 
-         <form class="px-6 py-2 dark:text-slate-950" >
+         <form class="px-6 py-2" >
 
            <input
              on:change=move |ev|{
