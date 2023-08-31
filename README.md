@@ -18,18 +18,26 @@ npx tailwindcss -i ./input.css -o ./style/output.css --watch
 and
 
 ```bash
-cargo leptos watch
+cargo-leptos watch
 ```
 
 ## Production
 
+TODO
+ - How to select the root imags directory.
+ - Currently it is hard coded.
+
 ```bash
 cd photo_indexer
-cargo run ./folder/ 8080
-brave http://localhost:8080/
+cargo-leptos build
+cargo-leptos serve
 ```
 
-brave is a web-browser, other browsers are available!
+then,visit
+
+```
+http://localhost:3000/
+```
 
 Outline of test strategy
 

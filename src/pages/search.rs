@@ -15,7 +15,7 @@ use crate::indexer::Index;
 pub fn Search() -> impl IntoView {
     let root = Path::new(&"../exif-samples");
 
-    let (index_get, _index_set) = create_signal(Index::new(&root));
+    let (index_get, _index_set) = create_signal(Index::new(root));
     let (search_query_get, search_query_set) = create_signal::<Vec<char>>(vec![]);
 
     // A derived signal
@@ -61,7 +61,7 @@ pub fn Search() -> impl IntoView {
 
          </form>
 
-         <p>{move || summary()}</p>
+         <p>{ summary()}</p>
 
          <section class="gallery rounded grid bg-slate-600" >
          <Transition
