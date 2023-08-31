@@ -28,21 +28,25 @@ pub fn Search() -> impl IntoView {
         index.model.search_query(&query)
     };
 
-    let n_found = move || format!("{} images found", images().len());
+    let summary = move || {
+        let images = images();
+        if images.is_empty() {
+            String::from("No results found")
+        } else {
+            format!("{} images found", images.len())
+        }
+    };
 
     view! {
       <div class="dark:bg-slate-950 dark:text-white my-0 mx-auto font-roboto">
 
          <Style>
-           "body { font-weight: bold; }"
            // TODO move this to tailwind.config.js
            // or use value like ... grid-cols-[200px_minmax(900px,_1fr)_100px]
            ".gallery {
               grid-template-columns: repeat( auto-fill, minmax(320px, 1fr) );
             }"
          </Style>
-
-         <h1 class="p-6 font-light text-8xl">"Photo Indexer"</h1>
 
          <form class="px-6 py-2 dark:text-slate-950" >
 
@@ -56,7 +60,8 @@ pub fn Search() -> impl IntoView {
            />
 
          </form>
-         <p>{move || n_found()}</p>
+
+         <p>{move || summary()}</p>
 
          <section class="gallery rounded grid bg-slate-600" >
          <Transition
