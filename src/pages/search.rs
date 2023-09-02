@@ -82,7 +82,7 @@ pub fn Search() -> impl IntoView {
                        src={src}
                      />
                      <figcaption class="mb-4">
-                       image.0.file_name().unwrap().to_str().unwrap().to_string()
+                       {image.0.file_name().unwrap().to_str().unwrap().to_string()}
                      </figcaption>
                      </figure>
 
