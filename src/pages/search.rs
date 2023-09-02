@@ -18,9 +18,6 @@ pub fn Search() -> impl IntoView {
     let (index_get, _index_set) = create_signal(Index::new(root));
     let (search_query_get, search_query_set) = create_signal::<Vec<char>>(vec![]);
 
-    // A derived signal
-    // query and image are signal
-    // so images changes when they are updated.
     let images = move || {
         let query = search_query_get.get();
         println!("inside derived {query:#?} ");
@@ -48,12 +45,15 @@ pub fn Search() -> impl IntoView {
             }"
          </Style>
 
-         <form class="px-6 py-2" >
+         <form class="dark:text-slate-950 px-6 py-2 text-center">
 
+           <label class="hidden" for="search">Search</label>
            <input
+             id="search"
+             class="p-2"
              on:change=move |ev|{
                let val = event_target_value(&ev).chars().collect();
-               log!("pressed enter {:#?}", &val);
+              //  log!("pressed enter {:#?}", &val);
                search_query_set.set(val);
              }
              type="text"
@@ -61,41 +61,38 @@ pub fn Search() -> impl IntoView {
 
          </form>
 
-         <p>{ summary()}</p>
+         <p class="mb-2">{ summary()}</p>
 
-         <section class="gallery rounded grid bg-slate-600" >
-         <Transition
-           fallback =move || view!{ <p>"Loading"</p> }
-         >
+         <section class="gallery rounded px-2 grid py-4 justify-items-center dark:text-slate-950 bg-slate-600" >
+           <Transition
+             fallback =move || view!{ <p>"Loading"</p> }
+           >
 
-          <For
-            each=move || images()
-            key=|r_img| r_img.1 as usize // rank
-            view=move |ri| {
-              let src = ri.clone().0.into_os_string().into_string().unwrap();
-               view!{
-                 <div class="gallery-item rounded">
-                 <figure>
-                   <img
-                     width="280" height="280"
-                     class="aspect-square"
-                     src={src}
-                   />
-                   <figcaption class="text-center">
-                     // {doc_link.filename.get()}
-                   </figcaption>
-                 </figure>
-                 <p>
-                   // {doc_link.description.get()}
-                 </p>
+            <For
+              each=move || images()
+              key=|r_img| r_img.1 as usize // rank
+              view=move |image| {
+                let src = image.clone().0.into_os_string().into_string().unwrap();
+                 view!{
+                   <div class="gallery-item rounded">
+                   <figure class="text-left ">
+                     <img
+                       width="280" height="280"
+                       class="aspect-square mx-auto"
+                       src={src}
+                     />
+                     <figcaption class="mb-4">
+                       image.0.file_name().unwrap().to_str().unwrap().to_string()
+                     </figcaption>
+                     </figure>
 
-                 </div>
-                }
-            }
-          />
+                   </div>
+                  }
+              }
+            />
 
           </Transition>
-          </section>
+        </section>
        </div>
     }
 }
