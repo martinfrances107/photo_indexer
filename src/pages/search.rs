@@ -75,15 +75,15 @@ pub fn Search() -> impl IntoView {
                 let src = image.clone().0.into_os_string().into_string().unwrap();
                  view!{
                    <div class="gallery-item rounded">
-                   <figure class="text-left ">
-                     <img
-                       width="280" height="280"
-                       class="aspect-square mx-auto"
-                       src={src}
-                     />
-                     <figcaption class="mb-4">
-                       {image.0.file_name().unwrap().to_str().unwrap().to_string()}
-                     </figcaption>
+                    <figure class="text-left ">
+                      <img
+                        width="280" height="280"
+                        class="aspect-square mx-auto"
+                        src={src}
+                      />
+                      <figcaption class="mb-4">
+                        {image.0.file_name().unwrap().to_str().unwrap().to_string()}
+                      </figcaption>
                      </figure>
 
                    </div>
