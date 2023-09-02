@@ -1,4 +1,5 @@
 use std::path::Path;
+use std::path::PathBuf;
 
 use leptos::component;
 use leptos::create_signal;
@@ -22,15 +23,24 @@ pub fn Search() -> impl IntoView {
         let query = search_query_get.get();
         println!("inside derived {query:#?} ");
         let index = index_get.get();
-        index.model.search_query(&query)
+        index
+            .model
+            .search_query(&query)
+            .iter()
+            .enumerate()
+            .map(|(i, (pb, f32))| (i, (pb.clone(), *f32)))
+            .collect::<Vec<(usize, (PathBuf, f32))>>()
     };
 
     let summary = move || {
         let images = images();
-        if images.is_empty() {
-            String::from("No results found")
-        } else {
-            format!("{} images found", images.len())
+
+        match images.len() {
+            0 => String::from("No results found"),
+            1 => String::from("1 image found"),
+            _ => {
+                format!("{} images found", images.len())
+            }
         }
     };
 
@@ -70,9 +80,9 @@ pub fn Search() -> impl IntoView {
 
             <For
               each=move || images()
-              key=|r_img| r_img.1 as usize // rank
-              view=move |image| {
-                let src = image.clone().0.into_os_string().into_string().unwrap();
+              key=move |(i, _)| *i
+              view=move |(_, (pb, _r))| {
+                let src = pb.clone().into_os_string().into_string().unwrap();
                  view!{
                    <div class="gallery-item rounded">
                     <figure class="text-left ">
@@ -82,7 +92,7 @@ pub fn Search() -> impl IntoView {
                         src={src}
                       />
                       <figcaption class="mb-4">
-                        {image.0.file_name().unwrap().to_str().unwrap().to_string()}
+                        {pb.file_name().unwrap().to_str().unwrap().to_string()}
                       </figcaption>
                      </figure>
 
