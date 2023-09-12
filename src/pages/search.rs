@@ -65,7 +65,7 @@ pub fn Search() -> impl IntoView {
 
          <p class="mb-2">{ summary()}</p>
 
-         <section class="flex flex-wrap rounded px-2 py-4 justify-evenly dark:text-slate-950 bg-slate-600" >
+         <section class="flex flex-wrap gap-y-4 rounded px-2 py-4 justify-evenly dark:text-slate-950 bg-slate-600" >
            <Transition
              fallback =move || view!{ <p>"Loading"</p> }
            >
@@ -75,8 +75,8 @@ pub fn Search() -> impl IntoView {
               key=move |(i, _)| *i
               view=move |(_, (pb, _r))| {
                  view!{
-                   <div class="gallery-item rounded">
-                    <figure class="text-left ">
+
+                    <figure class="bg-slate-200 p-2 rounded text-left">
                       <img
                         width="420" height="420"
                         class="aspect-square mx-auto"
@@ -87,7 +87,6 @@ pub fn Search() -> impl IntoView {
                       </figcaption>
                      </figure>
 
-                   </div>
                   }
               }
             />
