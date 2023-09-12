@@ -47,14 +47,6 @@ pub fn Search() -> impl IntoView {
     view! {
       <div class="my-0 mx-auto">
 
-         <Style>
-           // TODO move this to tailwind.config.js
-           // or use value like ... grid-cols-[200px_minmax(900px,_1fr)_100px]
-           ".gallery {
-              grid-template-columns: repeat( auto-fill, minmax(320px, 1fr) );
-            }"
-         </Style>
-
          <form class="dark:text-slate-950 px-6 py-2 text-center">
 
            <label class="hidden" for="search">Search</label>
@@ -73,7 +65,7 @@ pub fn Search() -> impl IntoView {
 
          <p class="mb-2">{ summary()}</p>
 
-         <section class="gallery rounded px-2 grid py-4 justify-items-center dark:text-slate-950 bg-slate-600" >
+         <section class="flex flex-wrap rounded px-2 py-4 justify-evenly dark:text-slate-950 bg-slate-600" >
            <Transition
              fallback =move || view!{ <p>"Loading"</p> }
            >
@@ -82,14 +74,13 @@ pub fn Search() -> impl IntoView {
               each=move || images()
               key=move |(i, _)| *i
               view=move |(_, (pb, _r))| {
-                let src = pb.clone().into_os_string().into_string().unwrap();
                  view!{
                    <div class="gallery-item rounded">
                     <figure class="text-left ">
                       <img
-                        width="280" height="280"
+                        width="420" height="420"
                         class="aspect-square mx-auto"
-                        src={src}
+                        src={pb.clone().into_os_string().into_string().unwrap()}
                       />
                       <figcaption class="mb-4">
                         {pb.file_name().unwrap().to_str().unwrap().to_string()}
