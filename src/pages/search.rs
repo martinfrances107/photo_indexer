@@ -63,7 +63,7 @@ pub fn Search() -> impl IntoView {
 
          </form>
 
-         <p class="mb-2">{ move || summary()}</p>
+         <p class="mb-2">{ move ||  summary()}</p>
 
          <section class="flex flex-wrap gap-y-4 rounded px-2 py-4 justify-evenly dark:text-slate-950 bg-slate-600" >
            <Transition
