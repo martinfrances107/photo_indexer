@@ -576,14 +576,6 @@ video {
   justify-content: space-evenly;
 }
 
-.gap-y-0 {
-  row-gap: 0px;
-}
-
-.gap-y-0\.5 {
-  row-gap: 0.125rem;
-}
-
 .gap-y-4 {
   row-gap: 1rem;
 }
