@@ -3,12 +3,12 @@ use std::path::PathBuf;
 
 use leptos::component;
 use leptos::create_signal;
+use leptos::logging::log;
 use leptos::view;
 use leptos::For;
 use leptos::IntoView;
 use leptos::*;
 use leptos_meta::Style;
-use tracing::info;
 
 use crate::indexer::Index;
 
@@ -59,6 +59,10 @@ pub fn Search() -> impl IntoView {
                search_query_set.set(val);
              }
              type="text"
+             placeholder="Search EXIF data"
+             prop:value = {move ||
+               String::from_iter(search_query_get.get())
+             }
            />
 
          </form>
@@ -73,20 +77,34 @@ pub fn Search() -> impl IntoView {
             <For
               each=move || images()
               key=move |(i, _)| *i
-              view=move |(_, (pb, _r))| {
+              view=move |(i, (pb, r))| {
                  view!{
-
-                    <figure class="bg-slate-200 p-2 rounded text-left">
-                      <img
-                        width="420" height="420"
-                        class="aspect-square mx-auto"
-                        src={pb.clone().into_os_string().into_string().unwrap()}
-                      />
-                      <figcaption class="mb-4">
-                        {pb.file_name().unwrap().to_str().unwrap().to_string()}
-                      </figcaption>
-                     </figure>
-
+                    <div class="bg-slate-100 p-2 rounded text-left">
+                      <figure >
+                         <img
+                           width="420" height="420"
+                           class="aspect-square mx-auto"
+                           src={pb.clone().into_os_string().into_string().unwrap()}
+                         />
+                         <figcaption class="mb-4">
+                           {pb.file_name().unwrap().to_str().unwrap().to_string()}
+                         </figcaption>
+                      </figure>
+                      <details>
+                        <summary>
+                          MetaData
+                        </summary>
+                        <div class="[&>*:nth-child(even)]:bg-gray-100 [&>*:nth-child(odd)]:bg-gray-300">
+                          <For
+                          each = move || { 1i32..10i32}
+                          key = move |i| {i.clone()}
+                          view = move |_| { view!{
+                            <p>{"hello"}</p>
+                          }}
+                          />
+                        </div>
+                      </details>
+                     </div>
                   }
               }
             />
