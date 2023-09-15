@@ -77,27 +77,27 @@ pub fn Search() -> impl IntoView {
             <For
               each=move || images()
               key=move |(i, _)| *i
-              view=move |(i, (pb, r))| {
+              view=move |(_, (pb, _))| {
                  view!{
-                    <div class="bg-slate-100 p-2 rounded text-left">
-                      <figure >
+                    <div class="p-2 mb-4 rounded text-left">
+                      <figure class="bg-slate-100 rounded-t">
                          <img
                            width="420" height="420"
                            class="aspect-square mx-auto"
                            src={pb.clone().into_os_string().into_string().unwrap()}
                          />
-                         <figcaption class="mb-4">
+                         <figcaption>
                            {pb.file_name().unwrap().to_str().unwrap().to_string()}
                          </figcaption>
                       </figure>
-                      <details>
+                      <details class="bg-slate-100 rounded-b">
                         <summary>
                           MetaData
                         </summary>
                         <div class="[&>*:nth-child(even)]:bg-gray-100 [&>*:nth-child(odd)]:bg-gray-300">
                           <For
                           each = move || { 1i32..10i32}
-                          key = move |i| {i.clone()}
+                          key = move |j| {*j}
                           view = move |_| { view!{
                             <p>{"hello"}</p>
                           }}
