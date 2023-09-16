@@ -1,6 +1,11 @@
+use core::fmt::Display;
+use core::hash::Hash;
+use std::collections::HashMap;
 use std::path::Path;
+use std::path::PathBuf;
 use std::time::SystemTime;
 
+use exif::Field;
 use exif::Tag;
 
 use seroost_lib::model::Model;
@@ -11,7 +16,9 @@ use walkdir::WalkDir;
 #[derive(Clone, Debug)]
 pub(crate) struct Index {
     // pub doc_links: Vec<DocLink>,
+    pub description_store: HashMap<PathBuf, String>,
     pub model: Model,
+    pub md_store: HashMap<PathBuf, Vec<Field>>,
 }
 
 /// Will error if the root directory is invalid.
@@ -27,6 +34,8 @@ impl Index {
         // TODO If availble load model from file.
         // let model: Arc<Mutex<Model>> = Arc::new(Mutex::new(Default::default()));
         let mut model = Model::default();
+        let mut md_store = HashMap::default();
+        let mut description_store = HashMap::default();
 
         //this is the same as let glob = glob("**/*.{png, jpg}");
         let image_entries = WalkDir::new(root)
@@ -58,83 +67,51 @@ impl Index {
             match std::fs::File::open(de.path()) {
                 Err(_) => {
                     return Self {
-                        model: Model::default(),
+                        description_store,
+                        model,
+                        md_store,
                     }
                 }
                 Ok(file) => {
                     let mut bufreader = std::io::BufReader::new(&file);
                     let exifreader = exif::Reader::new();
 
-                    // info!("File {:#?}", file);
                     match exifreader.read_from_container(&mut bufreader) {
                         Ok(exif) => {
-                            let mut description = String::from("No description");
-                            let mut content: Vec<char> = vec![];
+                            let mut content = String::new();
                             for field in exif.fields() {
-                                match field.tag {
-                                    Tag::ImageDescription => {
-                                        description = format!("{}", field.display_value());
-                                        let mut other = format!(
-                                            " {} {}",
-                                            field.tag,
-                                            field.display_value().with_unit(&exif)
-                                        )
-                                        .chars()
-                                        .collect();
-                                        content.append(&mut other);
-                                    }
-                                    Tag::MakerNote => {
-                                        // TODO Do I decode this as u8 strings???
-                                        let mut other = format!(" {}", field.tag).chars().collect();
-                                        content.append(&mut other);
-                                    }
-                                    Tag::UserComment => {
-                                        // TODO Do I decode this as u8 strings??
-                                        let mut other =
-                                            format!(" {} ", field.tag).chars().collect();
-                                        // info!("UserComment {}", other);
-                                        content.append(&mut other);
-                                    }
+                                // MakerNote is a proprietary binary format block
+                                // do not pass to indexer.
+                                if field.tag != Tag::MakerNote {
+                                    let dv = format!("{}", field.display_value());
+                                    content.push_str(&dv);
+                                }
 
-                                    Tag::Sharpness => {
-                                        let mut other = " sharpess".chars().collect();
-                                        content.append(&mut other);
-                                    }
-                                    Tag::Saturation => {
-                                        let mut other = " sharpess".chars().collect();
-                                        content.append(&mut other);
-                                    }
-                                    Tag::ExifVersion => {
-                                        let mut other = " version".chars().collect();
-                                        content.append(&mut other);
-                                    }
-                                    Tag::InteroperabilityVersion => {
-                                        // let mut other = " Interop !!! ".to_string();
-                                        // content.append(other);
-                                    }
-                                    Tag::ImageUniqueID => {
-                                        // Todo
-                                        // ImageUniqueID: "77c6274bd589ad50395891e84a8b673b\"
-
-                                        // let mut other = " ID !!! ".into();
-                                        // content.append(&other);
-                                        //
-                                        // seroost::Lexer how are alphanumerics handled?
-                                    }
-                                    _ => {
-                                        let mut other = format!(
-                                            " {} {}",
-                                            field.tag,
-                                            field.display_value().with_unit(&exif)
-                                        )
-                                        .chars()
-                                        .collect();
-                                        content.append(&mut other);
-                                    }
+                                // Special case ImageDescription
+                                // Will be displayed before other metadata.
+                                if field.tag == Tag::ImageDescription {
+                                    description_store.insert(
+                                        filename.clone(),
+                                        format!("{}", field.display_value()),
+                                    );
                                 }
                             }
+                            md_store.insert(
+                                filename.clone(),
+                                // Strip ImageDescription from meta data list destined for display.
+                                // ImageDescription will be shown before the metadata.
+                                exif.fields()
+                                    .map(|f| f.clone())
+                                    .filter(|f| f.tag != Tag::ImageDescription)
+                                    .filter(|f| f.tag != Tag::MakerNote)
+                                    .collect(),
+                            );
 
-                            model.add_document(filename, SystemTime::now(), &content);
+                            model.add_document(
+                                filename,
+                                SystemTime::now(),
+                                &content.chars().collect::<Vec<char>>(),
+                            );
                         }
                         Err(e) => {
                             info!("skipping invalid field entry");
@@ -147,6 +124,10 @@ impl Index {
             }
         }
 
-        Self { model }
+        Self {
+            description_store,
+            model,
+            md_store,
+        }
     }
 }

@@ -1,6 +1,7 @@
 use std::path::Path;
 use std::path::PathBuf;
 
+use exif::Field;
 use leptos::component;
 use leptos::create_signal;
 use leptos::logging::log;
@@ -9,6 +10,7 @@ use leptos::For;
 use leptos::IntoView;
 use leptos::*;
 use leptos_meta::Style;
+use std::fmt::Display;
 
 use crate::indexer::Index;
 
@@ -31,6 +33,8 @@ pub fn Search() -> impl IntoView {
             .map(|(i, (pb, f32))| (i, (pb.clone(), *f32)))
             .collect::<Vec<(usize, (PathBuf, f32))>>()
     };
+
+    let md_store = move || index_get.get().md_store;
 
     let summary = move || {
         let images = images();
@@ -67,7 +71,7 @@ pub fn Search() -> impl IntoView {
 
          </form>
 
-         <p class="mb-2">{ move ||  summary()}</p>
+         <p class="mb-2">{ move || summary()}</p>
 
          <section class="flex flex-wrap gap-y-4 rounded px-2 py-4 justify-evenly dark:text-slate-950 bg-slate-600" >
            <Transition
@@ -79,7 +83,7 @@ pub fn Search() -> impl IntoView {
               key=move |(i, _)| *i
               view=move |(_, (pb, _))| {
                  view!{
-                    <div class="p-2 mb-4 rounded text-left">
+                    <div class="p-2 mb-4 rounded text-left" style="width:430px;">
                       <figure class="bg-slate-100 rounded-t">
                          <img
                            width="420" height="420"
@@ -88,6 +92,17 @@ pub fn Search() -> impl IntoView {
                          />
                          <figcaption>
                            {pb.file_name().unwrap().to_str().unwrap().to_string()}
+                           <p>
+
+                               {
+                                let ds = index_get.get().description_store.clone();
+                                match ds.get(&pb) {
+                                  Some(name) => view!{<p class="break-words w-full">{name}</p>},
+                                  None => view!{<p class="w-full">"No description"</p>}
+                                }
+                              }
+
+                           </p>
                          </figcaption>
                       </figure>
                       <details class="bg-slate-100 rounded-b">
@@ -96,10 +111,13 @@ pub fn Search() -> impl IntoView {
                         </summary>
                         <div class="[&>*:nth-child(even)]:bg-gray-100 [&>*:nth-child(odd)]:bg-gray-300">
                           <For
-                          each = move || { 1i32..10i32}
-                          key = move |j| {*j}
-                          view = move |_| { view!{
-                            <p>{"hello"}</p>
+                          // each = move || { 1i32..10i32}
+                          each =move || { md_store().get(&pb).expect("failed to extract fields from md_store").clone()}
+                          // each = move || { index_get.get().md_store}
+                          key = move |field| {field.ifd_num}
+                          view = move |field| { view!{
+                            <p>{ field.tag.to_string() }</p>
+                            <p class="text-right" >{ field.display_value().to_string() }</p>
                           }}
                           />
                         </div>
