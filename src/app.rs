@@ -11,7 +11,6 @@ use leptos_router::Route;
 use leptos_router::Router;
 use leptos_router::Routes;
 use leptos_router::A;
-use tracing::info;
 
 use crate::pages::about::About;
 use crate::pages::search::Search;

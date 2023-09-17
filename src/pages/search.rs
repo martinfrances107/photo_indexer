@@ -1,16 +1,12 @@
 use std::path::Path;
 use std::path::PathBuf;
 
-use exif::Field;
 use leptos::component;
 use leptos::create_signal;
-use leptos::logging::log;
 use leptos::view;
 use leptos::For;
 use leptos::IntoView;
 use leptos::*;
-use leptos_meta::Style;
-use std::fmt::Display;
 
 use crate::indexer::Index;
 

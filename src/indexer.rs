@@ -1,5 +1,3 @@
-use core::fmt::Display;
-use core::hash::Hash;
 use std::collections::HashMap;
 use std::path::Path;
 use std::path::PathBuf;
@@ -101,7 +99,7 @@ impl Index {
                                 // Strip ImageDescription from meta data list destined for display.
                                 // ImageDescription will be shown before the metadata.
                                 exif.fields()
-                                    .map(|f| f.clone())
+                                    .cloned()
                                     .filter(|f| f.tag != Tag::ImageDescription)
                                     .filter(|f| f.tag != Tag::MakerNote)
                                     .collect(),
