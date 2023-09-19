@@ -556,6 +556,10 @@ video {
   display: block;
 }
 
+.inline-block {
+  display: inline-block;
+}
+
 .flex {
   display: flex;
 }
@@ -568,8 +572,16 @@ video {
   aspect-ratio: 1 / 1;
 }
 
+.w-0 {
+  width: 0px;
+}
+
 .w-full {
   width: 100%;
+}
+
+.w-\[240\] {
+  width: 240;
 }
 
 .flex-wrap {
@@ -590,6 +602,10 @@ video {
 
 .self-center {
   align-self: center;
+}
+
+.overflow-hidden {
+  overflow: hidden;
 }
 
 .break-words {
