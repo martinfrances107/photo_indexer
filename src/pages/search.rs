@@ -3,10 +3,17 @@ use std::path::PathBuf;
 
 use leptos::component;
 use leptos::create_signal;
+use leptos::event_target_value;
+use leptos::logging::log;
 use leptos::view;
 use leptos::For;
+use leptos::IntoAttribute;
 use leptos::IntoView;
-use leptos::*;
+use leptos::Signal;
+use leptos::SignalGet;
+use leptos::SignalSet;
+use leptos::Transition;
+use leptos_router::A;
 
 use crate::indexer::Index;
 
@@ -100,11 +107,7 @@ pub fn Search() -> impl IntoView {
                   view!{
                     <div id="side-menu">
                       <A href="">Close</A>
-              <div
-              <div
-                id = move || format!("md-{i}")
                       <div
-                id = move || format!("md-{i}")
                         class="
                         block-inline
                         [&>*:nth-child(even)]:bg-gray-100
