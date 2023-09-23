@@ -1,0 +1,5 @@
+extend = [{ path = "./main.toml" }, { path = "./cargo-leptos.toml" }]
+
+[env]
+
+CLIENT_PROCESS_NAME = "photo_indexer_isomorphic"

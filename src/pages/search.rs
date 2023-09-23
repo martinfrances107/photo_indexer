@@ -14,11 +14,13 @@ use crate::indexer::Index;
 pub fn Search() -> impl IntoView {
     let root = Path::new(&"../exif-samples");
 
-    let (open_tray_get, open_tray_set) = create_signal::<Option<usize>>(None);
+    let (value, set_value) = create_signal(0);
+    let (md_key_get, md_key_set) = create_signal::<Option<PathBuf>>(None);
     let (index_get, _index_set) = create_signal(Index::new(root));
-    let (search_query_get, search_query_set) = create_signal::<Vec<char>>(vec![]);
+    let (search_query_get, search_query_set) =
+        create_signal::<Vec<char>>(vec![]);
 
-    let images = move || {
+    let images = Signal::derive(move || {
         let query = search_query_get.get();
         println!("inside derived {query:#?} ");
         let index = index_get.get();
@@ -29,12 +31,20 @@ pub fn Search() -> impl IntoView {
             .enumerate()
             .map(|(i, (pb, f32))| (i, (pb.clone(), *f32)))
             .collect::<Vec<(usize, (PathBuf, f32))>>()
-    };
+    });
 
-    let md_store = move || index_get.get().md_store;
+    // Use key to extract metadata from the md_store.
+    let md_data = Signal::derive(move || match md_key_get.get() {
+        Some(key) => index_get
+            .get()
+            .md_store
+            .get(&key)
+            .map(|fields| fields.to_vec()),
+        None => None,
+    });
 
-    let summary = move || {
-        let images = images();
+    let summary = Signal::derive(move || {
+        let images = images.get();
 
         match images.len() {
             0 => String::from("No results found"),
@@ -43,7 +53,7 @@ pub fn Search() -> impl IntoView {
                 format!("{} images found", images.len())
             }
         }
-    };
+    });
 
     view! {
       <div class="my-0 mx-auto">
@@ -68,8 +78,9 @@ pub fn Search() -> impl IntoView {
 
          </form>
 
-         <p class="mb-2">{ move || summary()}</p>
-
+         <p class="mb-2">{ move || summary.get()}</p>
+         <p>{move || value.get()}</p>
+         <button on:click=move |_| set_value.set(0)>"Clear"</button>
          <Transition
            fallback =move || view!{ <p>"Loading"</p> }
          >
@@ -82,75 +93,86 @@ pub fn Search() -> impl IntoView {
           justify-evenly
           dark:text-slate-950 bg-slate-600" >
 
-        <For
-          each=move || images()
-          key=move |(i, _)| format!("{}", *i)
-          view=move |(i, (pb, _))| {
-            view!{
+          {
+            move || {
+              match md_data.get(){
+                Some(data) => {
+                  view!{
+                    <div id="side-menu">
+                      <A href="">Close</A>
+              <div
               <div
                 id = move || format!("md-{i}")
-                class="
-                block-inline
-                [&>*:nth-child(even)]:bg-gray-100
-                [&>*:nth-child(odd)]:bg-gray-300
-                overflow-hidden
-                w-0
-                }}">
-              <For
-                each =move || { md_store().get(&pb).expect("failed to extract fields from md_store").clone()}
-                key = move |field| {field.ifd_num}
-                view = move |field| {
-                  view!{
-                  <p>{ field.tag.to_string() }</p>
-                  <p class="text-right" >{ field.display_value().to_string() }</p>
+                      <div
+                id = move || format!("md-{i}")
+                        class="
+                        block-inline
+                        [&>*:nth-child(even)]:bg-gray-100
+                        [&>*:nth-child(odd)]:bg-gray-300
+                        overflow-hidden
+                        w-[240px]
+                        }}">
+                        <For
+                          each =move || data.clone()
+                          key = move |field| {field.ifd_num}
+                          view = move |field| {
+                            view!{
+                              <p>{ field.tag.to_string() }</p>
+                              <p class="text-right" >{ field.display_value().to_string() }</p>
+                            }
+                          }
+                        />
+                        </div>
+                    </div>
+                  }
+                },
+                None => {
+                  view!{<div id="side-menu-empty" class="w-0"></div>}
                 }
               }
-              />
-              </div>
-            }}
-        />
+
+          }
+        }
 
         <For
-          each=move || images()
+          each=move || images.get()
           key=move |(i, _)| *i
           view=move |(_, (pb, _))| {
+            // TODO find a better way than clone.
+            let pb1 = pb.clone();
+            let pb2 = pb.clone();
+            let pb3 = pb.clone();
              view!{
                 <div class="p-2 mb-4 rounded text-left" style="width:280px;">
-                  <figure class="bg-slate-100 rounded-t">
+                  <figure
+                    class="bg-slate-100 rounded-t"
+                    // on::click=move |e: u32| {
+                    //   log!("{}", e);
+                    // }
+                    >
                      <img
                        width="274" height="160"
                        class="aspect-square mx-auto"
-                       src={pb.clone().into_os_string().into_string().unwrap()}
+                       src={pb1.into_os_string().to_owned().into_string().unwrap()}
                      />
                      <figcaption>
-                       {pb.file_name().unwrap().to_str().unwrap().to_string()}
+                       {pb2.file_name().unwrap().to_str().unwrap().to_string()}
                        <p>
-                        {
+                         {
                             let ds = index_get.get().description_store.clone();
-                            match ds.get(&pb) {
+                            match ds.get(&pb3) {
                               Some(name) => view!{<p class="break-words w-full">{name}</p>},
                               None => view!{<p class="w-full">"No description"</p>}
                             }
                           }
-                    </p>
+                        <button on:click=move |_| {
+                          log!("button clicked");
+                          md_key_set.set(Some(pb.to_owned()))
+                         }>"Metadata"</button>
+
+                       </p>
                      </figcaption>
                   </figure>
-                  // <A on::clip = move || {}>Meta Data</A>
-                  // <details class="bg-slate-100 rounded-b">
-                  //   <summary>
-                  //     MetaData
-                  //   </summary>
-                  //   <div class="[&>*:nth-child(even)]:bg-gray-100 [&>*:nth-child(odd)]:bg-gray-300">
-                  //     <For
-                  //     each =move || { md_store().get(&pb).expect("failed to extract fields from md_store").clone()}
-                  //     key = move |field| {field.ifd_num}
-                  //     view = move |field| { view!{
-                  //       <p>{ field.tag.to_string() }</p>
-                  //       <p class="text-right" >{ field.display_value().to_string() }</p>
-                  //     }}
-                  //     />
-                  //   </div>
-                  // </details>
                  </div>
               }
           }

@@ -27,8 +27,10 @@ impl Index {
     }
 
     /// Equivalent to "find . -name *.extension"
-    ///
-    pub(crate) fn new_with_extension<const N: usize>(root: &Path, extensions: [&str; N]) -> Self {
+    pub(crate) fn new_with_extension<const N: usize>(
+        root: &Path,
+        extensions: [&str; N],
+    ) -> Self {
         // TODO If availble load model from file.
         // let model: Arc<Mutex<Model>> = Arc::new(Mutex::new(Default::default()));
         let mut model = Model::default();
@@ -81,7 +83,8 @@ impl Index {
                                 // MakerNote is a proprietary binary format block
                                 // do not pass to indexer.
                                 if field.tag != Tag::MakerNote {
-                                    let dv = format!("{}", field.display_value());
+                                    let dv =
+                                        format!("{}", field.display_value());
                                     content.push_str(&dv);
                                 }
 
@@ -99,9 +102,9 @@ impl Index {
                                 // Strip ImageDescription from meta data list destined for display.
                                 // ImageDescription will be shown before the metadata.
                                 exif.fields()
+                                    .filter(|&f| f.tag != Tag::ImageDescription)
+                                    .filter(|&f| f.tag != Tag::MakerNote)
                                     .cloned()
-                                    .filter(|f| f.tag != Tag::ImageDescription)
-                                    .filter(|f| f.tag != Tag::MakerNote)
                                     .collect(),
                             );
 

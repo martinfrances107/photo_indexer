@@ -556,10 +556,6 @@ video {
   display: block;
 }
 
-.inline-block {
-  display: inline-block;
-}
-
 .flex {
   display: flex;
 }
@@ -576,12 +572,12 @@ video {
   width: 0px;
 }
 
-.w-full {
-  width: 100%;
+.w-\[240px\] {
+  width: 240px;
 }
 
-.w-\[240\] {
-  width: 240;
+.w-full {
+  width: 100%;
 }
 
 .flex-wrap {
@@ -614,11 +610,6 @@ video {
 
 .rounded {
   border-radius: 0.25rem;
-}
-
-.rounded-b {
-  border-bottom-right-radius: 0.25rem;
-  border-bottom-left-radius: 0.25rem;
 }
 
 .rounded-t {
