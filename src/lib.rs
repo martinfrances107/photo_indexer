@@ -1,6 +1,8 @@
 pub mod app;
+mod image_gallery;
 mod indexer;
 mod pages;
+mod sidebar;
 
 extern crate seroost_lib;
 
