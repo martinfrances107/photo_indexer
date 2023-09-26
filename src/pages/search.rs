@@ -4,10 +4,7 @@ use std::path::PathBuf;
 use leptos::component;
 use leptos::create_signal;
 use leptos::event_target_value;
-use leptos::logging::log;
 use leptos::view;
-use leptos::For;
-use leptos::IntoAttribute;
 use leptos::IntoView;
 use leptos::Signal;
 use leptos::SignalGet;
@@ -102,8 +99,8 @@ pub fn Search() -> impl IntoView {
         >
         <div class="flex">
 
-        <Sidebar md/>
-        <ImageGallery images index md_key_set />
+          <Sidebar md/>
+          <ImageGallery images index md_key_set />
 
        </div>
        </Transition>

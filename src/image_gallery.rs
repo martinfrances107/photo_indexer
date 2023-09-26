@@ -21,7 +21,7 @@ pub(crate) fn ImageGallery(
     images: Signal<Vec<(usize, (PathBuf, f32))>>,
     md_key_set: WriteSignal<Option<PathBuf>>,
 ) -> impl IntoView {
-    return view! {
+    view! {
       <section class="
       flex
       flex-wrap
@@ -79,5 +79,5 @@ pub(crate) fn ImageGallery(
       />
 
       </section>
-    };
+    }
 }
