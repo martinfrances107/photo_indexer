@@ -12,6 +12,7 @@ use leptos::IntoView;
 use leptos::Signal;
 use leptos::SignalGet;
 use leptos::SignalSet;
+use leptos::SignalUpdate;
 use leptos::Transition;
 use leptos_router::A;
 
@@ -22,7 +23,9 @@ pub fn Search() -> impl IntoView {
     let root = Path::new(&"../exif-samples");
 
     let (value, set_value) = create_signal(0);
-    let (md_key_get, md_key_set) = create_signal::<Option<PathBuf>>(None);
+    let (md_key_get, md_key_set) = create_signal::<Option<PathBuf>>(Some(
+        PathBuf::from("../exif-samples/jpg/orientation/landscape_6.jpg"),
+    ));
     let (index_get, _index_set) = create_signal(Index::new(root));
     let (search_query_get, search_query_set) =
         create_signal::<Vec<char>>(vec![]);
@@ -87,10 +90,56 @@ pub fn Search() -> impl IntoView {
 
          <p class="mb-2">{ move || summary.get()}</p>
          <p>{move || value.get()}</p>
+         <button on:click=move |_| set_value.update(|value| *value -= 1)>"-1"</button>
          <button on:click=move |_| set_value.set(0)>"Clear"</button>
+         <button on:click=move |_| set_value.update(|value| *value += 1)>"+1"</button>
+
+        <p id="key">{move ||{
+          let pb: PathBuf = md_key_get.get().unwrap_or_default();
+          pb.as_path().display().to_string();
+        }
+        }</p>
+        <div class="flex">
          <Transition
            fallback =move || view!{ <p>"Loading"</p> }
          >
+
+         {
+          move || {
+            match md_data.get(){
+              Some(data) => {
+                view!{
+                  <div id="side-menu" class="inline-block">
+                    <A href="">Close</A>
+                    <div
+                      class="
+                      [&>*:nth-child(even)]:bg-gray-100
+                      [&>*:nth-child(odd)]:bg-gray-300
+                      overflow-hidden
+                      w-[240px]
+                      }}">
+                      <For
+                        each =move || data.clone()
+                        key = move |field| {field.ifd_num}
+                        view = move |field| {
+                          view!{
+                            <p>{ field.tag.to_string() }</p>
+                            <p class="text-right" >{ field.display_value().to_string() }</p>
+                          }
+                        }
+                      />
+                      </div>
+                  </div>
+                }
+              },
+              None => {
+                view!{<div id="side-menu-empty" class="w-0"></div>}
+              }
+            }
+
+        }
+      }
+
         <section class="
           flex
           flex-wrap
@@ -100,43 +149,6 @@ pub fn Search() -> impl IntoView {
           justify-evenly
           dark:text-slate-950 bg-slate-600" >
 
-          {
-            move || {
-              match md_data.get(){
-                Some(data) => {
-                  view!{
-                    <div id="side-menu">
-                      <A href="">Close</A>
-                      <div
-                        class="
-                        block-inline
-                        [&>*:nth-child(even)]:bg-gray-100
-                        [&>*:nth-child(odd)]:bg-gray-300
-                        overflow-hidden
-                        w-[240px]
-                        }}">
-                        <For
-                          each =move || data.clone()
-                          key = move |field| {field.ifd_num}
-                          view = move |field| {
-                            view!{
-                              <p>{ field.tag.to_string() }</p>
-                              <p class="text-right" >{ field.display_value().to_string() }</p>
-                            }
-                          }
-                        />
-                        </div>
-                    </div>
-                  }
-                },
-                None => {
-                  view!{<div id="side-menu-empty" class="w-0"></div>}
-                }
-              }
-
-          }
-        }
-
         <For
           each=move || images.get()
           key=move |(i, _)| *i
@@ -145,6 +157,7 @@ pub fn Search() -> impl IntoView {
             let pb1 = pb.clone();
             let pb2 = pb.clone();
             let pb3 = pb.clone();
+            let pb4 = pb.clone();
              view!{
                 <div class="p-2 mb-4 rounded text-left" style="width:280px;">
                   <figure
@@ -170,7 +183,9 @@ pub fn Search() -> impl IntoView {
                           }
                         <button on:click=move |_| {
                           log!("button clicked");
-                          md_key_set.set(Some(pb.to_owned()))
+                          // console_log!("button clicked cl");
+                          println!("on the server click metadata");
+                          md_key_set.set(Some(pb4.to_owned()))
                          }>"Metadata"</button>
 
                        </p>
@@ -183,6 +198,7 @@ pub fn Search() -> impl IntoView {
 
        </section>
       </Transition>
+      </div>
     </div>
     }
 }
