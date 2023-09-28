@@ -9,7 +9,6 @@ use leptos::IntoView;
 use leptos::Signal;
 use leptos::SignalGet;
 use leptos::SignalSet;
-use leptos::SignalUpdate;
 use leptos::Transition;
 
 use crate::image_gallery::ImageGallery;
@@ -20,12 +19,12 @@ use crate::sidebar::Sidebar;
 pub fn Search() -> impl IntoView {
     let root = Path::new(&"../exif-samples");
 
-    let (value, set_value) = create_signal(0);
     let (md_key, md_key_set) = create_signal::<Option<PathBuf>>(Some(
         PathBuf::from("../exif-samples/jpg/orientation/landscape_6.jpg"),
     ));
     let (index, _index_set) = create_signal(Index::new(root));
-    let (search_query, search_query_set) = create_signal::<Vec<char>>(vec![]);
+    let (search_query, search_query_set) =
+        create_signal::<String>("".to_string());
 
     let images = Signal::derive(move || {
         let query = search_query.get();
@@ -33,7 +32,7 @@ pub fn Search() -> impl IntoView {
         let index = index.get();
         index
             .model
-            .search_query(&query)
+            .search_query(&query.chars().collect::<Vec<char>>())
             .iter()
             .enumerate()
             .map(|(i, (pb, f32))| (i, (pb.clone(), *f32)))
@@ -54,10 +53,16 @@ pub fn Search() -> impl IntoView {
         match images.len() {
             0 => String::from("No results found"),
             1 => String::from("1 image found"),
-            _ => {
-                format!("{} images found", images.len())
+            l => {
+                format!("{} images found", l)
             }
         }
+    });
+
+    let key = Signal::derive(move || {
+        let pb: PathBuf = md_key.get().unwrap_or_default();
+        let key = pb.as_path().display().to_string();
+        format!("key: {key}");
     });
 
     view! {
@@ -76,24 +81,14 @@ pub fn Search() -> impl IntoView {
              }
              type="text"
              placeholder="Search EXIF data"
-             prop:value = {move ||
-               String::from_iter(search_query.get())
-             }
+
+             prop:value = search_query
            />
 
          </form>
 
-         <p class="mb-2">{ move || summary.get()}</p>
-         <p>{move || value.get()}</p>
-         <button on:click=move |_| set_value.update(|value| *value -= 1)>"-1"</button>
-         <button on:click=move |_| set_value.set(0)>"Clear"</button>
-         <button on:click=move |_| set_value.update(|value| *value += 1)>"+1"</button>
-
-        <p id="key">{move ||{
-          let pb: PathBuf = md_key.get().unwrap_or_default();
-          pb.as_path().display().to_string();
-        }
-        }</p>
+         <p>{summary.get()}</p>
+         <p id="key">{key.get()} </p>
         <Transition
           fallback =move || view!{ <p>"Loading"</p> }
         >
