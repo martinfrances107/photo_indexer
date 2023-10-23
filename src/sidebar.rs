@@ -25,13 +25,13 @@ pub fn Sidebar(md: Signal<Option<Vec<Field>>>) -> impl IntoView {
                   <For
                     each =move || data.clone()
                     key = move |field| {field.ifd_num}
-                    view = move |field| {
-                      view!{
-                        <p>{ field.tag.to_string() }</p>
-                        <p class="text-right" >{ field.display_value().to_string() }</p>
-                      }
-                    }
-                  />
+                    let:field
+                  >
+
+                      <p>{ field.tag.to_string() }</p>
+                      <p class="text-right" >{ field.display_value().to_string() }</p>
+
+                  </For>
                   </div>
               </div>
             }

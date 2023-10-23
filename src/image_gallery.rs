@@ -34,8 +34,12 @@ pub(crate) fn ImageGallery(
       <For
       each=move || images.get()
       key=move |(i, _)| *i
-      view=move |(_, (pb, _))| {
+      let:data
+      >
+      // view=move |(_, (pb, _))| {
         // TODO find a better way than clone.
+        {
+          let (_,(pb, _)) = data;
         let pb1 = pb.clone();
         let pb2 = pb.clone();
         let pb3 = pb.clone();
@@ -75,7 +79,8 @@ pub(crate) fn ImageGallery(
               </figure>
              </div>
           }
-      }
+        }
+          </For>
       />
 
       </section>
