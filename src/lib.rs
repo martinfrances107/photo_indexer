@@ -1,3 +1,14 @@
+#![deny(clippy::all)]
+#![warn(clippy::pedantic)]
+#![warn(clippy::nursery)]
+#![warn(clippy::cargo)]
+#![warn(missing_docs)]
+#![warn(missing_debug_implementations)]
+
+//! A web app the search a set of images.
+
+/// TODO public to that main can see this
+/// is this correct?
 pub mod app;
 mod image_gallery;
 mod indexer;
@@ -17,6 +28,8 @@ if #[cfg(feature = "hydrate")] {
     use leptos::view;
     use crate::app::App;
 
+    /// Hydrate entry function logging initialisation
+    /// and mount point for App.
     #[wasm_bindgen]
     pub fn hydrate() {
       console_error_panic_hook::set_once();
