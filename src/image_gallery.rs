@@ -43,7 +43,7 @@ pub(crate) fn ImageGallery(
         let pb1 = pb.clone();
         let pb2 = pb.clone();
         let pb3 = pb.clone();
-        let pb4 = pb.clone();
+        let pb4 = pb;
          view!{
             <div class="p-2 mb-4 rounded text-left" style="width:280px;">
               <figure
@@ -55,23 +55,24 @@ pub(crate) fn ImageGallery(
                  <img
                    width="274" height="160"
                    class="aspect-square mx-auto"
-                   src={pb1.into_os_string().to_owned().into_string().unwrap()}
+                   src={pb1.into_os_string().into_string().unwrap()}
                  />
                  <figcaption>
                    {pb2.file_name().unwrap().to_str().unwrap().to_string()}
                    <p>
                      {
-                        let ds = index.get().description_store.clone();
-                        match ds.get(&pb3) {
-                          Some(name) => view!{<p class="break-words w-full">{name}</p>},
-                          None => view!{<p class="w-full">"No description"</p>}
-                        }
+                        let ds = index.get().description_store;
+                        ds.get(&pb3).map_or_else(|| view!{
+                          <p class="w-full">"No description"</p>
+                        }, |name| view!{
+                          <p class="break-words w-full">{name}</p>
+                        })
                       }
                     <button on:click=move |_| {
                       log!("button clicked");
                       // console_log!("button clicked cl");
                       println!("on the server click metadata");
-                      md_key_set.set(Some(pb4.to_owned()))
+                      md_key_set.set(Some(pb4.clone()));
                      }>"Metadata"</button>
 
                    </p>

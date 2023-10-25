@@ -24,7 +24,7 @@ pub fn Search() -> impl IntoView {
     ));
     let (index, _index_set) = create_signal(Index::new(root));
     let (search_query, search_query_set) =
-        create_signal::<String>("".to_string());
+        create_signal::<String>(String::new());
 
     let images = Signal::derive(move || {
         let query = search_query.get();
@@ -40,11 +40,10 @@ pub fn Search() -> impl IntoView {
     });
 
     // Use key to extract metadata from the md_store.
-    let md = Signal::derive(move || match md_key.get() {
-        Some(key) => {
-            index.get().md_store.get(&key).map(|fields| fields.to_vec())
-        }
-        None => None,
+    let md = Signal::derive(move || {
+        md_key
+            .get()
+            .and_then(|key| index.get().md_store.get(&key).cloned())
     });
 
     let summary = Signal::derive(move || {
@@ -54,7 +53,7 @@ pub fn Search() -> impl IntoView {
             0 => String::from("No results found"),
             1 => String::from("1 image found"),
             l => {
-                format!("{} images found", l)
+                format!("{l} images found")
             }
         }
     });

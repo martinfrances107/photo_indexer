@@ -41,7 +41,7 @@ impl Index {
         let image_entries = WalkDir::new(root)
             .follow_links(true)
             .into_iter()
-            .filter_map(|e| e.ok())
+            .filter_map(Result::ok)
             .filter_map(|entry| {
                 let f_name = entry.file_name().to_string_lossy();
                 for extension in &extensions {
