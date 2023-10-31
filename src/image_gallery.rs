@@ -46,12 +46,7 @@ pub(crate) fn ImageGallery(
         let pb4 = pb;
          view!{
             <div class="p-2 mb-4 rounded text-left" style="width:280px;">
-              <figure
-                class="bg-slate-100 rounded-t"
-                // on::click=move |e: u32| {
-                //   log!("{}", e);
-                // }
-                >
+              <figure class="bg-slate-100 rounded-t" >
                  <img
                    width="274" height="160"
                    class="aspect-square mx-auto"

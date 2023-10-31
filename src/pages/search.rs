@@ -27,12 +27,12 @@ pub fn Search() -> impl IntoView {
         create_signal::<String>(String::new());
 
     let images = Signal::derive(move || {
-        let query = search_query.get();
-        println!("inside derived {query:#?} ");
+        let query = move || search_query.get();
+        // println!("inside derived {query:#?} ");
         let index = index.get();
         index
             .model
-            .search_query(&query.chars().collect::<Vec<char>>())
+            .search_query(&query().chars().collect::<Vec<char>>())
             .iter()
             .enumerate()
             .map(|(i, (pb, f32))| (i, (pb.clone(), *f32)))

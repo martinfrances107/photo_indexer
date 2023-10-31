@@ -1,7 +1,12 @@
 [package]
-name = "photo_indexer"
-version = "0.1.0"
+authors = ["martin <martinfrances107@hotmail.com>"]
 edition = "2021"
+categories = ["images"]
+keywords = ["exif"]
+name = "photo_indexer"
+readme = "README.md"
+repository = "https://github.com/martinfrances107/photo_indexer"
+version = "0.1.0"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
