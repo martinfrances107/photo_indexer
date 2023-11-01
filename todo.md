@@ -1,10 +1,11 @@
 #TODO
 
-How can I show the associated metadata tap a button
-to show modal?
+style side tray.
 
-how to display rank ?
+Why doesn't searc limit the images shown.
 
-when you click on a image
-give the image in its own page with meta data and rank.
+Image card need to be rounded at the bottom.
+
+Conditions for PWA
+
 
