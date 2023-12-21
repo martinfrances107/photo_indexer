@@ -41,12 +41,12 @@ pub fn Search() -> impl IntoView {
             .collect::<Vec<(usize, (PathBuf, f32))>>()
     });
 
-    // Use key to extract metadata from the md_store.
-    let md = Signal::derive(move || {
-        md_key
-            .get()
-            .and_then(|key| index.get().md_store.get(&key).cloned())
-    });
+    // // Use key to extract metadata from the md_store.
+    // let md = Signal::derive(move || {
+    //     md_key
+    //         .get()
+    //         .and_then(|key| index.get().md_store.get(&key).cloned())
+    // });
 
     view! {
       <div class="my-0 mx-auto">
@@ -89,7 +89,7 @@ pub fn Search() -> impl IntoView {
         >
         <div class="flex">
 
-          <Sidebar md/>
+          // <Sidebar md/>
           <ImageGallery images=images.into() index md_key_set />
 
        </div>
