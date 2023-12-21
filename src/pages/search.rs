@@ -49,24 +49,6 @@ pub fn Search() -> impl IntoView {
             .and_then(|key| index.get().md_store.get(&key).cloned())
     });
 
-    let summary = Signal::derive(move || {
-        let images = images.get();
-
-        match images.len() {
-            0 => String::from("No results found"),
-            1 => String::from("1 image found"),
-            l => {
-                format!("{l} images found")
-            }
-        }
-    });
-
-    let key = Signal::derive(move || {
-        let pb: PathBuf = md_key.get().unwrap_or_default();
-        let key = pb.as_path().display().to_string();
-        format!("key: {key}");
-    });
-
     view! {
       <div class="my-0 mx-auto">
 
@@ -89,8 +71,20 @@ pub fn Search() -> impl IntoView {
 
          </form>
 
-         <p>{summary.get()}</p>
-         <p id="key">{key.get()} </p>
+         <p>{move || match images.get().len() {
+          0 => String::from("No results found"),
+          1 => String::from("1 image found"),
+          l => {
+              format!("{l} images found")
+          }
+          }}</p>
+
+         <p id="key">{ move || {
+            let pb: PathBuf = md_key.get().unwrap_or_default();
+            let key = pb.as_path().display().to_string();
+            format!("key: {key}");
+        }} </p>
+
         <Transition
           fallback =move || view!{ <p>"Loading"</p> }
         >
