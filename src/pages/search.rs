@@ -19,9 +19,12 @@ use crate::sidebar::Sidebar;
 pub fn Search() -> impl IntoView {
     let root = Path::new(&"../exif-samples");
 
-    let (md_key, md_key_set) = create_signal::<Option<PathBuf>>(Some(
-        PathBuf::from("../exif-samples/jpg/orientation/landscape_6.jpg"),
-    ));
+    let pb = move || {
+        Some(PathBuf::from(
+            "../exif-samples/jpg/orientation/landscape_6.jpg",
+        ))
+    };
+    let (md_key, md_key_set) = create_signal::<Option<PathBuf>>(pb());
     let (index, _index_set) = create_signal(Index::new(root));
     let (search_query, search_query_set) =
         create_signal::<String>(String::new());
