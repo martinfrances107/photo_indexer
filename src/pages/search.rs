@@ -2,6 +2,7 @@ use std::path::Path;
 use std::path::PathBuf;
 
 use leptos::component;
+use leptos::create_memo;
 use leptos::create_signal;
 use leptos::event_target_value;
 use leptos::view;
@@ -28,13 +29,13 @@ pub fn Search() -> impl IntoView {
     let (search_query, search_query_set) =
         create_signal::<String>(String::new());
 
-    let images = Signal::derive(move || {
-        let query = move || search_query.get();
+    let images = create_memo(move |_| {
         // println!("inside derived {query:#?} ");
-        let index = index.get();
         index
+            .get()
             .model
-            .search_query(&query().chars().collect::<Vec<char>>())
+            // .search_query(&search_query.get().chars().collect::<Vec<char>>())
+            .search_query(&"hello".chars().collect::<Vec<char>>())
             .iter()
             .enumerate()
             .map(|(i, (pb, f32))| (i, (pb.clone(), *f32)))
@@ -96,7 +97,7 @@ pub fn Search() -> impl IntoView {
         <div class="flex">
 
           <Sidebar md/>
-          <ImageGallery images index md_key_set />
+          <ImageGallery images=images.into() index md_key_set />
 
        </div>
        </Transition>
