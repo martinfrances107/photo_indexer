@@ -34,8 +34,7 @@ pub fn Search() -> impl IntoView {
         index
             .get()
             .model
-            // .search_query(&search_query.get().chars().collect::<Vec<char>>())
-            .search_query(&"hello".chars().collect::<Vec<char>>())
+            .search_query(&search_query.get().chars().collect::<Vec<char>>())
             .iter()
             .enumerate()
             .map(|(i, (pb, f32))| (i, (pb.clone(), *f32)))
