@@ -16,7 +16,7 @@ use crate::pages::about::About;
 use crate::pages::search::Search;
 
 #[component]
-pub fn App() -> impl IntoView {
+#[must_use] pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
     view! {

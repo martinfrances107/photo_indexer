@@ -16,7 +16,7 @@ use leptos::WriteSignal;
 // use leptos::SignalWrite;
 
 #[component]
-pub(crate) fn ImageGallery(
+pub fn ImageGallery(
     index: ReadSignal<Index>,
     images: Signal<Vec<(usize, (PathBuf, f32))>>,
     md_key_set: WriteSignal<Option<PathBuf>>,

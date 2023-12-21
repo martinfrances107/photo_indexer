@@ -12,7 +12,7 @@ use walkdir::DirEntry;
 use walkdir::WalkDir;
 
 #[derive(Clone, Debug)]
-pub(crate) struct Index {
+pub struct Index {
     // pub doc_links: Vec<DocLink>,
     pub description_store: HashMap<PathBuf, String>,
     pub model: Model,
