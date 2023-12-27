@@ -24,7 +24,7 @@ cargo-leptos watch
 ## Production
 
 TODO
- - How to select the root imags directory.
+ - How to select the root images directory.
  - Currently it is hard coded.
 
 ```bash
