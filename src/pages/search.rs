@@ -81,7 +81,7 @@ pub fn Search() -> impl IntoView {
          <p id="key">{ move || {
             let pb: PathBuf = md_key.get().unwrap_or_default();
             let key = pb.as_path().display().to_string();
-            format!("key: {key}");
+            format!("key: {key}")
         }} </p>
 
         <Transition
