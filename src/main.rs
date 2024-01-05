@@ -71,20 +71,16 @@ pub fn main() {
     // see optional feature `ssg` instead
 }
 
-// #[cfg(all(not(feature = "ssr"), feature = "csr"))]
-// pub fn main() {
-//     use leptos::*;
-//     use leptos_start::app::*;
-//     use wasm_bindgen::prelude::wasm_bindgen;
-//     // a client-side main function is required for using `trunk serve`
-//     // prefer using `cargo leptos serve` instead
-//     // to run: `trunk serve --open --features ssg`
+#[cfg(all(not(feature = "ssr"), feature = "csr"))]
+pub fn main() {
+    // a client-side main function is required for using `trunk serve`
+    // prefer using `cargo leptos serve` instead
+    // to run: `trunk serve --open --features csr`
+    use leptos::*;
+    use photo_indexer::app::*;
+    use wasm_bindgen::prelude::wasm_bindgen;
 
-//     console_error_panic_hook::set_once();
+    console_error_panic_hook::set_once();
 
-//     leptos::mount_to_body(move |cx| {
-//         // note: for testing it may be preferrable to replace this with a
-//         // more specific component, although leptos_router should still work
-//         view! {cx, <App/> }
-//     });
-// }
+    leptos::mount_to_body(App);
+}

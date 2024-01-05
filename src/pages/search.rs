@@ -84,6 +84,11 @@ pub fn Search() -> impl IntoView {
             format!("key: {key}")
         }} </p>
 
+        <p >{ move || {
+          let s = search_query.get();
+          format!("search query: {s}")
+      }} </p>
+
         <Transition
           fallback =move || view!{ <p>"Loading"</p> }
         >
