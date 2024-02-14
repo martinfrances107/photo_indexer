@@ -49,56 +49,56 @@ pub fn Search() -> impl IntoView {
     // });
 
     view! {
-      <div class="my-0 mx-auto">
+        <div class="my-0 mx-auto">
 
-         <form class="dark:text-slate-950 px-6 py-2 text-center">
+          <form class="dark:text-slate-950 px-6 py-2 text-center">
 
-           <label class="hidden" for="search">Search</label>
-           <input
-             id="search"
-             class="p-2"
-             on:change=move |ev|{
-               let val = event_target_value(&ev).chars().collect();
-              //  log!("pressed enter {:#?}", &val);
-               search_query_set.set(val);
+            <label class="hidden" for="search">Search</label>
+            <input
+              id="search"
+              class="p-2"
+              on:change=move |ev|{
+                let val = event_target_value(&ev).chars().collect();
+               //  log!("pressed enter {:#?}", &val);
+                search_query_set.set(val);
+              }
+              type="text"
+              placeholder="Search EXIF data"
+              prop:value = search_query
+            />
+
+          </form>
+
+          <p>{ move || match images.get().len() {
+             0 => String::from("No results found"),
+             1 => String::from("1 image found"),
+             l => {
+                 format!("{l} images found")
              }
-             type="text"
-             placeholder="Search EXIF data"
+             }}
+          </p>
 
-             prop:value = search_query
-           />
+          <p id="key">{ move || {
+              let pb: PathBuf = md_key.get().unwrap_or_default();
+              let key = pb.as_path().display().to_string();
+              format!("key: {key}")
+             }}
+          </p>
 
-         </form>
+          <p >{ move || {
+            let s = search_query.get();
+            format!("search query: {s}")
+              }}
+          </p>
 
-         <p>{move || match images.get().len() {
-          0 => String::from("No results found"),
-          1 => String::from("1 image found"),
-          l => {
-              format!("{l} images found")
-          }
-          }}</p>
-
-         <p id="key">{ move || {
-            let pb: PathBuf = md_key.get().unwrap_or_default();
-            let key = pb.as_path().display().to_string();
-            format!("key: {key}")
-        }} </p>
-
-        <p >{ move || {
-          let s = search_query.get();
-          format!("search query: {s}")
-      }} </p>
-
-        <Transition
-          fallback =move || view!{ <p>"Loading"</p> }
-        >
-        <div class="flex">
-
-          // <Sidebar md/>
-          <ImageGallery images=images.into() index md_key_set />
-
-       </div>
-       </Transition>
-    </div>
+          <Transition
+            fallback =move || view!{ <p>"Loading"</p> }
+          >
+          <div class="flex">
+            // <Sidebar md/>
+            <ImageGallery images=images.into() index md_key_set />
+          </div>
+         </Transition>
+      </div>
     }
 }
