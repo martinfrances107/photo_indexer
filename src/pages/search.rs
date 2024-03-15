@@ -2,11 +2,15 @@ use std::path::Path;
 use std::path::PathBuf;
 
 use leptos::component;
-use leptos::create_memo;
+use leptos::create_node_ref;
 use leptos::create_signal;
+use leptos::ev::SubmitEvent;
 use leptos::event_target_value;
+use leptos::html;
+use leptos::logging::log;
 use leptos::view;
 use leptos::IntoView;
+use leptos::NodeRef;
 use leptos::Signal;
 use leptos::SignalGet;
 use leptos::SignalSet;
@@ -16,6 +20,14 @@ use crate::image_gallery::ImageGallery;
 use crate::indexer::Index;
 use crate::sidebar::Sidebar;
 
+// Settings form calls root_path_set
+// This triggers Index to update,
+// Index is a async process - which is from here onwards is
+// is considered static.
+//
+// When the user enters a search terms
+// The Index is queried and a set of images produced.
+//
 #[component]
 pub fn Search() -> impl IntoView {
     let pb = move || {
@@ -23,50 +35,69 @@ pub fn Search() -> impl IntoView {
             "../exif-samples/jpg/orientation/landscape_6.jpg",
         ))
     };
-    let (md_key, md_key_set) = create_signal::<Option<PathBuf>>(pb());
-    let (index, _index_set) =
-        create_signal(Index::new(Path::new(&"../exif-samples")));
-    let (search_query, search_query_set) =
-        create_signal::<String>(String::new());
 
-    let images = create_memo(move |_| {
-        // println!("inside derived {query:#?} ");
+    let (md_key, md_key_set) = create_signal::<Option<PathBuf>>(pb());
+
+    let (root_path, root_path_set) =
+        create_signal(String::from("../exif-samples"));
+
+    let (search_query, search_query_set) = create_signal(String::new());
+
+    // Index is a derrived signal that depends on a semi static root_path.
+    let index = Signal::derive(move || {
+        let path_str = root_path.get();
+        let path = Path::new(&path_str);
+        Index::new(path)
+    });
+
+    // Images is a derivved signal. depends on both signals index and search_query
+    let images = Signal::derive(move || {
+        let sq = search_query.get().chars().collect::<Vec<char>>();
+        // log!("inside images query function with query {}", sq);
         index
             .get()
             .model
-            .search_query(&search_query.get().chars().collect::<Vec<char>>())
+            .search_query(&sq)
             .iter()
             .enumerate()
             .map(|(i, (pb, f32))| (i, (pb.clone(), *f32)))
             .collect::<Vec<(usize, (PathBuf, f32))>>()
     });
 
-    // // Use key to extract metadata from the md_store.
-    // let md = Signal::derive(move || {
-    //     md_key
-    //         .get()
-    //         .and_then(|key| index.get().md_store.get(&key).cloned())
-    // });
+    // Use key to extract metadata from the md_store.
+    let md = Signal::derive(move || {
+        md_key
+            .get()
+            .and_then(|key| index.get().md_store.get(&key).cloned())
+    });
+
+    let input_element: NodeRef<html::Input> = create_node_ref();
+
+    let on_submit = move |ev: SubmitEvent| {
+        ev.prevent_default();
+
+        let value = input_element
+            .get()
+            .expect("<input> should be mounted.")
+            .value();
+        log!("pressed enter {:#?}", &value);
+        search_query_set.set(value);
+    };
 
     view! {
         <div class="my-0 mx-auto">
 
-          <form class="dark:text-slate-950 px-6 py-2 text-center">
+          <form on:submit=on_submit class="dark:text-slate-950 px-6 py-2 text-center">
 
             <label class="hidden" for="search">Search</label>
             <input
               id="search"
               class="p-2"
-              on:change=move |ev|{
-                let val = event_target_value(&ev).chars().collect();
-               //  log!("pressed enter {:#?}", &val);
-                search_query_set.set(val);
-              }
               type="text"
               placeholder="Search EXIF data"
-              prop:value = search_query
+              node_ref = input_element
             />
-
+            <input type="submit" value="submit"/>
           </form>
 
           <p>{ move || match images.get().len() {

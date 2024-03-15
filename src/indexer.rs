@@ -5,13 +5,12 @@ use std::time::SystemTime;
 
 use exif::Field;
 use exif::Tag;
-
 use seroost_lib::model::Model;
 use tracing::info;
 use walkdir::DirEntry;
 use walkdir::WalkDir;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Index {
     // pub doc_links: Vec<DocLink>,
     pub description_store: HashMap<PathBuf, String>,

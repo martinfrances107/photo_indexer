@@ -17,7 +17,7 @@ use leptos::WriteSignal;
 
 #[component]
 pub fn ImageGallery(
-    index: ReadSignal<Index>,
+    index: Signal<Index>,
     images: Signal<Vec<(usize, (PathBuf, f32))>>,
     md_key_set: WriteSignal<Option<PathBuf>>,
 ) -> impl IntoView {
