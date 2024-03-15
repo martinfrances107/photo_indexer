@@ -5,7 +5,6 @@ use leptos::component;
 use leptos::create_node_ref;
 use leptos::create_signal;
 use leptos::ev::SubmitEvent;
-use leptos::event_target_value;
 use leptos::html;
 use leptos::logging::log;
 use leptos::view;
@@ -20,10 +19,11 @@ use crate::image_gallery::ImageGallery;
 use crate::indexer::Index;
 use crate::sidebar::Sidebar;
 
-// Settings form calls root_path_set
+// A settings form calls root_path_set ( Todo: it hard coded for now ).
+//
 // This triggers Index to update,
 // Index is a async process - which is from here onwards is
-// is considered static.
+// is considered semi static.
 //
 // When the user enters a search terms
 // The Index is queried and a set of images produced.
@@ -38,7 +38,8 @@ pub fn Search() -> impl IntoView {
 
     let (md_key, md_key_set) = create_signal::<Option<PathBuf>>(pb());
 
-    let (root_path, root_path_set) =
+    // TODO this should be under the control of a setting forms.
+    let (root_path, _root_path_set) =
         create_signal(String::from("../exif-samples"));
 
     let (search_query, search_query_set) = create_signal(String::new());
@@ -50,7 +51,7 @@ pub fn Search() -> impl IntoView {
         Index::new(path)
     });
 
-    // Images is a derivved signal. depends on both signals index and search_query
+    // Images depends on both signals index and search_query.
     let images = Signal::derive(move || {
         let sq = search_query.get().chars().collect::<Vec<char>>();
         // log!("inside images query function with query {}", sq);
@@ -127,7 +128,7 @@ pub fn Search() -> impl IntoView {
           >
           <div class="flex">
             // <Sidebar md/>
-            <ImageGallery images=images.into() index md_key_set />
+            <ImageGallery images=images index md_key_set />
           </div>
          </Transition>
       </div>

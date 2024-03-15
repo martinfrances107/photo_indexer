@@ -8,12 +8,10 @@ use leptos::view;
 use leptos::For;
 use leptos::IntoAttribute;
 use leptos::IntoView;
-use leptos::ReadSignal;
 use leptos::Signal;
 use leptos::SignalGet;
 use leptos::SignalSet;
 use leptos::WriteSignal;
-// use leptos::SignalWrite;
 
 #[component]
 pub fn ImageGallery(
