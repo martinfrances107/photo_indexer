@@ -122,9 +122,6 @@ lib-features = ["hydrate"]
 # Optional. Defaults to false.
 lib-default-features = false
 
-[patch.crates-io]
-exif = { git = "https://github.com/martinfrances107/exif-rs", branch = "PartialEq" }
-
 # https://benw.is/posts/how-i-improved-my-rust-compile-times-by-seventy-five-percent
 # Optimisation suggested by
 [profile.dev]
