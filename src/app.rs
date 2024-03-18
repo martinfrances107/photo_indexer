@@ -15,6 +15,7 @@ use leptos_router::A;
 use crate::pages::about::About;
 use crate::pages::search::Search;
 
+/// Provides routes and HTML template.
 #[component]
 #[must_use]
 pub fn App() -> impl IntoView {

@@ -19,15 +19,15 @@ use crate::image_gallery::ImageGallery;
 use crate::indexer::Index;
 use crate::sidebar::Sidebar;
 
-// A settings form calls root_path_set ( Todo: it hard coded for now ).
-//
-// This triggers Index to update,
-// Index is a async process - which is from here onwards is
-// is considered semi static.
-//
-// When the user enters a search terms
-// The Index is queried and a set of images produced.
-//
+/// A settings form calls root_path_set ( Todo: it hard coded for now ).
+///
+/// This triggers Index to update,
+/// Index is a async process - which is from here onwards is
+/// is considered semi static.
+///
+/// When the user enters a search terms
+/// The Index is queried and a set of images produced.
+///
 #[component]
 pub fn Search() -> impl IntoView {
     let pb = move || {
