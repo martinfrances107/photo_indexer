@@ -197,7 +197,12 @@ mod test {
 
         // assert_eq!(result.len(), 1);
 
-        let expected = vec![(PathBuf::from("hello"), 1_f32)];
+        let expected = vec![(
+            PathBuf::from(
+                "/home/martin/build/exif-samples/jpg/long_description.jpg",
+            ),
+            0.015946448_f32,
+        )];
         assert_eq!(result, expected);
     }
 
