@@ -12,7 +12,6 @@ use walkdir::WalkDir;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Index {
-    // pub doc_links: Vec<DocLink>,
     pub description_store: HashMap<PathBuf, String>,
     pub model: Model,
     pub md_store: HashMap<PathBuf, Vec<Field>>,
@@ -26,6 +25,7 @@ impl Index {
     }
 
     /// Equivalent to "find . -name *.extension"
+    #[allow(clippy::cognitive_complexity)]
     pub(crate) fn new_with_extension<const N: usize>(
         root: &Path,
         extensions: [&str; N],
@@ -107,11 +107,13 @@ impl Index {
                                     .collect(),
                             );
 
-                            model.add_document(
-                                filename,
-                                SystemTime::now(),
-                                &content.chars().collect::<Vec<char>>(),
-                            );
+                            if comment.is_empty() {
+                                model.add_document(
+                                    filename,
+                                    SystemTime::now(),
+                                    &content.chars().collect::<Vec<char>>(),
+                                );
+                            }
                         }
                         Err(e) => {
                             info!("skipping invalid field entry");
@@ -129,5 +131,96 @@ impl Index {
             model,
             md_store,
         }
+    }
+}
+
+#[cfg(not(tarpaulin_include))]
+#[cfg(test)]
+mod test {
+
+    static ROOT_DIR: &str = "/home/martin/build/exif-samples";
+    extern crate pretty_assertions;
+
+    use super::Index;
+    use std::path::Path;
+    use std::path::PathBuf;
+
+    // A query the elicits no results.
+    #[test]
+    fn no_results() {
+        let path = Path::new(ROOT_DIR);
+        let index = Index::new(path);
+
+        let query = "socks";
+
+        let sq = query.chars().collect::<Vec<char>>();
+
+        assert_eq!(index.model.search_query(&sq).len(), 0);
+    }
+
+    #[test]
+    fn found_in_title() {
+        let path = Path::new(ROOT_DIR);
+        let index = Index::new(path);
+
+        let query = "hdr";
+
+        let sq = query.chars().collect::<Vec<char>>();
+
+        let result = index.model.search_query(&sq);
+
+        let expected = vec![(PathBuf::from("hello"), 1_f32)];
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn found_in_description() {
+        let path = Path::new(ROOT_DIR);
+        let index = Index::new(path);
+
+        // Other words berlin, chinook.
+        let query = "heaven";
+
+        let sq = query.chars().collect::<Vec<char>>();
+
+        let result = index.model.search_query(&sq);
+
+        // assert_eq!(result.len(), 1);
+
+        let expected = vec![(PathBuf::from("hello"), 1_f32)];
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn found_in_metadata() {
+        let path = Path::new(ROOT_DIR);
+        let index = Index::new(path);
+
+        // Other words sanyo, digital
+        let query = "olymupus";
+
+        let sq = query.chars().collect::<Vec<char>>();
+
+        let result = index.model.search_query(&sq);
+
+        let expected = vec![(PathBuf::from("hello"), 1_f32)];
+        assert_eq!(result, expected);
+    }
+
+    // Must find by year
+    // DD/MM/YY
+    #[test]
+    fn date() {
+        let path = Path::new(ROOT_DIR);
+        let index = Index::new(path);
+
+        let query = "2018";
+
+        let sq = query.chars().collect::<Vec<char>>();
+
+        let result = index.model.search_query(&sq);
+
+        let expected = vec![(PathBuf::from("hello"), 1_f32)];
+        assert_eq!(result, expected);
     }
 }
