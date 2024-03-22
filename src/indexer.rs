@@ -77,7 +77,10 @@ impl Index {
 
                     match exifreader.read_from_container(&mut bufreader) {
                         Ok(exif) => {
-                            let mut content = String::new();
+                            // Unwrap here side steps unicode issues.
+                            let mut content =
+                                String::from(de.path().to_str().unwrap());
+                            content.push_str(" ");
                             for field in exif.fields() {
                                 // MakerNote is a proprietary binary format block
                                 // do not pass to indexer.
@@ -145,6 +148,10 @@ impl Index {
 
 #[cfg(not(tarpaulin_include))]
 #[cfg(test)]
+/// Can I refactor?
+/// Drop the ROOT_DIR
+/// Inject two simulated files.
+/// then assert we can see only one returned by search.
 mod test {
 
     static ROOT_DIR: &str = "/home/martin/build/exif-samples";
@@ -167,9 +174,8 @@ mod test {
         assert!(index.model.search_query(&sq).is_empty());
     }
 
-    #[ignore]
     #[test]
-    fn found_in_title() {
+    fn found_in_filename() {
         let path = Path::new(ROOT_DIR);
         let index = Index::new(path);
 
@@ -179,7 +185,14 @@ mod test {
 
         let result = index.model.search_query(&sq);
 
-        let expected = vec![(PathBuf::from("hello"), 1_f32)];
+        let expected = vec![
+          (PathBuf::from("/home/martin/build/exif-samples/jpg/Sony_HDR-HC3.jpg"), 0.026654188),
+          (PathBuf::from("/home/martin/build/exif-samples/jpg/hdr/canon_hdr_YES.jpg"), 0.015657004),
+          (PathBuf::from("/home/martin/build/exif-samples/jpg/hdr/canon_hdr_NO.jpg"), 0.015657004),
+          (PathBuf::from("/home/martin/build/exif-samples/jpg/hdr/iphone_hdr_YES.jpg"), 0.009995321),
+          (PathBuf::from("/home/martin/build/exif-samples/jpg/hdr/iphone_hdr_NO.jpg"), 0.009906866),
+          (PathBuf::from("/home/martin/build/exif-samples/jpg/mobile/HMD_Nokia_8.3_5G_hdr.jpg"), 0.0073168357)]
+        ;
         assert_eq!(result, expected);
     }
 
@@ -201,7 +214,7 @@ mod test {
             PathBuf::from(
                 "/home/martin/build/exif-samples/jpg/long_description.jpg",
             ),
-            0.015946448_f32,
+            0.014825212_f32,
         )];
         assert_eq!(result, expected);
     }
