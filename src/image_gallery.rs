@@ -75,7 +75,6 @@ pub fn ImageGallery(
           }
         }
           </For>
-      />
 
       </section>
     }
