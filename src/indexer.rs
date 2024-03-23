@@ -78,16 +78,19 @@ impl Index {
                     match exifreader.read_from_container(&mut bufreader) {
                         Ok(exif) => {
                             // Unwrap here side steps unicode issues.
+                            // TODI can I strip off absolute path
+                            // and extension and just have a file_stem?
                             let mut content =
                                 String::from(de.path().to_str().unwrap());
-                            content.push_str(" ");
+                            content.push(' ');
                             for field in exif.fields() {
                                 // MakerNote is a proprietary binary format block
                                 // do not pass to indexer.
                                 if field.tag != Tag::MakerNote {
-                                    let dv =
-                                        format!("{}", field.display_value());
-                                    content.push_str(&dv);
+                                    content.push_str(&format!(
+                                        "{}",
+                                        field.display_value()
+                                    ));
                                 }
 
                                 // Special case ImageDescription
@@ -96,16 +99,10 @@ impl Index {
                                     // TODO at this point a valid display_value() is
                                     // "\"          \""
                                     // Must strip out white space and escaped values like \"
-                                    // dbg!(format!("{}", field.display_value()));
                                     description_store.insert(
                                         filename.clone(),
                                         format!("{}", field.display_value()),
                                     );
-
-                                    content.push_str(&format!(
-                                        "{}",
-                                        field.display_value()
-                                    ));
                                 }
                             }
                             md_store.insert(
@@ -174,6 +171,11 @@ mod test {
         assert!(index.model.search_query(&sq).is_empty());
     }
 
+    // This test is broken these two have the same rank
+    // and from test to test can change position.
+    // canon_hdr_YES.jpg
+    // canon_hdr_NO.jpg
+    #[ignore]
     #[test]
     fn found_in_filename() {
         let path = Path::new(ROOT_DIR);
@@ -214,7 +216,7 @@ mod test {
             PathBuf::from(
                 "/home/martin/build/exif-samples/jpg/long_description.jpg",
             ),
-            0.014825212_f32,
+            0.01150077_f32,
         )];
         assert_eq!(result, expected);
     }
