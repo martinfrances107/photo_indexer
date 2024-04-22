@@ -24,8 +24,9 @@ cargo-leptos watch
 ## Production
 
 TODO
- - How to select the root images directory.
- - Currently it is hard coded.
+
+* How to select the root images directory.
+* Currently it is hard coded.
 
 ```bash
 cd photo_indexer
@@ -35,9 +36,7 @@ cargo-leptos serve
 
 then,visit
 
-```
-http://localhost:3000/
-```
+[localhost](http://localhost:3000/)
 
 Outline of test strategy
 
