@@ -18,8 +18,7 @@ pub struct GlobalState {
 
 impl Default for GlobalState {
     fn default() -> Self {
-        let root_dir =
-            PathBuf::from("../exif-samples");
+        let root_dir = PathBuf::from("../exif-samples");
 
         Self {
             index: Index::new(&root_dir),
