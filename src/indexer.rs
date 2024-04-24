@@ -10,7 +10,7 @@ use tracing::info;
 use walkdir::DirEntry;
 use walkdir::WalkDir;
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct Index {
     pub description_store: HashMap<PathBuf, String>,
     pub model: Model,
@@ -171,7 +171,7 @@ mod test {
         assert!(index.model.search_query(&sq).is_empty());
     }
 
-    // This test is broken these two have the same rank
+    // This test is broken these two elements have the same rank
     // and from test to test can change position.
     // canon_hdr_YES.jpg
     // canon_hdr_NO.jpg
