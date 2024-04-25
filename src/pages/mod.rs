@@ -1,35 +1,43 @@
 pub mod about;
 pub mod search;
 
-use std::path::PathBuf;
-use std::sync::Mutex;
+use cfg_if::cfg_if;
 
-use lazy_static::lazy_static;
+cfg_if! {
+  if #[cfg(feature="ssr")]{
 
-use crate::indexer::Index;
+    use std::path::PathBuf;
+    use std::sync::Mutex;
 
-#[derive(Clone, Debug)]
-pub struct GlobalState {
-    pub root_dir: PathBuf,
-    pub index: Index,
-    pub query: Vec<char>,
-    pub entries: Vec<(usize, (PathBuf, f32))>,
-}
+    use lazy_static::lazy_static;
 
-impl Default for GlobalState {
-    fn default() -> Self {
+    use crate::indexer::Index;
+
+    #[derive(Clone, Debug)]
+    pub struct GlobalState {
+      pub root_dir: PathBuf,
+      pub index: Index,
+      pub query: Vec<char>,
+      pub entries: Vec<(usize, (PathBuf, f32))>,
+    }
+
+
+    impl Default for GlobalState {
+      fn default() -> Self {
         let root_dir = PathBuf::from("../exif-samples");
 
         Self {
-            index: Index::new(&root_dir),
-            root_dir,
-            query: vec![],
-            entries: vec![],
+          index: Index::new(&root_dir),
+          root_dir,
+          query: vec![],
+          entries: vec![],
         }
+      }
     }
-}
 
-lazy_static! {
-    static ref GLOBAL_STATE: Mutex<GlobalState> =
-        Mutex::new(GlobalState::default());
+    lazy_static! {
+      static ref GLOBAL_STATE: Mutex<GlobalState> =
+      Mutex::new(GlobalState::default());
+    }
+  }
 }

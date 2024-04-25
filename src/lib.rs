@@ -4,13 +4,14 @@
 #![warn(clippy::cargo)]
 #![warn(missing_docs)]
 #![warn(missing_debug_implementations)]
-
+#![allow(clippy::module_name_repetitions)]
 //! A web app the search a set of images.
 
 /// TODO public to that main can see this
 /// is this correct?
 pub mod app;
 mod image_gallery;
+#[cfg(feature = "ssr")]
 mod indexer;
 mod pages;
 mod sidebar;

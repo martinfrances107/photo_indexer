@@ -4,28 +4,17 @@ use leptos::component;
 use leptos::logging::log;
 use leptos::view;
 use leptos::For;
-use leptos::IntoAttribute;
 use leptos::IntoView;
-use leptos::Memo;
-use leptos::ReadSignal;
-use leptos::Resource;
-use leptos::Transition;
-use leptos::ServerFnError;
 use leptos::Signal;
 use leptos::SignalGet;
-use leptos::SignalSet;
+use leptos::Transition;
 use leptos::WriteSignal;
-
-use crate::indexer::Index;
-use crate::pages::search::SearchResult;
 
 #[component]
 pub fn ImageGallery(
-    // index: Signal<Index>,
     entries: Signal<Vec<std::string::String>>,
     md_key_set: WriteSignal<Option<PathBuf>>,
 ) -> impl IntoView {
-
     view! {
 
       <section class="

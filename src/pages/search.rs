@@ -13,16 +13,14 @@ use leptos::logging::log;
 use leptos::server;
 use leptos::view;
 use leptos::IntoView;
-use leptos::Signal;
 use leptos::NodeRef;
 use leptos::ServerFnError;
+use leptos::Signal;
 use leptos::SignalGet;
 use leptos::Transition;
 use serde::Deserialize;
 use serde::Serialize;
 
-#[cfg(feature = "ssr")]
-use crate::pages::GlobalState;
 use crate::image_gallery::ImageGallery;
 #[cfg(feature = "ssr")]
 use crate::pages::GLOBAL_STATE;
@@ -50,7 +48,7 @@ pub async fn add_query(query: String) -> Result<SearchResult, ServerFnError> {
             })
         }
         Err(e) => {
-            panic!("/search{query} - could not unlock");
+            panic!("/search query - could not unlock {e}");
         }
     }
 }
@@ -61,7 +59,7 @@ pub async fn add_query(query: String) -> Result<SearchResult, ServerFnError> {
 #[server]
 pub async fn get_query() -> Result<SearchResult, ServerFnError> {
     let entries = match GLOBAL_STATE.lock() {
-        Ok(mut state) => {
+        Ok(state) => {
             // log!("get_query: {:#?}", state.query);
             // log!("get_query entries_raw {:#?}", state.entries);
             let entries = if state.query == vec!['h', 'd', 'r'] {
@@ -82,7 +80,7 @@ pub async fn get_query() -> Result<SearchResult, ServerFnError> {
             entries
         }
         Err(e) => {
-            panic!("get_query - could not unlock");
+            panic!("get_query - could not unlock {e}");
         }
     };
 
@@ -114,8 +112,7 @@ pub fn Search() -> impl IntoView {
     // let (root_path, _root_path_set) =
     //     create_signal(String::from("../exif-samples"));
 
-    let (search_query, search_query_set) =
-        create_signal(String::from("orient"));
+    let (search_query, _) = create_signal(String::from("orient"));
 
     // // Index is a derrived signal that depends on a semi static root_path.
     // let index = create_memo(move |_| {
@@ -164,19 +161,19 @@ pub fn Search() -> impl IntoView {
     );
 
     let entries = Signal::derive(move || {
-      match images.get() {
-        Some(Ok(SearchResult{entries})) => {
-          // log!("SD {:#?}", entries);
-           let paths: Vec<_>  = entries.iter().map(|(i, (path, _rank))|  {
-            path.display().to_string()
-          }).collect();
-          paths
-
-        },
-        _ => {
-          vec![]
+        match images.get() {
+            Some(Ok(SearchResult { entries })) => {
+                // log!("SD {:#?}", entries);
+                let paths: Vec<_> = entries
+                    .iter()
+                    .map(|(_, (path, _rank))| path.display().to_string())
+                    .collect();
+                paths
+            }
+            _ => {
+                vec![]
+            }
         }
-      }
     });
 
     // create_effect(move |_| {

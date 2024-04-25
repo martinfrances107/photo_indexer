@@ -4,6 +4,7 @@
 #![warn(clippy::cargo)]
 #![warn(missing_docs)]
 #![warn(missing_debug_implementations)]
+#![allow(clippy::module_name_repetitions)]
 
 //! A web app the search a set of images.
 
