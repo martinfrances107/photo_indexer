@@ -9,6 +9,7 @@ use leptos::IntoView;
 use leptos::Memo;
 use leptos::ReadSignal;
 use leptos::Resource;
+use leptos::Transition;
 use leptos::ServerFnError;
 use leptos::Signal;
 use leptos::SignalGet;
@@ -21,18 +22,12 @@ use crate::pages::search::SearchResult;
 #[component]
 pub fn ImageGallery(
     // index: Signal<Index>,
-    images: Resource<usize, Result<SearchResult, ServerFnError>>,
+    entries: Signal<Vec<std::string::String>>,
     md_key_set: WriteSignal<Option<PathBuf>>,
 ) -> impl IntoView {
-    let entries = match images.get() {
-        Some(Ok(SearchResult { entries })) => entries,
-        _ => {
-            // panic!("image gallery failed to get resource");
-            vec![]
-        }
-    };
 
     view! {
+
       <section class="
       flex
       flex-wrap
@@ -41,17 +36,25 @@ pub fn ImageGallery(
       px-2 py-4
       justify-evenly
       dark:text-slate-950 bg-slate-600" >
-
+      <Transition
+      fallback =move || view!{ <p>"Loading Image Gallery"</p> }
+    >
       <For
-      each=move || entries.clone()
+      each=move || entries.get().into_iter().enumerate()
       key=move |(i, _)| *i
       let:data
       >
       // view=move |(_, (pb, _))| {
-        // TODO find a better way than clone.
-        {
-          // log!("{:#?}", data);
-        // let (_, (pb, _)) = data;
+        // <p>{data.1}</p>
+        <img
+            width="274" height="160"
+            class="aspect-square mx-auto"
+            src={data.1}
+        />
+        // {
+        // // TODO find a better way than clone.
+        //   // log!("{:#?}", data);
+        // let  (_, pb) = data;
         // let pb1 = pb.clone();
         // let pb2 = pb.clone();
         // let pb3 = pb.clone();
@@ -62,24 +65,24 @@ pub fn ImageGallery(
         //          <img
         //            width="274" height="160"
         //            class="aspect-square mx-auto"
-        //            src={pb1.into_os_string().into_string().unwrap()}
+        //            src={pb1}
         //          />
         //          <figcaption>
-        //            {pb2.file_name().unwrap().to_str().unwrap().to_string()}
+        //            {pb2}
         //            <p>
-        //              {
-        //                 let ds = index.get().description_store;
-        //                 ds.get(&pb3 ).map_or_else(|| view!{
-        //                   <p class="w-full">"No description"</p>
-        //                 }, |name| view!{
-        //                   <p class="break-words w-full">{name}</p>
-        //                 })
-        //               }
+        //             //  {
+        //             //     let ds = index.get().description_store;
+        //             //     ds.get(&pb3 ).map_or_else(|| view!{
+        //             //       <p class="w-full">"No description"</p>
+        //             //     }, |name| view!{
+        //             //       <p class="break-words w-full">{name}</p>
+        //             //     })
+        //             //   }
         //             <button on:click=move |_| {
         //               log!("button clicked");
         //               // console_log!("button clicked cl");
         //               println!("on the server click metadata");
-        //               md_key_set.set(Some(pb4.clone()));
+        //               // md_key_set.set(Some(pb4.clone()));
         //              }>"Metadata"</button>
 
         //            </p>
@@ -87,8 +90,9 @@ pub fn ImageGallery(
         //       </figure>
         //      </div>
         //   }
-        }
+        // }
           </For>
+          </Transition>
 
       </section>
     }

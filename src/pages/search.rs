@@ -13,6 +13,7 @@ use leptos::logging::log;
 use leptos::server;
 use leptos::view;
 use leptos::IntoView;
+use leptos::Signal;
 use leptos::NodeRef;
 use leptos::ServerFnError;
 use leptos::SignalGet;
@@ -22,6 +23,7 @@ use serde::Serialize;
 
 #[cfg(feature = "ssr")]
 use crate::pages::GlobalState;
+use crate::image_gallery::ImageGallery;
 #[cfg(feature = "ssr")]
 use crate::pages::GLOBAL_STATE;
 use crate::sidebar::Sidebar;
@@ -60,8 +62,8 @@ pub async fn add_query(query: String) -> Result<SearchResult, ServerFnError> {
 pub async fn get_query() -> Result<SearchResult, ServerFnError> {
     let entries = match GLOBAL_STATE.lock() {
         Ok(mut state) => {
-            log!("get_query: {:#?}", state.query);
-            log!("get_query entries_raw {:#?}", state.entries);
+            // log!("get_query: {:#?}", state.query);
+            // log!("get_query entries_raw {:#?}", state.entries);
             let entries = if state.query == vec!['h', 'd', 'r'] {
                 // state.entries = entries_raw.into_iter().enumerate().collect();
                 state.entries.clone()
@@ -161,10 +163,26 @@ pub fn Search() -> impl IntoView {
         |_| get_query(),
     );
 
-    create_effect(move |_| {
-        log!("monitor: sq/images pair {:#?}", &search_query.get());
-        log!("monitor: images {:#?}", &images.get());
+    let entries = Signal::derive(move || {
+      match images.get() {
+        Some(Ok(SearchResult{entries})) => {
+          // log!("SD {:#?}", entries);
+           let paths: Vec<_>  = entries.iter().map(|(i, (path, _rank))|  {
+            path.display().to_string()
+          }).collect();
+          paths
+
+        },
+        _ => {
+          vec![]
+        }
+      }
     });
+
+    // create_effect(move |_| {
+    //     log!("monitor: sq/images pair {:#?}", &search_query.get());
+    //     log!("monitor: images {:#?}", &images.get());
+    // });
 
     // let count_string = Signal::derive(move || {
     //     let len = images.get().len();
@@ -197,7 +215,7 @@ pub fn Search() -> impl IntoView {
             .get()
             .expect("<input> should be mounted.")
             .value();
-        log!("pressed enter {:#?}", &query);
+        // log!("pressed enter {:#?}", &query);
 
         search_query_action.dispatch(AddQuery { query });
 
@@ -249,14 +267,17 @@ pub fn Search() -> impl IntoView {
             </p>
           </Transition>
 
-          <Transition
-            fallback =move || view!{ <p>"Loading Image Gallery"</p> }
-          >
+
             <div class="flex">
+            // <p>Hello{
+            //   entries.get()
+            // }
+            //   World
+            // </p>
               // <Sidebar md/>
-              // <ImageGallery images md_key_set />
+              <ImageGallery entries md_key_set />
             </div>
-         </Transition>
+
       </div>
     }
 }
