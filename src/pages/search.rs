@@ -39,9 +39,8 @@ pub async fn add_query(query: String) -> Result<SearchResult, ServerFnError> {
     let sq = query.chars().collect::<Vec<char>>();
     match GLOBAL_STATE.lock() {
         Ok(mut state) => {
-            state.query = sq.clone();
-            let entries_raw = state.index.model.search_query(&sq);
-            // log!("add_query: {:#?}", entries_raw);
+            state.query = sq;
+            let entries_raw = state.index.model.search_query(&state.query);
             state.entries = entries_raw.into_iter().enumerate().collect();
             Ok(SearchResult {
                 entries: state.entries.clone(),
@@ -60,8 +59,6 @@ pub async fn add_query(query: String) -> Result<SearchResult, ServerFnError> {
 pub async fn get_query() -> Result<SearchResult, ServerFnError> {
     let entries = match GLOBAL_STATE.lock() {
         Ok(state) => {
-            // log!("get_query: {:#?}", state.query);
-            // log!("get_query entries_raw {:#?}", state.entries);
                 state.entries.clone()
         }
         Err(e) => {
@@ -100,47 +97,6 @@ pub fn Search() -> impl IntoView {
     let (search_query, _) =
         create_signal(String::from("orient"));
 
-    // // Index is a derrived signal that depends on a semi static root_path.
-    // let index = create_memo(move |_| {
-    //     let path_str = root_path.get();
-    //     let path = Path::new(&path_str);
-    //     Index::new(path)
-    // });
-
-    // // `create_slice` lets us create a "lens" into the data
-    // let (index, _set_index) = create_slice(
-    //     // we take a slice *from* `state`
-    //     state,
-    //     // our getter returns a "slice" of the data
-    //     |state| state.index.clone(),
-    //     // our setter describes how to mutate that slice, given a new value
-    //     |state, index| state.index = index,
-    // );
-
-    // Images depends on both signals index and search_query.
-    // was using a single iterator here, but rust is lazily evaluates
-    // iterators, and care must be taken within closures.
-    // Dropped back to for loop here.
-    // let images = Signal::derive(move || {
-    //     // let sq = search_query.get().chars().collect::<Vec<char>>();
-    //     let mut sq = vec![];
-    //     for c in search_query.get().chars() {
-    //         sq.push(c);
-    //     }
-    //     let index_g = index.get();
-    //     log!("deriving images with sq ");
-    //     // log!("{:#?}", &sq);
-    //     // log!("{:#?}", &index_g.model);
-    //     let partial_results = index_g.model.search_query(&sq);
-    //     // log!("partial results");
-    //     // log!("{:#?}", &partial_results);
-    //     let mut results = vec![];
-    //     for (i, partial) in partial_results.into_iter().enumerate() {
-    //         results.push((i, partial));
-    //     }
-    //     results
-    // });
-    // let (images, images_set) = create_signal::<Vec<SRType>>(vec![]);
     let images = create_local_resource(
         move || search_query_action.version().get(),
         |_| get_query(),
@@ -198,17 +154,9 @@ pub fn Search() -> impl IntoView {
             .get()
             .expect("<input> should be mounted.")
             .value();
-        // log!("pressed enter {:#?}", &query);
 
         search_query_action.dispatch(AddQuery { query });
 
-        // if let Some(Ok(val)) = search_query_action.value().get() {
-        //     log!("{:#?}", &val);
-        // } else {
-        //     log!("Failed to get return value");
-        // }
-
-        // images_set.set(return_value);
     };
 
     view! {
@@ -252,11 +200,6 @@ pub fn Search() -> impl IntoView {
 
 
             <div class="flex">
-            // <p>Hello{
-            //   entries.get()
-            // }
-            //   World
-            // </p>
               // <Sidebar md/>
               <ImageGallery entries md_key_set />
             </div>
