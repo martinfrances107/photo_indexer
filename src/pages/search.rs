@@ -5,7 +5,6 @@ use leptos::create_effect;
 use leptos::create_node_ref;
 use leptos::create_server_action;
 use leptos::create_signal;
-// use leptos::create_slice;
 use leptos::create_local_resource;
 use leptos::ev::SubmitEvent;
 use leptos::html;
@@ -21,9 +20,9 @@ use leptos::Transition;
 use serde::Deserialize;
 use serde::Serialize;
 
-use crate::image_gallery::ImageGallery;
 #[cfg(feature = "ssr")]
 use crate::pages::GLOBAL_STATE;
+use crate::image_gallery::ImageGallery;
 use crate::sidebar::Sidebar;
 
 pub type SRType = (usize, (PathBuf, f32));
@@ -105,7 +104,6 @@ pub fn Search() -> impl IntoView {
     let entries = Signal::derive(move || {
       match images.get() {
         Some(Ok(SearchResult{entries})) => {
-          // log!("SD {:#?}", entries);
            let paths: Vec<_>  = entries.iter().map(|(_, (path, _rank))|  {
             path.display().to_string()
           }).collect();
@@ -123,16 +121,16 @@ pub fn Search() -> impl IntoView {
     //     log!("monitor: images {:#?}", &images.get());
     // });
 
-    // let count_string = Signal::derive(move || {
-    //     let len = images.get().len();
-    //     match len {
-    //         0 => String::from("No results found"),
-    //         1 => String::from("1 image found"),
-    //         l => {
-    //             format!("{l} images found")
-    //         }
-    //     }
-    // });
+    let count_string = Signal::derive(move || {
+        let len = entries.get().len();
+        match len {
+            0 => String::from("No results found"),
+            1 => String::from("1 image found"),
+            l => {
+                format!("{l} images found")
+            }
+        }
+    });
 
     // create_effect(move |_| {
     //     log!("monitor count_string() {:#?}", &count_string.get());
@@ -163,7 +161,6 @@ pub fn Search() -> impl IntoView {
         <div class="my-0 mx-auto">
 
           <form on:submit=on_submit class="dark:text-slate-950 px-6 py-2 text-center">
-
             <label class="hidden" for="search">Search</label>
             <input
               id="search"
@@ -175,34 +172,16 @@ pub fn Search() -> impl IntoView {
             <input type="submit" value="submit"/>
           </form>
 
-          // <Transition
-          //   fallback =move || view!{ <p>"Loading count"</p> }
-          // >
-          //   <p>{ move || count_string.get()}</p>
-          // </Transition>
-
-          <p id="key">{ move || {
-              let pb: PathBuf = md_key.get().unwrap_or_default();
-              let key = pb.as_path().display().to_string();
-              format!("key: {key}")
-             }}
-          </p>
-
           <Transition
-            fallback =move || view!{ <p>"Loading search query"</p> }
+            fallback =move || view!{ <p>"Loading count"</p> }
           >
-            <p >{ move || {
-              let s = search_query.get();
-              format!("search query: {s}")
-                }}
-            </p>
+            <p>{ move || count_string.get()}</p>
           </Transition>
 
-
-            <div class="flex">
-              // <Sidebar md/>
-              <ImageGallery entries md_key_set />
-            </div>
+          <div class="flex">
+            // <Sidebar md/>
+            <ImageGallery entries md_key_set />
+          </div>
 
       </div>
     }
