@@ -1,9 +1,22 @@
 # TODO
 
-style side tray.
+## Snags : -
+  Image card need to be rounded at the bottom.
 
-Why doesn't search limit the images shown.
+  Empty ImageGallery look like a pill.
+  Search Button - Not vissible
 
-Image card need to be rounded at the bottom.
+## meta data issues
 
-Conditions for PWA
+## style side tray
+
+## Performance
+
+  CSS is not compressed. A large drag on the waterfall.
+  Add compression to HTTP server.
+
+  ```rustlang
+  .wrap(middleware::Compress::default())
+  ```
+
+## Conditions for PWA

@@ -2,27 +2,27 @@ use std::path::PathBuf;
 
 use leptos::component;
 use leptos::create_effect;
+use leptos::create_local_resource;
 use leptos::create_node_ref;
 use leptos::create_server_action;
 use leptos::create_signal;
-use leptos::create_local_resource;
 use leptos::ev::SubmitEvent;
 use leptos::html;
 use leptos::logging::log;
 use leptos::server;
 use leptos::view;
 use leptos::IntoView;
-use leptos::Signal;
 use leptos::NodeRef;
 use leptos::ServerFnError;
+use leptos::Signal;
 use leptos::SignalGet;
 use leptos::Transition;
 use serde::Deserialize;
 use serde::Serialize;
 
+use crate::image_gallery::ImageGallery;
 #[cfg(feature = "ssr")]
 use crate::pages::GLOBAL_STATE;
-use crate::image_gallery::ImageGallery;
 use crate::sidebar::Sidebar;
 
 pub type SRType = (usize, (PathBuf, f32));
@@ -57,9 +57,7 @@ pub async fn add_query(query: String) -> Result<SearchResult, ServerFnError> {
 #[server]
 pub async fn get_query() -> Result<SearchResult, ServerFnError> {
     let entries = match GLOBAL_STATE.lock() {
-        Ok(state) => {
-                state.entries.clone()
-        }
+        Ok(state) => state.entries.clone(),
         Err(e) => {
             panic!("get_query - could not unlock {e}");
         }
@@ -93,27 +91,24 @@ pub fn Search() -> impl IntoView {
     // let (root_path, _root_path_set) =
     //     create_signal(String::from("../exif-samples"));
 
-    let (search_query, _) =
-        create_signal(String::from("orient"));
+    let (search_query, _) = create_signal(String::from("orient"));
 
     let images = create_local_resource(
         move || search_query_action.version().get(),
         |_| get_query(),
     );
 
-    let entries = Signal::derive(move || {
-      match images.get() {
-        Some(Ok(SearchResult{entries})) => {
-           let paths: Vec<_>  = entries.iter().map(|(_, (path, _rank))|  {
-            path.display().to_string()
-          }).collect();
-          paths
-
-        },
-        _ => {
-          vec![]
+    let entries = Signal::derive(move || match images.get() {
+        Some(Ok(SearchResult { entries })) => {
+            let paths: Vec<_> = entries
+                .iter()
+                .map(|(_, (path, _rank))| path.display().to_string())
+                .collect();
+            paths
         }
-      }
+        _ => {
+            vec![]
+        }
     });
 
     // create_effect(move |_| {
@@ -154,7 +149,6 @@ pub fn Search() -> impl IntoView {
             .value();
 
         search_query_action.dispatch(AddQuery { query });
-
     };
 
     view! {
