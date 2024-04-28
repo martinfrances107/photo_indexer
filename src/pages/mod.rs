@@ -8,9 +8,9 @@ cfg_if! {
 
     use std::path::PathBuf;
     use std::sync::Mutex;
-
     use lazy_static::lazy_static;
 
+    use crate::pages::search::SRElem;
     use crate::indexer::Index;
 
     #[derive(Clone, Debug)]
@@ -18,7 +18,7 @@ cfg_if! {
       pub root_dir: PathBuf,
       pub index: Index,
       pub query: Vec<char>,
-      pub entries: Vec<(usize, (PathBuf, f32))>,
+      pub entries: Vec<SRElem>,
     }
 
 

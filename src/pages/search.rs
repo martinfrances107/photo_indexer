@@ -25,11 +25,16 @@ use crate::image_gallery::ImageGallery;
 use crate::pages::GLOBAL_STATE;
 use crate::sidebar::Sidebar;
 
-pub type SRType = (usize, (PathBuf, f32));
+// Search Result Element
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
+pub struct SRElem {
+    pub description: String,
+    pub path_rank: (PathBuf, f32),
+}
 
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub struct SearchResult {
-    pub entries: Vec<SRType>,
+    pub entries: Vec<SRElem>,
 }
 
 #[server]
@@ -40,7 +45,20 @@ pub async fn add_query(query: String) -> Result<SearchResult, ServerFnError> {
         Ok(mut state) => {
             state.query = sq;
             let entries_raw = state.index.model.search_query(&state.query);
-            state.entries = entries_raw.into_iter().enumerate().collect();
+            state.entries = entries_raw
+                .iter()
+                .map(|path_rank| {
+                    let description =
+                        match state.index.description_store.get(&path_rank.0) {
+                            Some(description) => description.to_string(),
+                            None => String::default(),
+                        };
+                    SRElem {
+                        description,
+                        path_rank: path_rank.clone(),
+                    }
+                })
+                .collect();
             Ok(SearchResult {
                 entries: state.entries.clone(),
             })
@@ -100,11 +118,7 @@ pub fn Search() -> impl IntoView {
 
     let entries = Signal::derive(move || match images.get() {
         Some(Ok(SearchResult { entries })) => {
-            let paths: Vec<_> = entries
-                .iter()
-                .map(|(_, (path, _rank))| path.display().to_string())
-                .collect();
-            paths
+            entries
         }
         _ => {
             vec![]

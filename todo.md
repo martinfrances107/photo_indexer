@@ -1,9 +1,18 @@
 # TODO
 
+## Known bugs
+
+Images are sticky...
+
+type hdr - get 6 images
+type chinook - get one image -- but the first from hdr is incorrectly displayed.
+type "" to clear the images
+type chinook - to display the correct image.
+
 ## Snags : -
+
   Image card need to be rounded at the bottom.
 
-  Empty ImageGallery look like a pill.
   Search Button - Not vissible
 
 ## meta data issues

@@ -10,21 +10,26 @@ use leptos::SignalGet;
 use leptos::Transition;
 use leptos::WriteSignal;
 
+use crate::pages::search::SRElem;
+
 #[component]
 pub fn ImageGallery(
-    entries: Signal<Vec<std::string::String>>,
+    entries: Signal<Vec<SRElem>>,
     md_key_set: WriteSignal<Option<PathBuf>>,
 ) -> impl IntoView {
     view! {
 
       <section class="
+        dark:text-slate-950 bg-slate-600
         flex
         flex-wrap
         gap-y-4
-        rounded
-        px-2 py-4
+        min-h-full
         justify-evenly
-        dark:text-slate-950 bg-slate-600" >
+        px-2 py-4
+        rounded-t-lg
+        w-full
+        ">
         <Transition
          fallback =move || view!{ <p>"Loading Image Gallery"</p> }
         >
@@ -39,10 +44,10 @@ pub fn ImageGallery(
                  <img
                    width="274" height="160"
                    class="aspect-square mx-auto"
-                   src={data.1.clone()}
+                   src={data.1.path_rank.0.clone().display().to_string()}
                  />
                  <figcaption>
-                   {data.1}
+                   {data.1.description}
                    <p>
                     //  {
                     //     let ds = index.get().description_store;
