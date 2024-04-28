@@ -117,9 +117,7 @@ pub fn Search() -> impl IntoView {
     );
 
     let entries = Signal::derive(move || match images.get() {
-        Some(Ok(SearchResult { entries })) => {
-            entries
-        }
+        Some(Ok(SearchResult { entries })) => entries,
         _ => {
             vec![]
         }
