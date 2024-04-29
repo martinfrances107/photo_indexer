@@ -9,6 +9,7 @@ cfg_if! {
     use std::path::PathBuf;
     use std::sync::Mutex;
     use lazy_static::lazy_static;
+    use exif::Field;
 
     use crate::pages::search::SRElem;
     use crate::indexer::Index;
@@ -19,6 +20,7 @@ cfg_if! {
       pub index: Index,
       pub query: Vec<char>,
       pub entries: Vec<SRElem>,
+      pub metadata: Option<Vec<Field>>,
     }
 
 
@@ -31,12 +33,13 @@ cfg_if! {
           root_dir,
           query: vec![],
           entries: vec![],
+          metadata: None,
         }
       }
     }
 
     lazy_static! {
-      static ref GLOBAL_STATE: Mutex<GlobalState> =
+      pub static ref GLOBAL_STATE: Mutex<GlobalState> =
       Mutex::new(GlobalState::default());
     }
   }

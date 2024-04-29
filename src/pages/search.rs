@@ -23,7 +23,6 @@ use serde::Serialize;
 use crate::image_gallery::ImageGallery;
 #[cfg(feature = "ssr")]
 use crate::pages::GLOBAL_STATE;
-use crate::sidebar::Sidebar;
 
 // Search Result Element
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
@@ -103,7 +102,7 @@ pub fn Search() -> impl IntoView {
         ))
     };
 
-    let (md_key, md_key_set) = create_signal::<Option<PathBuf>>(pb());
+    // let (md_key, md_key_set) = create_signal::<Option<PathBuf>>(pb());
 
     // TODO this should be under the control of a setting forms.
     // let (root_path, _root_path_set) =
@@ -185,8 +184,7 @@ pub fn Search() -> impl IntoView {
           </Transition>
 
           <div class="flex">
-            // <Sidebar md/>
-            <ImageGallery entries md_key_set />
+            <ImageGallery entries />
           </div>
 
       </div>
