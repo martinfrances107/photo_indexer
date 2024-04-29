@@ -105,22 +105,20 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                    src={data.1.path_rank.0.clone().display().to_string()}
                  />
                  <figcaption>
-                   {data.1.description}
-                   <p>
-                    //  {
-                    //     let ds = index.get().description_store;
-                    //     ds.get(&pb3 ).map_or_else(|| view!{
-                    //       <p class="w-full">"No description"</p>
-                    //     }, |name| view!{
-                    //       <p class="break-words w-full">{name}</p>
-                    //     })
-                    //   }
+                     {
+                        if data.1.description.is_empty() { view!{
+                          <p class="w-full">"No description"</p>
+                          }
+                        } else {
+                          view!{
+                          <p class="break-words w-full">{data.1.description}</p>
+                        }
+                      }
+                    }
                     <button on:click=move |_| {
                       // md_key_set.set(Some(pb4.clone()));
                       metadata_action.dispatch(AddMetaData{ filename: data.1.path_rank.0.clone() });
                      }>"Metadata"</button>
-
-                   </p>
                  </figcaption>
               </figure>
             </div>

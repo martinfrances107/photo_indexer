@@ -102,13 +102,9 @@ pub fn Search() -> impl IntoView {
         ))
     };
 
-    // let (md_key, md_key_set) = create_signal::<Option<PathBuf>>(pb());
-
     // TODO this should be under the control of a setting forms.
     // let (root_path, _root_path_set) =
     //     create_signal(String::from("../exif-samples"));
-
-    let (search_query, _) = create_signal(String::from("orient"));
 
     let images = create_local_resource(
         move || search_query_action.version().get(),
@@ -122,11 +118,6 @@ pub fn Search() -> impl IntoView {
         }
     });
 
-    // create_effect(move |_| {
-    //     log!("monitor: sq/images pair {:#?}", &search_query.get());
-    //     log!("monitor: images {:#?}", &images.get());
-    // });
-
     let count_string = Signal::derive(move || {
         let len = entries.get().len();
         match len {
@@ -137,17 +128,6 @@ pub fn Search() -> impl IntoView {
             }
         }
     });
-
-    // create_effect(move |_| {
-    //     log!("monitor count_string() {:#?}", &count_string.get());
-    // });
-
-    // Use key to extract metadata from the md_store.
-    // let md = Signal::derive(move || {
-    //     md_key
-    //         .get()
-    //         .and_then(|key| index.get().md_store.get(&key).cloned())
-    // });
 
     let input_element: NodeRef<html::Input> = create_node_ref();
 
