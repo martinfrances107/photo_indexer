@@ -2,12 +2,13 @@
 
 ## Known bugs
 
-Images are sticky...
+1) Images are sticky
+  steps to reproduce ...
 
-type hdr - get 6 images
-type chinook - get one image -- but the first from hdr is incorrectly displayed.
-type "" to clear the images
-type chinook - to display the correct image.
+    type hdr - get 6 images
+    type chinook - get one image -- but the first from hdr is incorrectly displayed.
+    type "" to clear the images
+    type chinook - to display the correct image.
 
 ## Snags : -
 
