@@ -12,36 +12,41 @@ use leptos_router::A;
 #[component]
 pub fn Sidebar(metadata: Signal<Option<Vec<Field>>>) -> impl IntoView {
     view! {
-      <Transition
-        fallback=move || view! {<p>"SideBar..."</p>}
-     >
-    {move || {
+      <Transition fallback=move || {
+          view! { <p>"SideBar..."</p> }
+      }>
+        {move || {
+            metadata
+                .get()
+                .map_or_else(
+                    || view! { <div id="side-menu-empty" class="w-0"></div> },
+                    |data| {
+                        view! {
+                          <div id="side-menu" class="inline-block">
+                            <A href="">Close</A>
+                            <div class="
+                            [&>*:nth-child(even)]:bg-gray-100
+                            [&>*:nth-child(odd)]:bg-gray-300
+                            overflow-hidden
+                            w-[240px]
+                            }}">
+                              <For
+                                each=move || data.clone()
+                                key=move |field| { field.ifd_num }
+                                let:field
+                              >
 
-        metadata.get().map_or_else(|| view! {<div id="side-menu-empty" class="w-0"></div>}, |data| view! {
-          <div id="side-menu" class="inline-block">
-            <A href="">Close</A>
-            <div
-              class="
-          [&>*:nth-child(even)]:bg-gray-100
-          [&>*:nth-child(odd)]:bg-gray-300
-          overflow-hidden
-          w-[240px]
-          }}"
-            >
-              <For
-                each =move || data.clone()
-                key = move |field| {field.ifd_num}
-                let:field
-              >
+                                <p>{field.tag.to_string()}</p>
+                                <p class="text-right">{field.display_value().to_string()}</p>
 
-                <p>{ field.tag.to_string() }</p>
-                <p class="text-right" >{ field.display_value().to_string() }</p>
+                              </For>
+                            </div>
+                          </div>
+                        }
+                    },
+                )
+        }}
 
-              </For>
-            </div>
-          </div>
-            })}
-        }
-        </Transition>
-      }
+      </Transition>
+    }
 }

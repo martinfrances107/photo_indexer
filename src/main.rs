@@ -43,7 +43,7 @@ async fn main() -> std::io::Result<()> {
             .leptos_routes(
                 leptos_options.to_owned(),
                 routes.to_owned(),
-                || view! {  <App/> },
+                || view! { <App/> },
             )
             // TODO can I filter by extension rather than expose
             // all files from this directory.

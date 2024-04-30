@@ -143,29 +143,29 @@ pub fn Search() -> impl IntoView {
     };
 
     view! {
-        <div class="my-0 mx-auto">
+      <div class="my-0 mx-auto">
 
-          <form on:submit=on_submit class="dark:text-slate-950 px-6 py-2 text-center">
-            <label class="hidden" for="search">Search</label>
-            <input
-              id="search"
-              class="p-2"
-              type="text"
-              placeholder="Search EXIF data"
-              node_ref = input_element
-            />
-            <input type="submit" value="submit"/>
-          </form>
+        <form on:submit=on_submit class="dark:text-slate-950 px-6 py-2 text-center">
+          <label class="hidden" for="search">
+            Search
+          </label>
+          <input
+            id="search"
+            class="p-2"
+            type="text"
+            placeholder="Search EXIF data"
+            node_ref=input_element
+          />
+          <input type="submit" value="submit"/>
+        </form>
 
-          <Transition
-            fallback =move || view!{ <p>"Loading count"</p> }
-          >
-            <p>{ move || count_string.get()}</p>
-          </Transition>
+        <Transition fallback=move || view! { <p>"Loading count"</p> }>
+          <p>{move || count_string.get()}</p>
+        </Transition>
 
-          <div class="flex">
-            <ImageGallery entries />
-          </div>
+        <div class="flex">
+          <ImageGallery entries/>
+        </div>
 
       </div>
     }
