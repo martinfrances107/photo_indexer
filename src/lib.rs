@@ -14,7 +14,6 @@ mod image_gallery;
 #[cfg(feature = "ssr")]
 mod indexer;
 mod pages;
-mod sidebar;
 
 extern crate seroost_lib;
 

@@ -11,7 +11,6 @@
 mod image_gallery;
 mod indexer;
 mod pages;
-mod sidebar;
 
 extern crate seroost_lib;
 

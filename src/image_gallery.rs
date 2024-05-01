@@ -18,24 +18,40 @@ use leptos::SignalGet;
 use leptos::Transition;
 
 use crate::pages::search::SRElem;
-use crate::sidebar::Sidebar;
 
 #[cfg(feature = "ssr")]
 use crate::pages::GLOBAL_STATE;
 
 #[server]
 pub async fn add_meta_data(
-    filename: PathBuf,
+    filename: Option<PathBuf>,
 ) -> Result<Option<Vec<Field>>, ServerFnError> {
     log!("server: entry metadata");
 
     match GLOBAL_STATE.lock() {
         Ok(mut state) => {
-            state.metadata = match state.index.md_store.get(&filename) {
-                Some(metadata) => Some(metadata.clone()),
-                None => None,
-            };
-            Ok(state.metadata.clone())
+
+            match filename {
+              Some(filename) => {
+
+                state.metadata = match state.index.md_store.get(&filename) {
+                  Some(metadata) => Some(metadata.clone()),
+                  None => None,
+                };
+                Ok(state.metadata.clone())
+
+              }
+              None => {
+
+                state.metadata = None;
+                Ok(state.metadata.clone())
+
+              }
+
+
+            }
+
+
         }
         Err(e) => {
             panic!("/search query - could not unlock {e}");
@@ -75,7 +91,49 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
     });
 
     view! {
-      <Sidebar metadata/>
+      <Transition fallback=move || {
+        view! { <p>"SideBar..."</p> }
+    }>
+      {
+        // Sidebar
+        move || {
+          metadata
+              .get()
+              .map_or_else(
+                  || view! { <div id="side-menu-empty" class="w-0"></div> },
+                  |data| {
+                      view! {
+                        <div id="side-menu" class="inline-block">
+                        <button on:click=move |_| {
+                          metadata_action
+                              .dispatch(AddMetaData {
+                                  filename: None,
+                              });
+                      }>"Close"</button>
+                          <div class="
+                          [&>*:nth-child(even)]:bg-gray-100
+                          [&>*:nth-child(odd)]:bg-gray-300
+                          overflow-hidden
+                          w-[240px]
+                          }}">
+                            <For
+                              each=move || data.clone()
+                              key=move |field| { field.ifd_num }
+                              let:field
+                            >
+
+                              <p>{field.tag.to_string()}</p>
+                              <p class="text-right">{field.display_value().to_string()}</p>
+
+                            </For>
+                          </div>
+                        </div>
+                      }
+                  },
+              )
+      }}
+
+    </Transition>
       <section class="
       dark:text-slate-950 bg-slate-600
       flex
@@ -109,7 +167,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                   <button on:click=move |_| {
                       metadata_action
                           .dispatch(AddMetaData {
-                              filename: data.1.path_rank.0.clone(),
+                              filename: Some(data.1.path_rank.0.clone())
                           });
                   }>"Metadata"</button>
                 </figcaption>
