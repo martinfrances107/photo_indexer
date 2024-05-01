@@ -92,48 +92,45 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
 
     view! {
       <Transition fallback=move || {
-        view! { <p>"SideBar..."</p> }
-    }>
-      {
-        // Sidebar
+          view! { <p>"SideBar..."</p> }
+      }>
+
+        {// Sidebar
         move || {
-          metadata
-              .get()
-              .map_or_else(
-                  || view! { <div id="side-menu-empty" class="w-0"></div> },
-                  |data| {
-                      view! {
-                        <div id="side-menu" class="inline-block">
-                        <button on:click=move |_| {
-                          metadata_action
-                              .dispatch(AddMetaData {
-                                  filename: None,
-                              });
-                      }>"Close"</button>
-                          <div class="
-                          [&>*:nth-child(even)]:bg-gray-100
-                          [&>*:nth-child(odd)]:bg-gray-300
-                          overflow-hidden
-                          w-[240px]
-                          }}">
-                            <For
-                              each=move || data.clone()
-                              key=move |field| { field.ifd_num }
-                              let:field
-                            >
+            metadata
+                .get()
+                .map_or_else(
+                    || view! { <div id="side-menu-empty" class="w-0"></div> },
+                    |data| {
+                        view! {
+                          <div id="side-menu" class="inline-block">
+                            <button on:click=move |_| {
+                                metadata_action.dispatch(AddMetaData { filename: None });
+                            }>"Close"</button>
+                            <div class="
+                            [&>*:nth-child(even)]:bg-gray-100
+                            [&>*:nth-child(odd)]:bg-gray-300
+                            overflow-hidden
+                            w-[240px]
+                            }}">
+                              <For
+                                each=move || data.clone()
+                                key=move |field| { field.ifd_num }
+                                let:field
+                              >
 
-                              <p>{field.tag.to_string()}</p>
-                              <p class="text-right">{field.display_value().to_string()}</p>
+                                <p>{field.tag.to_string()}</p>
+                                <p class="text-right">{field.display_value().to_string()}</p>
 
-                            </For>
+                              </For>
+                            </div>
                           </div>
-                        </div>
-                      }
-                  },
-              )
-      }}
+                        }
+                    },
+                )
+        }}
 
-    </Transition>
+      </Transition>
       <section class="
       dark:text-slate-950 bg-slate-600
       flex
@@ -167,7 +164,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                   <button on:click=move |_| {
                       metadata_action
                           .dispatch(AddMetaData {
-                              filename: Some(data.1.path_rank.0.clone())
+                              filename: Some(data.1.path_rank.0.clone()),
                           });
                   }>"Metadata"</button>
                 </figcaption>
