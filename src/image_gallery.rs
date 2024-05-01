@@ -115,7 +115,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                             }}">
                               <For
                                 each=move || data.clone()
-                                key=move |field| { field.ifd_num }
+                                key=|field| { field.ifd_num }
                                 let:field
                               >
 
@@ -144,7 +144,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
       ">
 
         <Transition fallback=|| view! { <p>"Loading Image Gallery"</p> }>
-          <For each=move || entries.get().into_iter().enumerate() key=move |(i, _)| *i let:data>
+          <For each=move || entries.get().into_iter().enumerate() key= |(i, _)| *i let:data>
 
             <div class="p-2 mb-4 rounded text-left" style="width:280px;">
               <figure class="bg-slate-100 rounded-t">
