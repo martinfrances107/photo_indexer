@@ -157,7 +157,7 @@ pub fn Search() -> impl IntoView {
           <input type="submit" value="submit"/>
         </form>
 
-        <Transition fallback=move || view! { <p>"Loading count"</p> }>
+        <Transition fallback=|| view! { <p>"Loading count"</p> }>
           <p>{move || count_string.get()}</p>
         </Transition>
 

@@ -91,12 +91,12 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
     });
 
     view! {
-      <Transition fallback=move || {
+      <Transition fallback=|| {
           view! { <p>"SideBar..."</p> }
       }>
 
-        {// Sidebar
-        move || {
+        // Sidebar
+        {move || {
             metadata
                 .get()
                 .map_or_else(
@@ -143,7 +143,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
       w-full
       ">
 
-        <Transition fallback=move || view! { <p>"Loading Image Gallery"</p> }>
+        <Transition fallback=|| view! { <p>"Loading Image Gallery"</p> }>
           <For each=move || entries.get().into_iter().enumerate() key=move |(i, _)| *i let:data>
 
             <div class="p-2 mb-4 rounded text-left" style="width:280px;">
