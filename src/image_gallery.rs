@@ -104,11 +104,13 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                         view! {
                           <div id="side-menu" class="inline-block">
                             <button
+                              title="close"
                               class="text-right font-medium w-full"
                               on:click=move |_| {
                                   metadata_action.dispatch(AddMetaData { filename: None });
                               }
                             >
+
                               "X"
                             </button>
                             <div class="
@@ -150,7 +152,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
         <Transition fallback=|| view! { <p>"Loading Image Gallery"</p> }>
           <For each=move || entries.get().into_iter().enumerate() key=|(i, _)| *i let:data>
 
-            <div class="hover:bg-slate-600 p-2 mb-4 rounded text-left width-[200px]">
+            <div class="hover:bg-slate-600 p-2 mb-4 relative rounded text-left width-[200px]">
               <figure class="bg-slate-100 rounded-t">
                 <img
                   width="274"
@@ -165,14 +167,29 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                   } else {
                       view! { <p class="break-words w-full">{data.1.description}</p> }
                   }}
-                  <button on:click=move |_| {
-                      metadata_action
-                          .dispatch(AddMetaData {
-                              filename: Some(data.1.path_rank.0.clone()),
-                          });
-                  }>"Metadata"</button>
+
                 </figcaption>
               </figure>
+              <button
+                title="open metadata"
+                class="absolute bg-black/50 font-mono p-3 rounded-full right-4 text-white text-right top-4"
+                on:click=move |_| {
+                    metadata_action
+                        .dispatch(AddMetaData {
+                            filename: Some(data.1.path_rank.0.clone()),
+                        });
+                }
+              >
+
+                "M"
+              </button>
+              <button
+                title="fullscreen"
+                class="absolute bg-black/50 font-mono p-3  rounded-full right-4 text-white text-right top-20"
+                on:click=move |_| {}
+              >
+                "F"
+              </button>
             </div>
 
           </For>

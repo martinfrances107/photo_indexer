@@ -163,7 +163,11 @@ pub fn Search() -> impl IntoView {
             placeholder="Search EXIF data"
             node_ref=input_element
           />
-          <input type="submit" value=" " class="bg-sky-700 rounded-r-lg p-2 hover:bg-sky-600 w-[3.5rem]" />
+          <input
+            type="submit"
+            value=" "
+            class="bg-sky-700 cursor-grab rounded-r-lg p-2 hover:bg-sky-600 w-[3.5rem]"
+          />
         </form>
 
         <Transition fallback=|| view! { <p>"Loading count"</p> }>
