@@ -48,7 +48,6 @@ pub async fn add_meta_data(
 
               }
 
-
             }
 
 
@@ -104,12 +103,17 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                     |data| {
                         view! {
                           <div id="side-menu" class="inline-block">
-                            <button on:click=move |_| {
-                                metadata_action.dispatch(AddMetaData { filename: None });
-                            }>"Close"</button>
+                            <button
+                              class="text-right font-medium w-full"
+                              on:click=move |_| {
+                                  metadata_action.dispatch(AddMetaData { filename: None });
+                              }
+                            >
+                              "X"
+                            </button>
                             <div class="
-                            [&>*:nth-child(even)]:bg-gray-100
-                            [&>*:nth-child(odd)]:bg-gray-300
+                            [&>*:nth-child(even)]:bg-gray-400
+                            [&>*:nth-child(odd)]:bg-gray-700
                             overflow-hidden
                             w-[240px]
                             }}">
@@ -119,8 +123,8 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                                 let:field
                               >
 
-                                <p>{field.tag.to_string()}</p>
-                                <p class="text-right">{field.display_value().to_string()}</p>
+                                <p class="ps-0.5">{field.tag.to_string()}</p>
+                                <p class="pe-2.5 text-right">{field.display_value().to_string()}</p>
 
                               </For>
                             </div>
@@ -132,7 +136,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
 
       </Transition>
       <section class="
-      dark:text-slate-950 bg-slate-600
+      dark:text-slate-950
       flex
       flex-wrap
       gap-y-4
@@ -144,9 +148,9 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
       ">
 
         <Transition fallback=|| view! { <p>"Loading Image Gallery"</p> }>
-          <For each=move || entries.get().into_iter().enumerate() key= |(i, _)| *i let:data>
+          <For each=move || entries.get().into_iter().enumerate() key=|(i, _)| *i let:data>
 
-            <div class="p-2 mb-4 rounded text-left" style="width:280px;">
+            <div class="hover:bg-slate-600 p-2 mb-4 rounded text-left width-[200px]">
               <figure class="bg-slate-100 rounded-t">
                 <img
                   width="274"

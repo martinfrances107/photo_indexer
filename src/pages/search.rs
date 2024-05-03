@@ -31,11 +31,15 @@ pub struct SRElem {
 
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub struct SearchResult {
-    pub entries: Vec<SRElem>,
+  pub entries: Vec<SRElem>,
+  // counter that increments every for query.
+  // Ensures images in the gallery have a
+  // unique id, otherwise images are not correctly refreshed.
+  pub version: usize,
 }
 
 #[server]
-pub async fn add_query(query: String) -> Result<SearchResult, ServerFnError> {
+pub async fn add_query(query: String) -> Result<(), ServerFnError> {
     log!("serve: entry search_query");
     let sq = query.chars().collect::<Vec<char>>();
     match GLOBAL_STATE.lock() {
@@ -56,9 +60,7 @@ pub async fn add_query(query: String) -> Result<SearchResult, ServerFnError> {
                     }
                 })
                 .collect();
-            Ok(SearchResult {
-                entries: state.entries.clone(),
-            })
+            Ok(())
         }
         Err(e) => {
             panic!("/search query - could not unlock {e}");
@@ -70,7 +72,7 @@ pub async fn add_query(query: String) -> Result<SearchResult, ServerFnError> {
 // get_query get the result of the last query
 // ie get a list of images.
 #[server]
-pub async fn get_query() -> Result<SearchResult, ServerFnError> {
+pub async fn get_query(version: usize) -> Result<SearchResult, ServerFnError> {
     let entries = match GLOBAL_STATE.lock() {
         Ok(state) => state.entries.clone(),
         Err(e) => {
@@ -78,7 +80,10 @@ pub async fn get_query() -> Result<SearchResult, ServerFnError> {
         }
     };
 
-    Ok(SearchResult { entries })
+    Ok(SearchResult {
+      entries,
+      version
+    })
 }
 
 /// A settings form calls root_path_set ( Todo: it hard coded for now ).
@@ -106,11 +111,15 @@ pub fn Search() -> impl IntoView {
 
     let images = create_local_resource(
         move || search_query_action.version().get(),
-        |_| get_query(),
+        |version| {
+          get_query(version)
+        }
     );
 
     let entries = Signal::derive(move || match images.get() {
-        Some(Ok(SearchResult { entries })) => entries,
+        Some(Ok(SearchResult { entries, .. })) => {
+          entries
+        },
         _ => {
             vec![]
         }
@@ -154,11 +163,11 @@ pub fn Search() -> impl IntoView {
             placeholder="Search EXIF data"
             node_ref=input_element
           />
-          <input type="submit" value="submit"/>
+          <input type="submit" value=" " class="bg-sky-700 rounded-r-lg p-2 hover:bg-sky-600 w-[3.5rem]" />
         </form>
 
         <Transition fallback=|| view! { <p>"Loading count"</p> }>
-          <p>{move || count_string.get()}</p>
+          <p classs="leading-8">{move || count_string.get()}</p>
         </Transition>
 
         <div class="flex">
