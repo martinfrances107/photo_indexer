@@ -115,7 +115,6 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                             </button>
                             <div class="
                             [&>*:nth-child(even)]:bg-gray-400
-                            [&>*:nth-child(odd)]:bg-gray-700
                             overflow-hidden
                             w-[240px]
                             }}">
@@ -138,6 +137,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
 
       </Transition>
       <section class="
+      content-start
       dark:text-slate-950
       flex
       flex-wrap
@@ -152,26 +152,24 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
         <Transition fallback=|| view! { <p>"Loading Image Gallery"</p> }>
           <For each=move || entries.get().into_iter().enumerate() key=|(i, _)| *i let:data>
 
-            <div class="hover:bg-slate-600 p-2 mb-4 relative rounded text-left width-[200px]">
-              <figure class="bg-slate-100 rounded-t">
+            <div class="hover:bg-slate-600 mb-4 relative rounded text-left w-[280px]">
+              <figure class="bg-slate-100 pt-2 rounded-t">
                 <img
-                  width="274"
-                  height="160"
-                  class="aspect-square mx-auto"
+                  class="aspect-square mx-auto w-[274px] h-[160px]"
                   src=data.1.path_rank.0.clone().display().to_string()
                 />
                 <figcaption>
 
                   {if data.1.description.is_empty() {
-                      view! { <p class="w-full">"No description"</p> }
+                      view! { <p >"No description"</p> }
                   } else {
-                      view! { <p class="break-words w-full">{data.1.description}</p> }
+                      view! { <p class="break-words">{data.1.description}</p> }
                   }}
 
                 </figcaption>
               </figure>
               <button
-                title="open metadata"
+                title="OPEN METADATA"
                 class="absolute bg-black/50 font-mono p-3 rounded-full right-4 text-white text-right top-4"
                 on:click=move |_| {
                     metadata_action
@@ -184,8 +182,8 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                 "M"
               </button>
               <button
-                title="fullscreen"
-                class="absolute bg-black/50 font-mono p-3  rounded-full right-4 text-white text-right top-20"
+                title="FULLSCREEN"
+                class="absolute bg-black/50 font-mono p-3 rounded-full right-4 text-white text-right top-20"
                 on:click=move |_| {}
               >
                 "F"
