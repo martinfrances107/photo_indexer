@@ -27,6 +27,8 @@ async fn main() -> std::io::Result<()> {
     use leptos_actix::LeptosRoutes;
     use photo_indexer::app::App;
     use tracing::log;
+    use actix_web::middleware::Compress;
+
 
     let conf = get_configuration(None).await.unwrap();
     let addr = conf.leptos_options.site_addr;
@@ -38,6 +40,7 @@ async fn main() -> std::io::Result<()> {
         let site_root = &leptos_options.site_root;
 
         App::new()
+            .wrap(Compress::default())
             .route("/api/{tail:.*}", leptos_actix::handle_server_fns())
             .leptos_routes(
                 leptos_options.to_owned(),
@@ -48,7 +51,6 @@ async fn main() -> std::io::Result<()> {
             // all files from this directory.
             .service(Files::new("/exif-samples/", "../exif-samples/"))
             .service(Files::new("/", site_root))
-        //.wrap(middleware::Compress::default())
     })
     .bind(&addr)
     {
