@@ -165,13 +165,14 @@ pub fn Search() -> impl IntoView {
           />
           <input
             type="submit"
+            title="Search"
             value=" "
             class="bg-sky-700 cursor-grab rounded-r-lg p-2 hover:bg-sky-600 w-[3.5rem]"
           />
         </form>
 
         <Transition fallback=|| view! { <p>"Loading count"</p> }>
-          <p class="leading-8">{move || count_string.get()}</p>
+          <p class="m-6 text-right">{move || count_string.get()}</p>
         </Transition>
 
         <div class="flex">
