@@ -31,11 +31,11 @@ pub struct SRElem {
 
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub struct SearchResult {
-  pub entries: Vec<SRElem>,
-  // counter that increments every for query.
-  // Ensures images in the gallery have a
-  // unique id, otherwise images are not correctly refreshed.
-  pub version: usize,
+    pub entries: Vec<SRElem>,
+    // counter that increments every for query.
+    // Ensures images in the gallery have a
+    // unique id, otherwise images are not correctly refreshed.
+    pub version: usize,
 }
 
 #[server]
@@ -80,10 +80,7 @@ pub async fn get_query(version: usize) -> Result<SearchResult, ServerFnError> {
         }
     };
 
-    Ok(SearchResult {
-      entries,
-      version
-    })
+    Ok(SearchResult { entries, version })
 }
 
 /// A settings form calls root_path_set ( Todo: it hard coded for now ).
@@ -111,15 +108,11 @@ pub fn Search() -> impl IntoView {
 
     let images = create_local_resource(
         move || search_query_action.version().get(),
-        |version| {
-          get_query(version)
-        }
+        |version| get_query(version),
     );
 
     let entries = Signal::derive(move || match images.get() {
-        Some(Ok(SearchResult { entries, .. })) => {
-          entries
-        },
+        Some(Ok(SearchResult { entries, .. })) => entries,
         _ => {
             vec![]
         }

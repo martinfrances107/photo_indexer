@@ -29,29 +29,19 @@ pub async fn add_meta_data(
     log!("server: entry metadata");
 
     match GLOBAL_STATE.lock() {
-        Ok(mut state) => {
-
-            match filename {
-              Some(filename) => {
-
+        Ok(mut state) => match filename {
+            Some(filename) => {
                 state.metadata = match state.index.md_store.get(&filename) {
-                  Some(metadata) => Some(metadata.clone()),
-                  None => None,
+                    Some(metadata) => Some(metadata.clone()),
+                    None => None,
                 };
                 Ok(state.metadata.clone())
-
-              }
-              None => {
-
+            }
+            None => {
                 state.metadata = None;
                 Ok(state.metadata.clone())
-
-              }
-
             }
-
-
-        }
+        },
         Err(e) => {
             panic!("/search query - could not unlock {e}");
         }
@@ -161,7 +151,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                 <figcaption>
 
                   {if data.1.description.is_empty() {
-                      view! { <p >"No description"</p> }
+                      view! { <p>"No description"</p> }
                   } else {
                       view! { <p class="break-words">{data.1.description}</p> }
                   }}

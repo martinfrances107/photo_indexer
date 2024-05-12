@@ -20,6 +20,7 @@ async fn main() -> std::io::Result<()> {
     use actix_files::Files;
     use actix_web::App;
     // use actix_web::middleware::Compress;
+    use actix_web::middleware::Compress;
     use actix_web::HttpServer;
     use leptos::get_configuration;
     use leptos::view;
@@ -27,8 +28,6 @@ async fn main() -> std::io::Result<()> {
     use leptos_actix::LeptosRoutes;
     use photo_indexer::app::App;
     use tracing::log;
-    use actix_web::middleware::Compress;
-
 
     let conf = get_configuration(None).await.unwrap();
     let addr = conf.leptos_options.site_addr;
