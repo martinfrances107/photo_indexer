@@ -7,7 +7,6 @@ use serde::Serialize;
 use leptos::component;
 use leptos::create_local_resource;
 use leptos::create_server_action;
-use leptos::logging::log;
 use leptos::server;
 use leptos::view;
 use leptos::For;
@@ -26,7 +25,7 @@ use crate::pages::GLOBAL_STATE;
 pub async fn add_meta_data(
     filename: Option<PathBuf>,
 ) -> Result<Option<Vec<Field>>, ServerFnError> {
-    log!("server: entry metadata");
+    leptos::logging::log!("server: entry metadata");
 
     match GLOBAL_STATE.lock() {
         Ok(mut state) => match filename {

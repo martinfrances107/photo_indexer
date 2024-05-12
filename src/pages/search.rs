@@ -6,7 +6,6 @@ use leptos::create_node_ref;
 use leptos::create_server_action;
 use leptos::ev::SubmitEvent;
 use leptos::html;
-use leptos::logging::log;
 use leptos::server;
 use leptos::view;
 use leptos::IntoView;
@@ -40,7 +39,7 @@ pub struct SearchResult {
 
 #[server]
 pub async fn add_query(query: String) -> Result<(), ServerFnError> {
-    log!("serve: entry search_query");
+    leptos::logging::log!("serve: entry search_query");
     let sq = query.chars().collect::<Vec<char>>();
     match GLOBAL_STATE.lock() {
         Ok(mut state) => {
