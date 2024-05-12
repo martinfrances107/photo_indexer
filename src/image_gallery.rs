@@ -112,10 +112,8 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                                 key=|field| { field.ifd_num }
                                 let:field
                               >
-
                                 <p class="ps-0.5">{field.tag.to_string()}</p>
                                 <p class="pe-2.5 text-right">{field.display_value().to_string()}</p>
-
                               </For>
                             </div>
                           </div>

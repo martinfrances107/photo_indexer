@@ -95,16 +95,6 @@ pub async fn get_query(version: usize) -> Result<SearchResult, ServerFnError> {
 pub fn Search() -> impl IntoView {
     let search_query_action = create_server_action::<AddQuery>();
 
-    let pb = move || {
-        Some(PathBuf::from(
-            "../exif-samples/jpg/orientation/landscape_6.jpg",
-        ))
-    };
-
-    // TODO this should be under the control of a setting forms.
-    // let (root_path, _root_path_set) =
-    //     create_signal(String::from("../exif-samples"));
-
     let images = create_local_resource(
         move || search_query_action.version().get(),
         |version| get_query(version),
