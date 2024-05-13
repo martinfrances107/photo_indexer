@@ -4,6 +4,7 @@ use leptos::IntoView;
 use leptos_meta::provide_meta_context;
 use leptos_meta::Body;
 use leptos_meta::Html;
+use leptos_meta::Link;
 use leptos_meta::Meta;
 use leptos_meta::Stylesheet;
 use leptos_meta::Title;
@@ -25,6 +26,7 @@ pub fn App() -> impl IntoView {
       <Html lang="en"/>
       <Meta name="description" content="Search images metadata."/>
       <Meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <Link rel="icon" type_="image/svg+xml" href="/mag.svg"/>
       <Stylesheet id="leptos" href="/pkg/pi.css"/>
       <Title text="Photo Indexer"/>
       <Body class="dark:bg-slate-950 dark:text-white font-roboto"/>
