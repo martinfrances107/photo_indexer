@@ -2,33 +2,31 @@
 <svg
    viewBox="0 0 24 24"
    version="1.1"
-   id="svg828"
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs832">
+  <defs>
     <linearGradient
        id="SkyBlue">
       <stop
-         style="stop-color:#12a5dc;stop-opacity:1"
+         style="stop-color:#12a5dc;"
          offset="0"
-         id="stop1691" />
+      />
       <stop
-         style="stop-color:#c5d1f2;stop-opacity:0.88187289"
+         style="stop-color:#c5d1f2;"
          offset="1"
-         id="stop1693" />
+      />
     </linearGradient>
     <linearGradient
        id="grass">
       <stop
-         style="stop-color:#008000;stop-opacity:1"
+         style="stop-color:#008000;"
          offset="0"
-         id="stop3215" />
+      />
       <stop
-         style="stop-color:#00e500;stop-opacity:1"
+         style="stop-color:#00e500;"
          offset="1"
-         id="stop3217" />
+      />
     </linearGradient>
     <linearGradient
        xlink:href="#grass"
@@ -49,27 +47,24 @@
        gradientTransform="translate(-1.1975669,-1.9369073)" />
   </defs>
   <rect
-     style="fill:url(#linearGradient1697);fill-opacity:1;stroke:#040404;stroke-width:0;stroke-linecap:round;stroke-linejoin:round"
-     id="rect1029"
+     style="fill:url(#linearGradient1697);stroke:#040404;stroke-width:0;stroke-linecap:round;stroke-linejoin:round"
      width="24"
      height="24"
      x="0"
      y="0" />
   <path
-     style="fill:url(#linearGradient3221);fill-opacity:1;stroke:#040404;stroke-width:0;stroke-linecap:round;stroke-linejoin:round"
+     style="fill:url(#linearGradient3221);stroke:#040404;stroke-width:0;stroke-linecap:round;stroke-linejoin:round"
      d="m 0,12 8.8938053,5.66909 c 0,0 7.4288517,-3.951494 11.4958127,-4.117889 C 21.60037,13.501661 24,14.579 24,14.579 V 24 H -2.4619315e-4 Z"
-     id="path947" />
-  <g
-     id="g837">
+  />
+  <g>
     <path
        style="stroke:#000;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;"
        d="m 16,15 4.5,5.4"
        id="path824" />
     <circle
-       style="fill:#fff;fill-opacity:0;stroke-width:5;stroke:#000"
+       style="fill:#fff;fill-opacity:0.4;stroke-width:5;stroke:#000"
        cx="11"
        cy="11"
-       r="6"
-       id="circle826" />
+       r="6" />
   </g>
 </svg>
