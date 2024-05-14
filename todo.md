@@ -22,11 +22,9 @@
 
 ## Performance
 
-  CSS is not compressed. A large drag on the waterfall.
-  Add compression to HTTP server.
-
-  ```rustlang
-  .wrap(middleware::Compress::default())
-  ```
-
 ## Conditions for PWA
+
+A the moment the SVG icon is a bit basic.
+
+to be FULLY compliant add a PNG icon  ( 512x512 ).
+Add a maskable icon for android.

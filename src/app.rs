@@ -26,7 +26,10 @@ pub fn App() -> impl IntoView {
       <Html lang="en"/>
       <Meta name="description" content="Search images metadata."/>
       <Meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <Meta name="theme-color" content="#319197"/>
       <Link rel="icon" type_="image/svg+xml" href="/mag.svg"/>
+      <Link rel="manifest" href="/manifest.json"/>
+
       <Stylesheet id="leptos" href="/pkg/pi.css"/>
       <Title text="Photo Indexer"/>
       <Body class="dark:bg-slate-950 dark:text-white font-roboto"/>

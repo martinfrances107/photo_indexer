@@ -1,0 +1,30 @@
+{
+  "lang": "en",
+  "dir": "ltr",
+  "name": "Photo Indexer",
+  "short_name": "PI",
+  "icons": [{
+    "src": "/mag.svg",
+    "sizes": "64x64",
+    "type": "image/svg"
+  }, {
+    "src": "  /mag.svg",
+    "sizes": "64x64"
+  }, {
+      "src": "/mag.svg",
+      "sizes": "128x128"
+  }, {
+    "src": "/mag.svg",
+    "sizes": "144x144"
+  }, {
+    "src": "/mag.svg",
+    "sizes": "512x1512"
+  }],
+  "scope": "/",
+  "id": "photoindexer",
+  "start_url": "/start.html",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "theme_color": "aliceblue",
+  "background_color": "blue"
+}
