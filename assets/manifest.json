@@ -6,16 +6,15 @@
   "icons": [{
     "src": "/mag.svg",
     "sizes": "64x64",
-    "type": "image/svg"
+    "type": "image/svg+xml"
   }, {
     "src": "/mag.svg",
-    "sizes": "64x64"
-  }, {
-      "src": "/mag.svg",
-      "sizes": "128x128"
+    "sizes": "128x128",
+    "type": "image/svg+xml"
   }, {
     "src": "/mag.svg",
-    "sizes": "144x144"
+    "sizes": "144x144",
+    "type": "image/svg+xml"
   }, {
     "src": "/mag.png",
     "sizes": "512x512",

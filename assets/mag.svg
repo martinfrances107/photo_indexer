@@ -59,12 +59,12 @@
   <g>
     <path
        style="stroke:#000;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;"
-       d="m 16,15 4.5,5.4"
+       d="m 17,17 3,3"
        id="path824" />
     <circle
        style="fill:#fff;fill-opacity:0.4;stroke-width:5;stroke:#000"
-       cx="11"
-       cy="11"
-       r="6" />
+       cx="12"
+       cy="12"
+       r="5" />
   </g>
 </svg>
