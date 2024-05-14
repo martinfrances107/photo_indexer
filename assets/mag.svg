@@ -53,18 +53,19 @@
      id="path1309" />
   <path
      style="fill:url(#linearGradient3221);fill-opacity:1;stroke:#040404;stroke-width:0;stroke-linecap:round;stroke-linejoin:round"
-     d="M -0.26264222,12.329725 8.8938053,17.66909 c 0,0 7.4288517,-3.951494 11.4958127,-4.117889 1.210752,-0.04954 3.511062,0.942241 3.511062,0.942241 l 0.02607,9.398467 -23.83383365,0.160951 z"
+     d="m 0,12 8.8938053,5.66909 c 0,0 7.4288517,-3.951494 11.4958127,-4.117889 C 21.60037,13.501661 24,14.579 24,14.579 V 24 H -2.4619315e-4 Z"
      id="path947" />
-  <g>
+  <g
+     id="g837">
     <path
-      style="stroke:#000;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;"
-      d="m 16,15 4.5,5.4"
-      id="path824" />
+       style="stroke:#000;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;"
+       d="m 16,15 4.5,5.4"
+       id="path824" />
     <circle
-      style="fill:#fff;fill-opacity:0;stroke-width:5;stroke:#000"
-      cx="11"
-      cy="11"
-      r="6"
-      id="circle826" />
+       style="fill:#fff;fill-opacity:0;stroke-width:5;stroke:#000"
+       cx="11"
+       cy="11"
+       r="6"
+       id="circle826" />
   </g>
 </svg>
