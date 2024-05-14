@@ -9,15 +9,26 @@
   <defs
      id="defs832">
     <linearGradient
-       id="mountain">
+       id="SkyBlue">
       <stop
-         style="stop-color:#105395;stop-opacity:1"
+         style="stop-color:#12a5dc;stop-opacity:1"
          offset="0"
-         id="stop3592" />
+         id="stop1691" />
       <stop
-         style="stop-color:#79b5f1;stop-opacity:1"
+         style="stop-color:#c5d1f2;stop-opacity:0.88187289"
          offset="1"
-         id="stop3594" />
+         id="stop1693" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient984">
+      <stop
+         style="stop-color:#073256;stop-opacity:1"
+         offset="0"
+         id="stop980" />
+      <stop
+         style="stop-color:#25221a;stop-opacity:1"
+         offset="1"
+         id="stop982" />
     </linearGradient>
     <linearGradient
        id="grass">
@@ -39,18 +50,22 @@
        y2="5"
        gradientUnits="userSpaceOnUse" />
     <linearGradient
-       xlink:href="#mountain"
-       id="linearGradient3598"
-       x1="7"
-       y1="17"
-       x2="7"
-       y2="1"
-       gradientUnits="userSpaceOnUse" />
+       xlink:href="#SkyBlue"
+       id="linearGradient1697"
+       x1="13"
+       y1="23"
+       x2="13"
+       y2="2"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-1.1975669,-1.9369073)" />
   </defs>
-  <path
-     style="fill:url(#linearGradient3598);fill-opacity:1;stroke:#040404;stroke-width:0;stroke-linecap:round;stroke-linejoin:round"
-     d="M 0.8114099,15.970565 8.0682698,0.46981669 15.706858,17.62263 Z"
-     id="path1309" />
+  <rect
+     style="fill:url(#linearGradient1697);fill-opacity:1;stroke:#040404;stroke-width:0;stroke-linecap:round;stroke-linejoin:round"
+     id="rect1029"
+     width="24"
+     height="24"
+     x="0"
+     y="0" />
   <path
      style="fill:url(#linearGradient3221);fill-opacity:1;stroke:#040404;stroke-width:0;stroke-linecap:round;stroke-linejoin:round"
      d="m 0,12 8.8938053,5.66909 c 0,0 7.4288517,-3.951494 11.4958127,-4.117889 C 21.60037,13.501661 24,14.579 24,14.579 V 24 H -2.4619315e-4 Z"
