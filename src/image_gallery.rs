@@ -82,7 +82,6 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
       <Transition fallback=|| {
           view! { <p>"SideBar..."</p> }
       }>
-
         // Sidebar
         {move || {
             metadata
@@ -93,11 +92,12 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                         view! {
                           <div id="side-menu" class="inline-block">
                             <button
-                              title="close"
                               class="text-right font-medium w-full"
                               on:click=move |_| {
                                   metadata_action.dispatch(AddMetaData { filename: None });
                               }
+
+                              title="close"
                             >
 
                               "X"
@@ -146,7 +146,6 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                   src=data.1.path_rank.0.clone().display().to_string()
                 />
                 <figcaption>
-
                   {if data.1.description.is_empty() {
                       view! { <p>"No description"</p> }
                   } else {
@@ -156,7 +155,6 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                 </figcaption>
               </figure>
               <button
-                title="OPEN METADATA"
                 class="absolute bg-black/50 font-mono p-3 rounded-full right-4 text-white text-right top-4"
                 on:click=move |_| {
                     metadata_action
@@ -164,14 +162,16 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                             filename: Some(data.1.path_rank.0.clone()),
                         });
                 }
+
+                title="OPEN METADATA"
               >
 
                 "M"
               </button>
               <button
-                title="FULLSCREEN"
                 class="absolute bg-black/50 font-mono p-3 rounded-full right-4 text-white text-right top-20"
                 on:click=move |_| {}
+                title="FULLSCREEN"
               >
                 "F"
               </button>
