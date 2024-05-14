@@ -134,7 +134,7 @@ pub fn Search() -> impl IntoView {
     view! {
       <div class="my-0 mx-auto">
 
-        <form on:submit=on_submit class="dark:text-slate-950 px-6 py-2 text-center">
+        <form on:submit=on_submit class="dark:text-slate-700 px-6 py-2 text-center">
           <label class="hidden" for="search">
             Search
           </label>
