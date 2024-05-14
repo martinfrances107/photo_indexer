@@ -20,17 +20,6 @@
          id="stop1693" />
     </linearGradient>
     <linearGradient
-       id="linearGradient984">
-      <stop
-         style="stop-color:#073256;stop-opacity:1"
-         offset="0"
-         id="stop980" />
-      <stop
-         style="stop-color:#25221a;stop-opacity:1"
-         offset="1"
-         id="stop982" />
-    </linearGradient>
-    <linearGradient
        id="grass">
       <stop
          style="stop-color:#008000;stop-opacity:1"
