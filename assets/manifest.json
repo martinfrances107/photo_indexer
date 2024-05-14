@@ -8,7 +8,7 @@
     "sizes": "64x64",
     "type": "image/svg"
   }, {
-    "src": "  /mag.svg",
+    "src": "/mag.svg",
     "sizes": "64x64"
   }, {
       "src": "/mag.svg",
@@ -17,12 +17,13 @@
     "src": "/mag.svg",
     "sizes": "144x144"
   }, {
-    "src": "/mag.svg",
-    "sizes": "512x1512"
+    "src": "/mag.png",
+    "sizes": "512x512",
+    "type": "image/png"
   }],
   "scope": "/",
   "id": "photoindexer",
-  "start_url": "/start.html",
+  "start_url": "/",
   "display": "fullscreen",
   "orientation": "landscape",
   "theme_color": "aliceblue",
