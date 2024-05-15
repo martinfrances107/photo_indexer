@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="540"
+   height="720"
+   viewBox="0 0 24 24"
+   version="1.1"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient
+       id="SkyBlue">
+      <stop
+         style="stop-color:#12a5dc;"
+         offset="0"
+      />
+      <stop
+         style="stop-color:#c5d1f2;"
+         offset="1"
+      />
+    </linearGradient>
+    <linearGradient
+       id="grass">
+      <stop
+         style="stop-color:#008000;"
+         offset="0"
+      />
+      <stop
+         style="stop-color:#00e500;"
+         offset="1"
+      />
+    </linearGradient>
+    <linearGradient
+       xlink:href="#grass"
+       id="linearGradient3221"
+       x1="14"
+       y1="23"
+       x2="14"
+       y2="5"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       xlink:href="#SkyBlue"
+       id="linearGradient1697"
+       x1="13"
+       y1="23"
+       x2="13"
+       y2="2"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-1.1975669,-1.9369073)" />
+  </defs>
+  <rect
+     style="fill:url(#linearGradient1697);stroke:#040404;stroke-width:0;stroke-linecap:round;stroke-linejoin:round"
+     width="24"
+     height="24"
+     x="0"
+     y="0" />
+  <path
+     style="fill:url(#linearGradient3221);stroke:#040404;stroke-width:0;stroke-linecap:round;stroke-linejoin:round"
+     d="m 0,12 8.8938053,5.66909 c 0,0 7.4288517,-3.951494 11.4958127,-4.117889 C 21.60037,13.501661 24,14.579 24,14.579 V 24 H -2.4619315e-4 Z"
+  />
+  <g>
+    <path
+       style="stroke:#000;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;"
+       d="m 17,17 3,3"
+       id="path824" />
+    <circle
+       style="fill:#fff;fill-opacity:0.4;stroke-width:5;stroke:#000"
+       cx="12"
+       cy="12"
+       r="5" />
+  </g>
+</svg>
