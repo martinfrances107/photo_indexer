@@ -44,7 +44,9 @@ pub fn App() -> impl IntoView {
                   // TODO work out wrapping for mobile nav is below the header
                   // for desktop nav is right justified.
                   <header class="flex item-center justify-between px-6 m-none">
-                    <h1 class="font-light" style="font-size: calc(min(max(8vw, 1rem), 4rem));">"SEARCH"</h1>
+                    <h1 class="font-light" style="font-size: calc(min(max(8vw, 1rem), 4rem));">
+                      "SEARCH"
+                    </h1>
                     <nav class="self-center">
                       <A href="/about">
                         <span class="text-[0.5vw]">"ABOUT"</span>
@@ -63,7 +65,9 @@ pub fn App() -> impl IntoView {
                   // TODO work out wrapping for mobile nav is below the header
                   // for desktop nav is right justified.
                   <header class="border-none flex item-center justify-between px-6 m-none">
-                    <h1 class="font-light" style="font-size: calc(min(max(8vw, 1rem), 4rem));">"ABOUT"</h1>
+                    <h1 class="font-light" style="font-size: calc(min(max(8vw, 1rem), 4rem));">
+                      "ABOUT"
+                    </h1>
                     <nav class="self-center">
                       <A href="/">
                         <span class="text-[0.5vw]">"SEARCH"</span>
