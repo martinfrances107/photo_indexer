@@ -11,6 +11,7 @@
 mod image_gallery;
 mod indexer;
 mod pages;
+mod settings;
 
 extern crate seroost_lib;
 
@@ -18,8 +19,8 @@ extern crate seroost_lib;
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     use actix_files::Files;
-    use actix_web::App;
     use actix_web::middleware::Compress;
+    use actix_web::App;
     use actix_web::HttpServer;
     use leptos::get_configuration;
     use leptos::view;

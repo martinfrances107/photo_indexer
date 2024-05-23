@@ -14,17 +14,19 @@
 
   Image card need to be rounded at the bottom.
 
-  Search Button - Not vissible
+  Search Button - Not visible
 
 ## meta data issues
 
 ## style side tray
 
+ Need to style the hamburger (shift to the right)
+ Need to sanitize the input
+ Consider using a FileDirectory selector.
+
 ## Performance
 
 ## Conditions for PWA
-
-A the moment the SVG icon is a bit basic.
 
 to be FULLY compliant add a PNG icon  ( 512x512 ).
 Add a maskable icon for android.

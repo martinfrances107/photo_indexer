@@ -11,9 +11,11 @@
 /// is this correct?
 pub mod app;
 mod image_gallery;
-#[cfg(feature = "ssr")]
+
 mod indexer;
+
 mod pages;
+mod settings;
 
 extern crate seroost_lib;
 

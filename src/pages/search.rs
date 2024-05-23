@@ -20,6 +20,7 @@ use serde::Serialize;
 use crate::image_gallery::ImageGallery;
 #[cfg(feature = "ssr")]
 use crate::pages::GLOBAL_STATE;
+use crate::settings::SettingsPannel;
 
 // Search Result Element
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
@@ -39,7 +40,7 @@ pub struct SearchResult {
 
 #[server]
 pub async fn add_query(query: String) -> Result<(), ServerFnError> {
-    leptos::logging::log!("serve: entry search_query");
+    leptos::logging::log!("server: entry search_query");
     let sq = query.chars().collect::<Vec<char>>();
     match GLOBAL_STATE.lock() {
         Ok(mut state) => {
@@ -97,7 +98,7 @@ pub fn Search() -> impl IntoView {
 
     let images = create_local_resource(
         move || search_query_action.version().get(),
-        |version| get_query(version),
+        get_query,
     );
 
     let entries = Signal::derive(move || match images.get() {
@@ -159,6 +160,7 @@ pub fn Search() -> impl IntoView {
 
         <div class="flex">
           <ImageGallery entries/>
+          <SettingsPannel/>
         </div>
 
       </div>
