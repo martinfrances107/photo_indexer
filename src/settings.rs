@@ -32,6 +32,7 @@ pub struct RootDirResult {
 
 #[server]
 pub async fn add_root_dir(root_dir: String) -> Result<(), ServerFnError> {
+    use std::path::PathBuf;
     use crate::indexer::Index;
     use crate::pages::GLOBAL_STATE;
 
