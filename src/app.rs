@@ -51,8 +51,8 @@ pub fn App() -> impl IntoView {
                 view! {
                   // TODO work out wrapping for mobile nav is below the header
                   // for desktop nav is right justified.
-                  <header class="flex item-center justify-between px-6 m-none">
-                    <h1 class="font-light" style="font-size: calc(min(max(8vw, 1rem), 4rem));">
+                  <header class="flex gap-8 item-center justify-between px-6 m-none">
+                    <h1 class="font-light grow" style="font-size: calc(min(max(8vw, 1rem), 4rem));">
                       "SEARCH"
                     </h1>
                     <SettingsButton/>
