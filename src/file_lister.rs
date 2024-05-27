@@ -1,8 +1,6 @@
 use leptos::component;
-use leptos::create_effect;
 use leptos::create_local_resource;
 use leptos::create_server_action;
-use leptos::logging::log;
 use leptos::server;
 use leptos::view;
 use leptos::For;
@@ -21,6 +19,11 @@ use crate::pages::IMAGE_PREFIX;
 pub struct ListUrlResult {
     list_url: String,
     listed_urls: Vec<String>,
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct SelectedUrlResult {
+    url: String,
 }
 
 #[server]
@@ -66,6 +69,68 @@ pub async fn get_list_url() -> Result<ListUrlResult, ServerFnError> {
     })
 }
 
+#[server]
+pub async fn add_selected_url(url: String) -> Result<(), ServerFnError> {
+    use std::path::PathBuf;
+
+    use crate::indexer::Index;
+    use crate::pages::GLOBAL_STATE;
+
+    leptos::logging::log!("server: entry add_root_dir");
+    // SANITIZE: Reject if not a valid directory
+    // ALSO check access permissions.
+    match GLOBAL_STATE.lock() {
+        Ok(mut state) => {
+            // SANITIZATION
+            // Reject urls without a prefix "/images"
+            // Reject invalid directory names ( within the container directory ).
+            let selected_dir = match PathBuf::from(url).strip_prefix("images") {
+                Ok(filename_suffix) => {
+                    state.container_dir.join(filename_suffix)
+                }
+                Err(_) => {
+                    // malformed input.
+                    return Err(ServerFnError::Args(String::from(
+                        "URL must be prefixed with 'images/'",
+                    )));
+                }
+            };
+
+            if selected_dir.is_dir() {
+                // reject suspicious input.
+                return Err(ServerFnError::Args(String::from(
+                    "rejecting selected url",
+                )));
+            }
+
+            state.index =
+                Index::new(selected_dir.clone(), state.container_dir.clone());
+            state.entries = vec![];
+            state.selected_dir = selected_dir;
+            Ok(())
+        }
+        Err(e) => {
+            panic!("/search query - could not unlock {e}");
+        }
+    }
+}
+
+#[server]
+pub async fn get_selected_dir() -> Result<SelectedUrlResult, ServerFnError> {
+    use crate::pages::GLOBAL_STATE;
+
+    let selected_dir = match GLOBAL_STATE.lock() {
+        Ok(state) => state.selected_dir.clone(),
+        Err(e) => {
+            panic!("get_root_dir() - could not unlock {e}");
+        }
+    };
+
+    Ok(SelectedUrlResult {
+        url: selected_dir.display().to_string(),
+    })
+}
+
 /// Right handside side bar.
 ///
 /// Form is used to set the indexer to a new value.
@@ -87,9 +152,18 @@ pub fn FileLister() -> impl IntoView {
             },
         });
 
-    create_effect(move |_| {
-        log!("{:#?}", list_url_result.get());
-    });
+    // let root_dir_action = create_server_action::<AddSelectedUrl>();
+
+    //   let on_submit = move |ev: SubmitEvent| {
+    //     ev.prevent_default();
+
+    //     let url = input_element
+    //         .get()
+    //         .expect("<input> should be mounted.")
+    //         .value();
+
+    //     root_dir_action.dispatch(AddSelectedUrl { url });
+    // };
 
     view! {
       <div>

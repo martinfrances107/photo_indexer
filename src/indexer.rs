@@ -162,12 +162,11 @@ impl Index {
     }
 }
 
-#[cfg(not(tarpaulin_include))]
-#[cfg(test)]
 /// Can I refactor?
 /// Drop the ROOT_DIR
 /// Inject two simulated files.
 /// then assert we can see only one returned by search.
+#[cfg(test)]
 mod test {
 
     static ROOT_DIR: &str = "/home/martin/build/exif-samples";

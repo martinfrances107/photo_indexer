@@ -19,7 +19,6 @@ use crate::pages::search::SRElem;
 pub async fn add_meta_data(
     url: Option<String>,
 ) -> Result<Option<Vec<Field>>, ServerFnError> {
-
     use crate::pages::GLOBAL_STATE;
 
     leptos::logging::log!("server: entry metadata");
