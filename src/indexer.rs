@@ -1,38 +1,48 @@
 use std::collections::HashMap;
-use std::path::Path;
-use std::path::PathBuf;
-use std::time::SystemTime;
 
 use exif::Field;
-use exif::Tag;
 use seroost_lib::model::Model;
-use tracing::info;
-use walkdir::DirEntry;
-use walkdir::WalkDir;
 
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Index {
-    pub description_store: HashMap<PathBuf, String>,
+    pub description_store: HashMap<String, String>,
     pub model: Model,
-    pub md_store: HashMap<PathBuf, Vec<Field>>,
+    pub md_store: HashMap<String, Vec<Field>>,
 }
 
 /// Will error if the root directory is invalid.
+#[cfg(feature = "ssr")]
 impl Index {
-    pub(crate) fn new(root: &Path) -> Self {
+    pub(crate) fn new<P>(root: P, container_dir: P) -> Self
+    where
+        P: AsRef<std::path::Path>,
+    {
         let extensions = [".jpg", ".gif", ".png", ".jpeg"];
-        Self::new_with_extension(root, extensions)
+        Self::new_with_extension(root, container_dir, extensions)
     }
 
     /// Equivalent to "find . -name *.extension"
     #[allow(clippy::cognitive_complexity)]
-    pub(crate) fn new_with_extension<const N: usize>(
-        root: &Path,
+    pub(crate) fn new_with_extension<const N: usize, P>(
+        root: P,
+        container_dir: P,
         extensions: [&str; N],
-    ) -> Self {
+    ) -> Self
+    where
+        P: AsRef<std::path::Path>,
+    {
+        use std::time::SystemTime;
+
+        use exif::Tag;
+        use tracing::info;
+        use walkdir::DirEntry;
+        use walkdir::WalkDir;
+
+        use crate::pages::IMAGE_PREFIX;
+
         // TODO If availble load model from file.
-        // let model: Arc<Mutex<Model>> = Arc::new(Mutex::new(Default::default()));
         let mut model = Model::default();
+        // URL as key.
         let mut md_store = HashMap::default();
         let mut description_store = HashMap::default();
 
@@ -63,6 +73,15 @@ impl Index {
         for de in image_entries {
             // Can ALWAYS unwrap the file inside the loop containing valid filenames?
             let filename = de.path().to_path_buf();
+            let url = format!(
+                "{IMAGE_PREFIX}{}",
+                filename
+                    .strip_prefix(&container_dir)
+                    .expect("indexer new_with_extension: strip_prefix failed")
+                    .display()
+                    .to_string()
+            );
+
             match std::fs::File::open(de.path()) {
                 Err(_) => {
                     return Self {
@@ -100,13 +119,13 @@ impl Index {
                                     // "\"          \""
                                     // Must strip out white space and escaped values like \"
                                     description_store.insert(
-                                        filename.clone(),
+                                        url.clone(),
                                         format!("{}", field.display_value()),
                                     );
                                 }
                             }
                             md_store.insert(
-                                filename.clone(),
+                                url.clone(),
                                 // Strip ImageDescription from meta data list destined for display.
                                 // ImageDescription will be shown before the metadata.
                                 exif.fields()

@@ -8,26 +8,92 @@
 
 //! A web app the search a set of images.
 
+mod file_lister;
 mod image_gallery;
 mod indexer;
 mod pages;
 mod settings;
 
+extern crate clap;
 extern crate seroost_lib;
+
+use clap::Parser;
+use std::path::PathBuf;
+
+/// Simple program to greet a person
+#[derive(Parser, Debug)]
+#[command(version, about, long_about = None)]
+struct Args {
+    /// Directory to index.
+    root_dir: Option<PathBuf>,
+}
 
 #[cfg(feature = "ssr")]
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    use std::fs::canonicalize;
+    use std::io::Error;
+    use std::io::ErrorKind;
+
     use actix_files::Files;
     use actix_web::middleware::Compress;
     use actix_web::App;
     use actix_web::HttpServer;
+    use clap::Parser;
     use leptos::get_configuration;
     use leptos::view;
     use leptos_actix::generate_route_list;
     use leptos_actix::LeptosRoutes;
     use photo_indexer::app::App;
     use tracing::log;
+
+    use crate::indexer::Index;
+    use crate::pages::GLOBAL_STATE;
+    use crate::pages::IMAGE_PREFIX;
+
+    let args: Args = Args::parse();
+
+    let root_dir = match args.root_dir {
+        Some(root_dir) => {
+            if root_dir.is_dir() {
+                match canonicalize(root_dir) {
+                    Ok(root_dir) => root_dir,
+                    Err(_) => {
+                        return Err(Error::new(
+                            ErrorKind::Unsupported,
+                            "Could not convert directory name to a full path",
+                        ));
+                    }
+                }
+            } else {
+                return Err(Error::new(
+                    ErrorKind::InvalidInput,
+                    "Must supply a valid directory.",
+                ));
+            }
+        }
+        None => match std::env::current_dir() {
+            Ok(root_dir) => root_dir,
+            Err(_) => {
+                log::error!("Could not read the current working directory.");
+                return Err(Error::new(ErrorKind::Unsupported, "No root directory supplied and could not read the current directory"));
+            }
+        },
+    };
+
+    match GLOBAL_STATE.lock() {
+        Ok(mut state) => {
+            state.index = Index::new(root_dir.clone(), root_dir.clone());
+            state.container_dir = root_dir.clone();
+            state.selected_dir = root_dir.clone();
+            state.list_url = IMAGE_PREFIX.to_string();
+        }
+        Err(_) => {
+            panic!("INTERNAL: could not update global state from command line args");
+        }
+    }
+
+    log::info!("Index {}", root_dir.display());
 
     let conf = get_configuration(None).await.unwrap();
     let addr = conf.leptos_options.site_addr;
@@ -48,7 +114,7 @@ async fn main() -> std::io::Result<()> {
             )
             // TODO can I filter by extension rather than expose
             // all files from this directory.
-            .service(Files::new("/exif-samples/", "../exif-samples/"))
+            .service(Files::new(IMAGE_PREFIX, root_dir.clone()))
             .service(Files::new("/", site_root))
     })
     .bind(&addr)

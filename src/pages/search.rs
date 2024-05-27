@@ -1,5 +1,3 @@
-use std::path::PathBuf;
-
 use leptos::component;
 use leptos::create_local_resource;
 use leptos::create_node_ref;
@@ -23,13 +21,14 @@ use crate::pages::GLOBAL_STATE;
 use crate::settings::SettingsPannel;
 
 // Search Result Element
-#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct SRElem {
     pub description: String,
-    pub path_rank: (PathBuf, f32),
+    // pub path_rank: (PathBuf, f32),
+    pub url: String,
 }
 
-#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct SearchResult {
     pub entries: Vec<SRElem>,
     // counter that increments every for query.
@@ -40,8 +39,12 @@ pub struct SearchResult {
 
 #[server]
 pub async fn add_query(query: String) -> Result<(), ServerFnError> {
+    use crate::pages::IMAGE_PREFIX;
+
     leptos::logging::log!("server: entry search_query");
+
     let sq = query.chars().collect::<Vec<char>>();
+
     match GLOBAL_STATE.lock() {
         Ok(mut state) => {
             state.query = sq;
@@ -49,15 +52,30 @@ pub async fn add_query(query: String) -> Result<(), ServerFnError> {
             state.entries = entries_raw
                 .iter()
                 .map(|path_rank| {
-                    let description =
-                        match state.index.description_store.get(&path_rank.0) {
-                            Some(description) => description.to_string(),
-                            None => String::default(),
-                        };
-                    SRElem {
-                        description,
-                        path_rank: path_rank.clone(),
-                    }
+                    let description = match state
+                        .index
+                        .description_store
+                        .get(&path_rank.0.display().to_string())
+                    {
+                        Some(description) => description.to_string(),
+                        None => String::default(),
+                    };
+
+                    // Construct url from filename
+                    let url = match path_rank
+                        .0
+                        .strip_prefix(state.selected_dir.clone())
+                    {
+                        Ok(filename) => {
+                            format!(
+                                "{IMAGE_PREFIX}{}",
+                                filename.display().to_string()
+                            )
+                        }
+                        Err(_) => String::default(),
+                    };
+
+                    SRElem { description, url }
                 })
                 .collect();
             Ok(())

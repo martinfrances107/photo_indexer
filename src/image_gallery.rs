@@ -1,9 +1,4 @@
-use std::path::PathBuf;
-
 use exif::Field;
-use serde::Deserialize;
-use serde::Serialize;
-
 use leptos::component;
 use leptos::create_local_resource;
 use leptos::create_server_action;
@@ -15,22 +10,24 @@ use leptos::ServerFnError;
 use leptos::Signal;
 use leptos::SignalGet;
 use leptos::Transition;
+use serde::Deserialize;
+use serde::Serialize;
 
 use crate::pages::search::SRElem;
 
-#[cfg(feature = "ssr")]
-use crate::pages::GLOBAL_STATE;
-
 #[server]
 pub async fn add_meta_data(
-    filename: Option<PathBuf>,
+    url: Option<String>,
 ) -> Result<Option<Vec<Field>>, ServerFnError> {
+
+    use crate::pages::GLOBAL_STATE;
+
     leptos::logging::log!("server: entry metadata");
 
     match GLOBAL_STATE.lock() {
-        Ok(mut state) => match filename {
-            Some(filename) => {
-                state.metadata = match state.index.md_store.get(&filename) {
+        Ok(mut state) => match url {
+            Some(url) => {
+                state.metadata = match state.index.md_store.get(&url) {
                     Some(metadata) => Some(metadata.clone()),
                     None => None,
                 };
@@ -49,6 +46,7 @@ pub async fn add_meta_data(
 
 #[server]
 pub async fn get_metadata() -> Result<Option<Vec<Field>>, ServerFnError> {
+    use crate::pages::GLOBAL_STATE;
     let metadata = match GLOBAL_STATE.lock() {
         Ok(state) => state.metadata.clone(),
         Err(e) => {
@@ -59,7 +57,7 @@ pub async fn get_metadata() -> Result<Option<Vec<Field>>, ServerFnError> {
     Ok(metadata)
 }
 
-#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct SearchResult {
     pub entries: Vec<SRElem>,
 }
@@ -67,12 +65,10 @@ pub struct SearchResult {
 #[component]
 pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
     let metadata_action = create_server_action::<AddMetaData>();
-
     let metadata_resource = create_local_resource(
         move || metadata_action.version().get(),
         |_| get_metadata(),
     );
-
     let metadata = Signal::derive(move || match metadata_resource.get() {
         Some(Ok(metadata)) => metadata,
         _ => None,
@@ -94,7 +90,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                             <button
                               class="text-right font-medium w-full"
                               on:click=move |_| {
-                                  metadata_action.dispatch(AddMetaData { filename: None });
+                                  metadata_action.dispatch(AddMetaData { url: None });
                               }
 
                               title="close"
@@ -141,10 +137,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
 
             <div class="hover:bg-slate-600 mb-4 relative rounded text-left w-[280px]">
               <figure class="bg-slate-100 pt-2 rounded-t">
-                <img
-                  class="aspect-square mx-auto w-[274px] h-[160px]"
-                  src=data.1.path_rank.0.clone().display().to_string()
-                />
+                <img class="aspect-square mx-auto w-[274px] h-[160px]" src=data.1.url.clone()/>
                 <figcaption>
                   {if data.1.description.is_empty() {
                       view! { <p>"No description"</p> }
@@ -159,11 +152,11 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                 on:click=move |_| {
                     metadata_action
                         .dispatch(AddMetaData {
-                            filename: Some(data.1.path_rank.0.clone()),
+                            url: Some(data.1.url.clone()),
                         });
                 }
 
-                title="OPEN METADATA"
+                title="Open metadata"
               >
 
                 "M"

@@ -18,34 +18,67 @@ use leptos::WriteSignal;
 use serde::Deserialize;
 use serde::Serialize;
 
+use crate::file_lister::FileLister;
+
 #[derive(Clone, Debug)]
 pub enum SideBarState {
     Open,
     Close,
 }
 
-// A request by the client to to change the root directory.
-#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
-pub struct RootDirResult {
-    root_dir: String,
+#[derive(Deserialize, Serialize)]
+pub struct SelectedUrlResult {
+    url: String,
+}
+
+impl SideBarState {
+    // Used to dynamically control class the settings bar.
+    const fn is_hidden(&self) -> bool {
+        match self {
+            Self::Open => false,
+            Self::Close => true,
+        }
+    }
 }
 
 #[server]
-pub async fn add_root_dir(root_dir: String) -> Result<(), ServerFnError> {
+pub async fn add_selected_url(url: String) -> Result<(), ServerFnError> {
     use std::path::PathBuf;
+
     use crate::indexer::Index;
     use crate::pages::GLOBAL_STATE;
 
     leptos::logging::log!("server: entry add_root_dir");
-
-    let pb_root_dir = PathBuf::from(root_dir);
     // SANITIZE: Reject if not a valid directory
     // ALSO check access permissions.
     match GLOBAL_STATE.lock() {
         Ok(mut state) => {
-            state.index = Index::new(&pb_root_dir);
+            // SANITIZATION
+            // Reject urls without a prefix "/images"
+            // Reject invalid directory names ( within the container directory ).
+            let selected_dir = match PathBuf::from(url).strip_prefix("images") {
+                Ok(filename_suffix) => {
+                    state.container_dir.join(filename_suffix)
+                }
+                Err(_) => {
+                    // malformed input.
+                    return Err(ServerFnError::Args(String::from(
+                        "URL must be prefixed with 'images/'",
+                    )));
+                }
+            };
+
+            if selected_dir.is_dir() {
+                // reject suspicious input.
+                return Err(ServerFnError::Args(String::from(
+                    "rejecting selected url",
+                )));
+            }
+
+            state.index =
+                Index::new(selected_dir.clone(), state.container_dir.clone());
             state.entries = vec![];
-            state.root_dir = pb_root_dir;
+            state.selected_dir = selected_dir;
             Ok(())
         }
         Err(e) => {
@@ -55,18 +88,18 @@ pub async fn add_root_dir(root_dir: String) -> Result<(), ServerFnError> {
 }
 
 #[server]
-pub async fn get_root_dir() -> Result<RootDirResult, ServerFnError> {
+pub async fn get_selected_dir() -> Result<SelectedUrlResult, ServerFnError> {
     use crate::pages::GLOBAL_STATE;
 
-    let root_dir = match GLOBAL_STATE.lock() {
-        Ok(state) => state.root_dir.clone(),
+    let selected_dir = match GLOBAL_STATE.lock() {
+        Ok(state) => state.selected_dir.clone(),
         Err(e) => {
             panic!("get_root_dir() - could not unlock {e}");
         }
     };
 
-    Ok(RootDirResult {
-        root_dir: root_dir.display().to_string(),
+    Ok(SelectedUrlResult {
+        url: selected_dir.display().to_string(),
     })
 }
 
@@ -97,7 +130,7 @@ pub fn SettingsButton() -> impl IntoView {
             sidebar_state_setter.set(new_state);
         }
 
-        title="OPEN METADATA"
+        title="Open settings"
       >
         <img src="/hamburger.svg"/>
       </button>
@@ -109,49 +142,28 @@ pub fn SettingsButton() -> impl IntoView {
 /// Form is used to set the indexer to a new value.
 #[component]
 pub fn SettingsPannel() -> impl IntoView {
-    let root_dir_action = create_server_action::<AddRootDir>();
+    let root_dir_action = create_server_action::<AddSelectedUrl>();
 
     let input_element: NodeRef<html::Input> = create_node_ref();
 
     let on_submit = move |ev: SubmitEvent| {
         ev.prevent_default();
 
-        let root_dir = input_element
+        let url = input_element
             .get()
             .expect("<input> should be mounted.")
             .value();
 
-        root_dir_action.dispatch(AddRootDir { root_dir });
+        root_dir_action.dispatch(AddSelectedUrl { url });
     };
 
     let (sidebar_state, _sidebar_state_setter) =
         use_context::<(ReadSignal<SideBarState>, WriteSignal<SideBarState>)>()
             .unwrap();
     view! {
-      <div style:width=move || match sidebar_state.get() {
-          SideBarState::Open => "100%",
-          SideBarState::Close => "0",
-      }>
+      <div class:hidden=move || sidebar_state.get().is_hidden()>
         <h1>"Settings"</h1>
-        <p>"Inside the new sidebar"</p>
-        <form on:submit=on_submit class="dark:text-slate-700 px-6 py-2 text-center">
-          <label class="hidden" for="root_dir">
-            "Set the root directory"
-          </label>
-          <input
-            id="root_dir"
-            class="p-2"
-            type="text"
-            placeholder="root directory"
-            node_ref=input_element
-          />
-          <input
-            type="submit"
-            title="Set the root directory for the indexer"
-            value=" "
-            class="bg-sky-700 cursor-grab rounded-r-lg p-2 hover:bg-sky-600 w-[3.5rem]"
-          />
-        </form>
+        <FileLister/>
       </div>
     }
 }
