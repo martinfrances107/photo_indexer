@@ -5,6 +5,7 @@ use leptos::IntoView;
 use leptos::ReadSignal;
 use leptos::SignalGet;
 use leptos::SignalSet;
+use leptos::SignalUpdate;
 use leptos::WriteSignal;
 
 use crate::file_lister::FileLister;
@@ -23,6 +24,13 @@ impl SideBarState {
             Self::Close => true,
         }
     }
+
+    const fn toggle(&self) -> Self {
+        match self {
+            Self::Open => Self::Close,
+            Self::Close => Self::Open,
+        }
+    }
 }
 
 /// App level Button
@@ -39,15 +47,7 @@ pub fn SettingsButton() -> impl IntoView {
       <button
         class="text-white"
         on:click=move |_| {
-            let new_state = match sidebar_state.get() {
-                SideBarState::Open => {
-                    SideBarState::Close
-                }
-                SideBarState::Close => {
-                    SideBarState::Open
-                }
-            };
-            sidebar_state_setter.set(new_state);
+            sidebar_state_setter.update(|state| {state.toggle();});
         }
 
         title="Open settings"
