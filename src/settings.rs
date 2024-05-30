@@ -4,7 +4,6 @@ use leptos::view;
 use leptos::IntoView;
 use leptos::ReadSignal;
 use leptos::SignalGet;
-use leptos::SignalSet;
 use leptos::SignalUpdate;
 use leptos::WriteSignal;
 
@@ -39,7 +38,7 @@ impl SideBarState {
 /// hand side.
 #[component]
 pub fn SettingsButton() -> impl IntoView {
-    let (sidebar_state, sidebar_state_setter) =
+    let (_, sidebar_state_setter) =
         use_context::<(ReadSignal<SideBarState>, WriteSignal<SideBarState>)>()
             .unwrap();
 
@@ -47,8 +46,7 @@ pub fn SettingsButton() -> impl IntoView {
       <button
         class="text-white"
         on:click=move |_| {
-            sidebar_state_setter.update(|state| *state = state.toggle()
-            );
+            sidebar_state_setter.update(|state| *state = state.toggle());
         }
 
         title="Open settings"
