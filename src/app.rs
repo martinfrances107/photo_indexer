@@ -55,10 +55,10 @@ pub fn App() -> impl IntoView {
                     <h1 class="font-light grow" style="font-size: calc(min(max(8vw, 1rem), 4rem));">
                       "SEARCH"
                     </h1>
-                    <SettingsButton/>
                     <nav class="self-center text-[0.5vw]">
-                      <A href="/about">"ABOUT"</A>
+                    <A href="/about">"ABOUT"</A>
                     </nav>
+                    <SettingsButton/>
                   </header>
                   <Search/>
                 }
@@ -75,10 +75,10 @@ pub fn App() -> impl IntoView {
                     <h1 class="font-light grow" style="font-size: calc(min(max(8vw, 1rem), 4rem));">
                       "ABOUT"
                     </h1>
-                    <SettingsButton/>
                     <nav class="self-center text-[0.5vw]">
-                      <A href="/">"SEARCH"</A>
+                    <A href="/">"SEARCH"</A>
                     </nav>
+                    <SettingsButton/>
                   </header>
                   <About/>
                 }
