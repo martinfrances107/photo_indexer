@@ -56,7 +56,7 @@ pub fn App() -> impl IntoView {
                       "SEARCH"
                     </h1>
                     <nav class="self-center text-[0.5vw]">
-                    <A href="/about">"ABOUT"</A>
+                      <A href="/about">"ABOUT"</A>
                     </nav>
                     <SettingsButton/>
                   </header>
@@ -76,7 +76,7 @@ pub fn App() -> impl IntoView {
                       "ABOUT"
                     </h1>
                     <nav class="self-center text-[0.5vw]">
-                    <A href="/">"SEARCH"</A>
+                      <A href="/">"SEARCH"</A>
                     </nav>
                     <SettingsButton/>
                   </header>

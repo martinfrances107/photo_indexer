@@ -7,7 +7,7 @@ use leptos::SignalGet;
 use leptos::SignalUpdate;
 use leptos::WriteSignal;
 
-use crate::file_lister::FileLister;
+use crate::file_lister::lister::Lister as FileLister;
 
 #[derive(Clone, Debug)]
 pub enum SideBarState {

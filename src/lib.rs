@@ -10,7 +10,7 @@
 /// TODO public to that main can see this
 /// is this correct?
 pub mod app;
-mod file_lister;
+pub(crate) mod file_lister;
 mod image_gallery;
 mod indexer;
 mod pages;

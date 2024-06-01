@@ -8,7 +8,7 @@
 
 //! A web app the search a set of images.
 
-mod file_lister;
+pub(crate) mod file_lister;
 mod image_gallery;
 mod indexer;
 mod pages;
@@ -31,7 +31,6 @@ struct Args {
 #[cfg(feature = "ssr")]
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    use std::fs::canonicalize;
     use std::io::Error;
     use std::io::ErrorKind;
 
@@ -56,15 +55,7 @@ async fn main() -> std::io::Result<()> {
     let root_dir = match args.root_dir {
         Some(root_dir) => {
             if root_dir.is_dir() {
-                match canonicalize(root_dir) {
-                    Ok(root_dir) => root_dir,
-                    Err(_) => {
-                        return Err(Error::new(
-                            ErrorKind::Unsupported,
-                            "Could not convert directory name to a full path",
-                        ));
-                    }
-                }
+                root_dir
             } else {
                 return Err(Error::new(
                     ErrorKind::InvalidInput,
@@ -86,7 +77,7 @@ async fn main() -> std::io::Result<()> {
             state.index = Index::new(root_dir.clone(), root_dir.clone());
             state.container_dir = root_dir.clone();
             state.selected_dir = root_dir.clone();
-            state.list_url = IMAGE_PREFIX.to_string();
+            // state.list_url = IMAGE_PREFIX.to_string();
         }
         Err(_) => {
             panic!("INTERNAL: could not update global state from command line args");
