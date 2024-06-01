@@ -18,8 +18,8 @@ use leptos::SignalGet;
 use leptos::SignalSet;
 use leptos::Transition;
 
-use crate::file_lister::AddListUrl;
 use crate::file_lister::get_list_url;
+use crate::file_lister::AddListUrl;
 use crate::pages::IMAGE_PREFIX;
 
 /// Right handside side bar.
@@ -55,15 +55,11 @@ pub fn Lister() -> impl IntoView {
         // Response failure.
         Some(Err(e)) => {
             log!("{e:#?}");
-            vec![
-                "client_error_x".into(),
-            ]
+            vec!["client_error_x".into()]
         }
         None => {
             log!("None");
-            vec![
-                "client_none_x".into()
-            ]
+            vec!["client_none_x".into()]
         }
     });
 
@@ -74,7 +70,6 @@ pub fn Lister() -> impl IntoView {
         // Update form with pre-prepared value.
         if let Some(event) = event.related_target() {
             log!("event {event:#?}");
-            // let url = String::from("hello");
         } else {
             log!("failed to get event");
         }

@@ -75,9 +75,12 @@ async fn main() -> std::io::Result<()> {
     match GLOBAL_STATE.lock() {
         Ok(mut state) => {
             state.index = Index::new(root_dir.clone(), root_dir.clone());
-            state.container_dir = root_dir.clone();
-            state.selected_dir = root_dir.clone();
-            // state.list_url = IMAGE_PREFIX.to_string();
+            state
+                .container_dir_set(root_dir.clone())
+                .expect("Could not initialize container dir");
+            state
+                .selected_dir_set(root_dir.clone())
+                .expect("Could not initialize selected dir");
         }
         Err(_) => {
             panic!("INTERNAL: could not update global state from command line args");

@@ -21,30 +21,57 @@ cfg_if! {
       InvalidDirectory,
     }
 
+    #[derive(Debug)]
+    pub(crate) struct DirectorySetError{}
+
     #[derive(Clone, Debug)]
     pub(crate) struct GlobalState {
-      pub container_dir: PathBuf,
-      pub selected_dir: PathBuf,
-      pub index: Index,
-      pub query: Vec<char>,
       pub entries: Vec<SRElem>,
-      list_dir: PathBuf,
+      pub index: Index,
       pub listed_urls: Vec<String>,
       pub metadata: Option<Vec<Field>>,
+      pub query: Vec<char>,
+
+    // PRIVATE: setters ensure all drectories must be valid.
+    // at time of writing.
+    //
+    // TODO: Could watch/notify these directories incase
+    // another program modified the filesystem.
+      container_dir: PathBuf,
+      list_dir: PathBuf,
+      selected_dir: PathBuf,
     }
 
-    // Getters and setters for
+    impl Default for GlobalState {
+      fn default() -> Self {
+        // Initialisation value required for the period before initialisation
+        // from command line arguments.
+        let root_dir = PathBuf::from("../exif-samples") ;
+
+        Self {
+          container_dir: root_dir.clone(),
+          index: Index::new(root_dir.clone(), root_dir.clone()),
+          query: vec![],
+          entries: vec![],
+          list_dir: root_dir.clone(),
+          listed_urls: vec!["default a".into()],
+          metadata: None,
+          selected_dir: root_dir,
+        }
+      }
+    }
+
     impl GlobalState {
+      // Reject urls without a prefix "/images"
+      // Reject invalid DIRECTORY names ( within the container directory ).
       fn sanitize_url(&self, url: String) -> Result<PathBuf, UrlSanitizationError> {
-           // SANITIZATION
-            // Reject urls without a prefix "/images"
-            // Reject invalid DIRECTORY names ( within the container directory ).
+
             let list_dir = match url.strip_prefix(IMAGE_PREFIX) {
               Some(filename_suffix) => {
                   PathBuf::from(self.container_dir.join(filename_suffix))
               }
               None => {
-                  // malformed input.
+                  // Malformed input.
                   return Err(UrlSanitizationError::MissingPrefix)
               }
           };
@@ -75,27 +102,34 @@ cfg_if! {
         self.list_dir.clone()
       }
 
-      // TODO MISSING: set_selected_dir_from_url()
-      // TODO MISSING: selected_dir()
-    }
-
-    impl Default for GlobalState {
-      fn default() -> Self {
-        // Initialisation value required for the period before initialisation
-        // from command line arguments.
-        let root_dir = PathBuf::from("../exif-samples") ;
-
-        Self {
-          container_dir: root_dir.clone(),
-          index: Index::new(root_dir.clone(), root_dir.clone()),
-          query: vec![],
-          entries: vec![],
-          list_dir: root_dir.clone(),
-          listed_urls: vec!["default a".into()],
-          metadata: None,
-          selected_dir: root_dir,
+      pub(crate)  fn selected_dir_set(&mut self, dir: PathBuf) -> Result<(), DirectorySetError>{
+        if dir.is_dir() {
+          self.selected_dir = dir;
+          Ok(())
+        }
+        else {
+          Err(DirectorySetError{})
         }
       }
+
+      pub(crate) fn selected_dir(&self) -> PathBuf {
+        self.selected_dir.clone()
+      }
+
+      pub(crate) fn container_dir_set(&mut self, dir: PathBuf) -> Result<(), DirectorySetError>{
+        if dir.is_dir() {
+          self.container_dir = dir;
+          Ok(())
+        }
+        else {
+          Err(DirectorySetError{})
+        }
+      }
+
+      pub(crate) fn container_dir(&self) -> PathBuf {
+        self.container_dir.clone()
+      }
+
     }
 
     lazy_static! {

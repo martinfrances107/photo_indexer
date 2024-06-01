@@ -4,8 +4,6 @@ use leptos::ServerFnError;
 use serde::Deserialize;
 use serde::Serialize;
 
-
-
 pub(crate) mod lister;
 
 // A request by the client to to change the root directory.
@@ -17,13 +15,13 @@ pub struct ListUrlResult {
 
 #[cfg(feature = "ssr")]
 fn is_not_hidden(entry: &walkdir::DirEntry) -> bool {
-  entry
-       .file_name()
-       .to_str()
-       .is_some_and(|s| entry.depth() == 0 || !s.starts_with('.'))
+    entry
+        .file_name()
+        .to_str()
+        .is_some_and(|s| entry.depth() == 0 || !s.starts_with('.'))
 }
 
-// Ingest an sanitize url.
+// Ingest and sanitize url.
 //
 // Errors: -
 // timeout aquiring lock.
@@ -69,31 +67,26 @@ pub async fn get_list_url(
 
     match crate::pages::GLOBAL_STATE.lock() {
         Ok(mut state) => {
+            let container_dir = state.container_dir().clone();
             let listed_urls = WalkDir::new(state.list_dir())
-            .max_depth(1)
+                .max_depth(1)
                 .into_iter()
                 .filter_entry(|e| is_not_hidden(e))
-                .filter_map(|entry| {
-                    match entry {
-                        Ok(entry) => {
-                            if entry.path().is_dir() {
-                                Some(entry)
-                            } else {
-                                None
-                            }
-                        }
-                        Err(_e) => {
+                .filter_map(|entry| match entry {
+                    Ok(entry) => {
+                        if entry.path().is_dir() {
+                            Some(entry)
+                        } else {
                             None
                         }
                     }
+                    Err(_e) => None,
                 })
                 .filter_map(|entry| {
-                  match entry.path().strip_prefix(state.container_dir.clone()){
-                    Ok(url) => {
-                      Some(url.display().to_string())
-                    },
-                    Err(_) => {None}
-                  }
+                    match entry.path().strip_prefix(container_dir.clone()) {
+                        Ok(url) => Some(url.display().to_string()),
+                        Err(_) => None,
+                    }
                 })
                 .collect();
 
