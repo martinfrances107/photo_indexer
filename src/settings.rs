@@ -51,7 +51,20 @@ pub fn SettingsButton() -> impl IntoView {
 
         title="Open settings"
       >
-        <img src="/hamburger.svg"/>
+        <svg
+          class="stroke-neutral-400 hover:stroke-neutral-300"
+          width="24px"
+          height="24px"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 6.00092H21M3 12.0009H21M3 18.0009H21"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></path>
+        </svg>
       </button>
     }
 }
