@@ -16,9 +16,10 @@ use serde::Deserialize;
 use serde::Serialize;
 
 use crate::image_gallery::ImageGallery;
+use crate::settings::pannel::Pannel as SettingsPannel;
+
 #[cfg(feature = "ssr")]
 use crate::pages::GLOBAL_STATE;
-use crate::settings::SettingsPannel;
 
 // Search Result Element
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -86,19 +87,20 @@ pub async fn add_query(query: String) -> Result<(), ServerFnError> {
     }
 }
 
-// TODO wiered leptos default naming convention
+// TODO wierd leptos default naming convention
 // get_query get the result of the last query
 // ie get a list of images.
 #[server]
 pub async fn get_query(version: usize) -> Result<SearchResult, ServerFnError> {
-    let entries = match GLOBAL_STATE.lock() {
-        Ok(state) => state.entries.clone(),
+    match GLOBAL_STATE.lock() {
+        Ok(state) => Ok(SearchResult {
+            entries: state.entries.clone(),
+            version,
+        }),
         Err(e) => {
             panic!("get_query - could not unlock {e}");
         }
-    };
-
-    Ok(SearchResult { entries, version })
+    }
 }
 
 /// A settings form calls root_path_set ( Todo: it hard coded for now ).

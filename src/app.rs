@@ -17,7 +17,7 @@ use leptos_router::A;
 
 use crate::pages::about::About;
 use crate::pages::search::Search;
-use crate::settings::SettingsButton;
+use crate::settings::button::Button as SettingsButton;
 use crate::settings::SideBarState;
 
 /// Provides routes and HTML template.

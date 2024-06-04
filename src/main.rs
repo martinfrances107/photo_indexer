@@ -67,7 +67,7 @@ async fn main() -> std::io::Result<()> {
             Ok(root_dir) => root_dir,
             Err(_) => {
                 log::error!("Could not read the current working directory.");
-                return Err(Error::new(ErrorKind::Unsupported, "No root directory supplied and could not read the current directory"));
+                return Err(Error::new(ErrorKind::Other, "No root directory supplied and could not read the current directory"));
             }
         },
     };
@@ -83,13 +83,19 @@ async fn main() -> std::io::Result<()> {
                 .expect("Could not initialize selected dir");
         }
         Err(_) => {
-            panic!("INTERNAL: could not update global state from command line args");
+            return Err(Error::new(ErrorKind::Other,"INTERNAL: Could not update global state from command line args"));
         }
     }
 
     log::info!("Index {}", root_dir.display());
 
-    let conf = get_configuration(None).await.unwrap();
+    let conf = match get_configuration(None).await {
+      Ok(conf) => conf,
+      Err(_) => {
+        return Err(Error::new(ErrorKind::Other, "INTERNAL: Could not load configuration."));
+      }
+    };
+
     let addr = conf.leptos_options.site_addr;
     // Generate the list of routes in your Leptos App
     let routes = generate_route_list(|| view! { <App/> });

@@ -101,7 +101,7 @@ pub async fn get_list_url(
             let err_msg = format!(
                 "get_list_url() failed to unlock() global state {e:#?}"
             );
-            println!("{}", err_msg);
+            println!("get_list_url{}", err_msg);
             log::error!("{}", err_msg);
             // TODO: In production, this will leak infomation to an attacker
             // Should I emmit a bland Internal Server error message?

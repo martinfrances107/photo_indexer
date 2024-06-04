@@ -40,17 +40,7 @@ pub fn Lister() -> impl IntoView {
     );
 
     let list_url = Signal::derive(move || match list_urls_resource.get() {
-        Some(Ok(result)) => {
-            // // Integrity/Sync check.
-            // // What is requested should be contained in the resposne.
-            // log!(
-            //     "current selection {:#?} - {:#?}",
-            //     current_selection.get(),
-            //     result.list_url
-            // );
-            // debug_assert!(current_selection.get() == result.list_url);
-            result.listed_urls
-        }
+        Some(Ok(result)) => result.listed_urls,
         // Client side initial value
         // Response failure.
         Some(Err(e)) => {
@@ -58,7 +48,7 @@ pub fn Lister() -> impl IntoView {
             vec!["client_error_x".into()]
         }
         None => {
-            log!("None");
+            log!("FileLister/Lister: DerivedSignal - list_url - asked for resource got None");
             vec!["client_none_x".into()]
         }
     });
@@ -88,14 +78,16 @@ pub fn Lister() -> impl IntoView {
     };
 
     let refresh_click = move |ev: MouseEvent| {
-        log!("refresh {ev:#?}");
+      ev.prevent_default();
+      log!("refresh {ev:#?}");
+
     };
 
     view! {
-      <div>
-        <h2>File Lister</h2>
+      <div class="dark:bg-slate-800 p-2 max-w-80 mr-2 rounded">
+        <h2 class="mp-2 text-center">"Select a directory to index"</h2>
         <p>{move || current_selection.get()}</p>
-        <ol>
+        <ol class="flex flex-wrap gap-2 p-2 ">
           <Transition fallback=move || {
               view! {
                 <li>
@@ -109,18 +101,34 @@ pub fn Lister() -> impl IntoView {
               let:data
             >
               <li>
-                <button on:click=selection_click>{data.1}</button>
+                <button
+                  class="dark:bg-neutral-400 dark:focus:bg-neutral-300 p-2 rounded"
+                  on:click=selection_click
+                >
+                  {data.1}
+                </button>
               </li>
             </For>
           </Transition>
         </ol>
 
-        <form on:submit=on_submit class="dark:text-slate-700 px-6 py-2 text-center">
+        <form on:submit=on_submit class="dark:text-slate-700 flex flex-wrap flex-end px-6 py-2 text-center">
           <label class="hidden" for="search">
             Search
           </label>
-          <input id="search" type="text" placeholder="select directory" node_ref=input_element/>
-          <input type="submit" title="Select" value="SUBMIT"/>
+          <input
+            class="px-2"
+            id="search"
+            type="text"
+            placeholder="select directory"
+            node_ref=input_element
+          />
+          <input
+            class="bg-sky-700 cursor-grab rounded p-2 hover:bg-sky-600 w-[3.5rem]"
+            type="submit"
+            title="Select"
+            value=""
+          />
         </form>
 
       </div>

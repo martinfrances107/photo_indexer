@@ -14,13 +14,19 @@
 
   Image card need to be rounded at the bottom.
 
-  Search Button - Not visible
+  FileLister -- text element must be 100% of width -- (small by default)
+  Button is on a the line below right aligned.
 
-## meta data issues
+## Functionality
 
-## style side tray
+  Demo "directory" button change the current selection.
 
- Need to style the hamburger (shift to the right)
+  Demo active selection changing the indexer
+
+## Meta data issues
+
+## Style side tray
+
  Need to sanitize the input
  Consider using a FileDirectory selector.
 
@@ -28,5 +34,5 @@
 
 ## Conditions for PWA
 
-to be FULLY compliant add a PNG icon  ( 512x512 ).
+to be FULLY compliant add a PNG icon ( 512x512 ).
 Add a maskable icon for android.

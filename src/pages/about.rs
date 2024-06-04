@@ -2,7 +2,7 @@ use leptos::component;
 use leptos::view;
 use leptos::IntoView;
 
-use crate::settings::SettingsPannel;
+use crate::settings::pannel::Pannel as SettingsPannel;
 
 /// Holds main search bar and results.
 #[component]

@@ -97,7 +97,7 @@ impl Index {
                     match exifreader.read_from_container(&mut bufreader) {
                         Ok(exif) => {
                             // Unwrap here side steps unicode issues.
-                            // TODI can I strip off absolute path
+                            // TODO:: can I strip off absolute path
                             // and extension and just have a file_stem?
                             let mut content =
                                 String::from(de.path().to_str().unwrap());
