@@ -90,10 +90,13 @@ async fn main() -> std::io::Result<()> {
     log::info!("Index {}", root_dir.display());
 
     let conf = match get_configuration(None).await {
-      Ok(conf) => conf,
-      Err(_) => {
-        return Err(Error::new(ErrorKind::Other, "INTERNAL: Could not load configuration."));
-      }
+        Ok(conf) => conf,
+        Err(_) => {
+            return Err(Error::new(
+                ErrorKind::Other,
+                "INTERNAL: Could not load configuration.",
+            ));
+        }
     };
 
     let addr = conf.leptos_options.site_addr;

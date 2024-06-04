@@ -9,9 +9,9 @@ use leptos::IntoView;
 /// hand side.
 #[component]
 pub fn Button() -> impl IntoView {
+    use leptos::ReadSignal;
     use leptos::SignalUpdate;
     use leptos::WriteSignal;
-    use leptos::ReadSignal;
 
     use crate::settings::SideBarState;
 
@@ -45,5 +45,3 @@ pub fn Button() -> impl IntoView {
       </button>
     }
 }
-
-

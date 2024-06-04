@@ -25,7 +25,9 @@ use crate::pages::GLOBAL_STATE;
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct SRElem {
     pub description: String,
-    // pub path_rank: (PathBuf, f32),
+    // key: Ensures images in the gallery have a
+    // unique id, otherwise images are not correctly refreshed.
+    pub key: usize,
     pub url: String,
 }
 
@@ -33,15 +35,22 @@ pub struct SRElem {
 pub struct SearchResult {
     pub entries: Vec<SRElem>,
     // counter that increments every for query.
-    // Ensures images in the gallery have a
-    // unique id, otherwise images are not correctly refreshed.
     pub version: usize,
+}
+
+// Cantor Pairing.
+//
+// A hash function for two integers
+//
+// <https://en.wikipedia.org/wiki/Pairing_function>
+#[cfg(feature = "ssr")]
+#[inline]
+fn cantor_pair(k1: usize, k2: usize) -> usize {
+    (k1 + k2) * (k1 + k2 + 1) / 2 + k2
 }
 
 #[server]
 pub async fn add_query(query: String) -> Result<(), ServerFnError> {
-    use crate::pages::IMAGE_PREFIX;
-
     leptos::logging::log!("server: entry search_query");
 
     let sq = query.chars().collect::<Vec<char>>();
@@ -49,10 +58,30 @@ pub async fn add_query(query: String) -> Result<(), ServerFnError> {
     match GLOBAL_STATE.lock() {
         Ok(mut state) => {
             state.query = sq;
+            Ok(())
+        }
+        Err(e) => {
+            panic!("/search query - could not unlock {e}");
+        }
+    }
+}
+
+// TODO wierd leptos default naming convention
+// get_query get the result of the last query
+// ie get a list of images.
+#[server]
+pub async fn get_query(version: usize) -> Result<SearchResult, ServerFnError> {
+
+    use crate::pages::IMAGE_PREFIX;
+
+    match GLOBAL_STATE.lock() {
+        Ok(mut state) => {
             let entries_raw = state.index.model.search_query(&state.query);
             state.entries = entries_raw
                 .iter()
-                .map(|path_rank| {
+                .enumerate()
+                .map(|(i, path_rank)| {
+                    let key = cantor_pair(version, i);
                     let description = match state
                         .index
                         .description_store
@@ -76,29 +105,20 @@ pub async fn add_query(query: String) -> Result<(), ServerFnError> {
                         Err(_) => String::default(),
                     };
 
-                    SRElem { description, url }
+                    SRElem {
+                        description,
+                        key,
+                        url,
+                    }
                 })
                 .collect();
-            Ok(())
+            Ok(SearchResult {
+                entries: state.entries.clone(),
+                version,
+            })
         }
         Err(e) => {
             panic!("/search query - could not unlock {e}");
-        }
-    }
-}
-
-// TODO wierd leptos default naming convention
-// get_query get the result of the last query
-// ie get a list of images.
-#[server]
-pub async fn get_query(version: usize) -> Result<SearchResult, ServerFnError> {
-    match GLOBAL_STATE.lock() {
-        Ok(state) => Ok(SearchResult {
-            entries: state.entries.clone(),
-            version,
-        }),
-        Err(e) => {
-            panic!("get_query - could not unlock {e}");
         }
     }
 }

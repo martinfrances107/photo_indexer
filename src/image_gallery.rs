@@ -132,16 +132,16 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
       ">
 
         <Transition fallback=|| view! { <p>"Loading Image Gallery"</p> }>
-          <For each=move || entries.get().into_iter().enumerate() key=|(i, _)| *i let:data>
+          <For each=move || entries.get().into_iter() key=|e| e.key let:data>
 
             <div class="hover:bg-slate-600 mb-4 relative rounded text-left w-[280px]">
               <figure class="bg-slate-100 pt-2 rounded-t">
-                <img class="aspect-square mx-auto w-[274px] h-[160px]" src=data.1.url.clone()/>
+                <img class="aspect-square mx-auto w-[274px] h-[160px]" src=data.url.clone()/>
                 <figcaption>
-                  {if data.1.description.is_empty() {
+                  {if data.description.is_empty() {
                       view! { <p>"No description"</p> }
                   } else {
-                      view! { <p class="break-words">{data.1.description}</p> }
+                      view! { <p class="break-words">{data.description}</p> }
                   }}
 
                 </figcaption>
@@ -151,7 +151,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                 on:click=move |_| {
                     metadata_action
                         .dispatch(AddMetaData {
-                            url: Some(data.1.url.clone()),
+                            url: Some(data.url.clone()),
                         });
                 }
 

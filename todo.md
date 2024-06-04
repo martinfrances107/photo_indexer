@@ -2,17 +2,12 @@
 
 ## Known bugs
 
-1) Images are sticky
-  steps to reproduce ...
-
-    type hdr - get 6 images
-    type chinook - get one image -- but the first from hdr is incorrectly displayed.
-    type "" to clear the images
-    type chinook - to display the correct image.
-
 ## Snags : -
 
   Image card need to be rounded at the bottom.
+
+  ImageGallery - "No Description" need padding ... left look tight.
+  top and bottom need different padding.
 
   FileLister -- text element must be 100% of width -- (small by default)
   Button is on a the line below right aligned.

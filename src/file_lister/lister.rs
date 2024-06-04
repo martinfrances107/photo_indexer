@@ -78,9 +78,8 @@ pub fn Lister() -> impl IntoView {
     };
 
     let refresh_click = move |ev: MouseEvent| {
-      ev.prevent_default();
-      log!("refresh {ev:#?}");
-
+        ev.prevent_default();
+        log!("refresh {ev:#?}");
     };
 
     view! {
@@ -112,7 +111,10 @@ pub fn Lister() -> impl IntoView {
           </Transition>
         </ol>
 
-        <form on:submit=on_submit class="dark:text-slate-700 flex flex-wrap flex-end px-6 py-2 text-center">
+        <form
+          on:submit=on_submit
+          class="dark:text-slate-700 flex flex-wrap flex-end px-6 py-2 text-center"
+        >
           <label class="hidden" for="search">
             Search
           </label>
