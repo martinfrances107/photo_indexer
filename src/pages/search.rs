@@ -51,7 +51,6 @@ fn cantor_pair(k1: usize, k2: usize) -> usize {
 
 #[server]
 pub async fn add_query(query: String) -> Result<(), ServerFnError> {
-
     use tracing::log;
     log::debug!("server: entry search_query");
 
@@ -73,7 +72,6 @@ pub async fn add_query(query: String) -> Result<(), ServerFnError> {
 // ie get a list of images.
 #[server]
 pub async fn get_query(version: usize) -> Result<SearchResult, ServerFnError> {
-
     use crate::pages::IMAGE_PREFIX;
 
     match GLOBAL_STATE.lock() {
