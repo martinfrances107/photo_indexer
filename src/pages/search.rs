@@ -51,7 +51,9 @@ fn cantor_pair(k1: usize, k2: usize) -> usize {
 
 #[server]
 pub async fn add_query(query: String) -> Result<(), ServerFnError> {
-    leptos::logging::log!("server: entry search_query");
+
+    use tracing::log;
+    log::debug!("server: entry search_query");
 
     let sq = query.chars().collect::<Vec<char>>();
 

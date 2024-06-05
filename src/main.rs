@@ -87,8 +87,6 @@ async fn main() -> std::io::Result<()> {
         }
     }
 
-    log::info!("Index {}", root_dir.display());
-
     let conf = match get_configuration(None).await {
         Ok(conf) => conf,
         Err(_) => {
@@ -99,10 +97,10 @@ async fn main() -> std::io::Result<()> {
         }
     };
 
-    let addr = conf.leptos_options.site_addr;
     // Generate the list of routes in your Leptos App
     let routes = generate_route_list(|| view! { <App/> });
 
+    let addr = conf.leptos_options.site_addr;
     match HttpServer::new(move || {
         let leptos_options = &conf.leptos_options;
         let site_root = &leptos_options.site_root;

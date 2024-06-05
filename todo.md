@@ -27,6 +27,9 @@
 
 ## Performance
 
+No I am using cantor pairing things seem slow..
+network waterfall is still fast .. but client processing time is high.
+
 ## Conditions for PWA
 
 to be FULLY compliant add a PNG icon ( 512x512 ).

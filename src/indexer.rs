@@ -63,10 +63,10 @@ impl Index {
             })
             .collect::<Vec<DirEntry>>();
 
-        info!("Indexing complete: About to start server");
+        log::info!("Indexing complete: About to start server");
 
         let n_files = image_entries.len();
-        info!("{}", format!("n files {}", n_files));
+        log::info!("{}", format!("n files {}", n_files));
 
         // TODO Make multithreaded
         // Given a list of files spawn a new thread for each file loading.
