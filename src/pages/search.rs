@@ -20,6 +20,8 @@ use crate::settings::pannel::Pannel as SettingsPannel;
 
 #[cfg(feature = "ssr")]
 use crate::pages::GLOBAL_STATE;
+#[cfg(feature = "ssr")]
+use crate::util::cantor_pair;
 
 // Search Result Element
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -36,17 +38,6 @@ pub struct SearchResult {
     pub entries: Vec<SRElem>,
     // counter that increments every for query.
     pub version: usize,
-}
-
-// Cantor Pairing.
-//
-// A hash function for two integers
-//
-// <https://en.wikipedia.org/wiki/Pairing_function>
-#[cfg(feature = "ssr")]
-#[inline]
-fn cantor_pair(k1: usize, k2: usize) -> usize {
-    (k1 + k2) * (k1 + k2 + 1) / 2 + k2
 }
 
 #[server]

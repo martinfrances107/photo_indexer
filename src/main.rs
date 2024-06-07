@@ -13,9 +13,7 @@ mod image_gallery;
 mod indexer;
 mod pages;
 mod settings;
-
-extern crate clap;
-extern crate seroost_lib;
+mod util;
 
 use clap::Parser;
 use std::path::PathBuf;

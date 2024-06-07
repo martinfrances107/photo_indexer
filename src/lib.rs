@@ -15,8 +15,7 @@ mod image_gallery;
 mod indexer;
 mod pages;
 mod settings;
-
-extern crate seroost_lib;
+mod util;
 
 use cfg_if::cfg_if;
 
@@ -34,8 +33,6 @@ if #[cfg(feature = "hydrate")] {
     #[wasm_bindgen]
     pub fn hydrate() {
       console_error_panic_hook::set_once();
-    // simple_logger::init_with_level(log::Level::Info).expect("couldn't initialize logging");
-    // a builder for `FmtSubscriber`.
     FmtSubscriber::builder()
         // all spans/events with a level higher than TRACE (e.g, debug, info, warn, etc.)
         // will be written to stdout.
