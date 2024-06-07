@@ -27,6 +27,9 @@ use crate::pages::IMAGE_PREFIX;
 /// Form is used to set the indexer to a new value.
 #[component]
 pub fn Lister() -> impl IntoView {
+    use wasm_bindgen::JsCast;
+    use web_sys::HtmlInputElement;
+
     let input_element: NodeRef<html::Input> = create_node_ref();
 
     let (current_selection, current_selection_set) =
@@ -55,19 +58,26 @@ pub fn Lister() -> impl IntoView {
 
     let selection_click = move |event: MouseEvent| {
         event.prevent_default();
-        log!("{event:#?}");
-        current_selection_set.set(String::from("wait ..."));
-        // Update form with pre-prepared value.
-        if let Some(event) = event.related_target() {
-            log!("event {event:#?}");
-        } else {
-            log!("failed to get event");
-        }
+        match event.target() {
+            Some(target) => match target.dyn_ref::<HtmlInputElement>() {
+                Some(input) => {
+                    let value = input.value();
+                    list_url_action.dispatch(AddListUrl {
+                        url: format!("{IMAGE_PREFIX}{value}"),
+                    });
+                }
+                None => {
+                    log::warn!("selection_click() - Extracted a target that was not a HtmlInputElement");
+                }
+            },
+            None => {
+                log::warn!("selection_click() - Could not extract a target");
+            }
+        };
     };
 
     let on_submit = move |ev: ev::SubmitEvent| {
         ev.prevent_default();
-
         let url = input_element
             .get()
             .expect("<input> should be mounted.")
@@ -100,12 +110,14 @@ pub fn Lister() -> impl IntoView {
               let:data
             >
               <li>
-                <button
+                <input
                   class="dark:bg-neutral-400 dark:focus:bg-neutral-300 p-2 rounded"
+                  name="dir"
                   on:click=selection_click
-                >
-                  {data.1}
-                </button>
+                  readonly
+                  type="text"
+                  value=data.1
+                />
               </li>
             </For>
           </Transition>
