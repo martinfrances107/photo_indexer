@@ -96,7 +96,7 @@ pub fn Lister() -> impl IntoView {
       <div class="dark:bg-slate-800 p-2 max-w-80 mr-2 rounded">
         <h2 class="mp-2 text-center">"Select a directory to index"</h2>
         <p>{move || current_selection.get()}</p>
-        <ol class="flex flex-wrap gap-2 p-2 ">
+        <ol class="flex flex-wrap gap-2 p-2 " on:click=selection_click >
           <Transition fallback=move || {
               view! {
                 <li>
@@ -113,7 +113,6 @@ pub fn Lister() -> impl IntoView {
                 <input
                   class="dark:bg-neutral-400 dark:focus:bg-neutral-300 p-2 rounded"
                   name="dir"
-                  on:click=selection_click
                   readonly
                   type="text"
                   value=data.1
