@@ -28,7 +28,6 @@ cfg_if! {
     pub(crate) struct GlobalState {
       pub entries: Vec<SRElem>,
       pub index: Index,
-      pub listed_urls: Vec<String>,
       pub metadata: Option<Vec<Field>>,
       pub query: Vec<char>,
 
@@ -54,7 +53,6 @@ cfg_if! {
           query: vec![],
           entries: vec![],
           list_dir: root_dir.clone(),
-          listed_urls: vec!["default a".into()],
           metadata: None,
           selected_dir: root_dir,
         }

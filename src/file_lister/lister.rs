@@ -48,11 +48,11 @@ pub fn Lister() -> impl IntoView {
         // Response failure.
         Some(Err(e)) => {
             log!("{e:#?}");
-            vec!["client_error_x".into()]
+            vec![(1usize, "client_error_x".into())]
         }
         None => {
             log!("FileLister/Lister: DerivedSignal - list_url - asked for resource got None");
-            vec!["client_none_x".into()]
+            vec![(1usize, "client_none_x".into())]
         }
     });
 
@@ -104,11 +104,7 @@ pub fn Lister() -> impl IntoView {
                 </li>
               }
           }>
-            <For
-              each=move || { list_url.get().into_iter().enumerate() }
-              key=|(i, _)| { *i }
-              let:data
-            >
+            <For each=move || { list_url.get().into_iter() } key=|(i, _)| { *i } let:data>
               <li>
                 <input
                   class="dark:bg-neutral-400 dark:focus:bg-neutral-300 p-2 rounded"

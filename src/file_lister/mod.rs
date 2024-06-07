@@ -9,7 +9,7 @@ pub(crate) mod lister;
 // A request by the client to to change the root directory.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct ListUrlResult {
-    listed_urls: Vec<String>,
+    listed_urls: Vec<(usize, String)>,
     version: usize,
 }
 
@@ -63,12 +63,14 @@ pub async fn add_list_url(url: String) -> Result<String, ServerFnError> {
 pub async fn get_list_url(
     version: usize,
 ) -> Result<ListUrlResult, ServerFnError> {
+    use crate::util::cantor_pair;
     use walkdir::WalkDir;
 
+    let version = version + 1;
     match crate::pages::GLOBAL_STATE.lock() {
-        Ok(mut state) => {
+        Ok(state) => {
             let container_dir = state.container_dir().clone();
-            let listed_urls = WalkDir::new(state.list_dir())
+            let uuid_url = WalkDir::new(state.list_dir())
                 .max_depth(1)
                 .into_iter()
                 .filter_entry(|e| is_not_hidden(e))
@@ -88,12 +90,14 @@ pub async fn get_list_url(
                         Err(_) => None,
                     }
                 })
+                .enumerate()
+                .map(|(i, url)| (cantor_pair(i, version), url))
                 .collect();
 
-            state.listed_urls = listed_urls;
+            // state.listed_urls = listed_urls;
             Ok(ListUrlResult {
-                listed_urls: state.listed_urls.clone(),
-                version: version + 1,
+                listed_urls: uuid_url,
+                version,
             })
         }
         Err(e) => {
