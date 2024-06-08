@@ -11,7 +11,7 @@ use leptos::WriteSignal;
 /// Form is used to set the indexer to a new value.
 #[component]
 pub fn Pannel() -> impl IntoView {
-    use crate::file_lister::lister::Lister as FileLister;
+    use crate::file_lister::view::Lister as FileLister;
     use crate::settings::SideBarState;
 
     let (sidebar_state, _sidebar_state_setter) =

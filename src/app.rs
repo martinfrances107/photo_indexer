@@ -15,15 +15,15 @@ use leptos_router::Router;
 use leptos_router::Routes;
 use leptos_router::A;
 
-use crate::pages::about::About;
-use crate::pages::search::Search;
-use crate::settings::button::Button as SettingsButton;
-use crate::settings::SideBarState;
-
 /// Provides routes and HTML template.
 #[component]
 #[must_use]
 pub fn App() -> impl IntoView {
+    use crate::pages::about::About;
+    use crate::pages::search::view::Search;
+    use crate::settings::button::Button as SettingsButton;
+    use crate::settings::SideBarState;
+
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
 
