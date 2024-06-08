@@ -119,7 +119,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
         }}
 
       </Transition>
-      <section class="
+      <div class="
       content-start
       dark:text-slate-950
       flex
@@ -172,6 +172,6 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
 
           </For>
         </Transition>
-      </section>
+      </div>
     }
 }

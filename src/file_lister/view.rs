@@ -122,12 +122,12 @@ pub fn Lister() -> impl IntoView {
           on:submit=on_submit
           class="dark:text-slate-700 flex flex-wrap flex-end px-6 py-2 text-center"
         >
-          <label class="hidden" for="search">
+          <label class="hidden" for="fl">
             Search
           </label>
           <input
             class="px-2"
-            id="search"
+            id="fl"
             type="text"
             placeholder="select directory"
             node_ref=input_element

@@ -1,4 +1,3 @@
-
 use leptos::server;
 use leptos::ServerFnError;
 use serde::Deserialize;
