@@ -7,12 +7,9 @@
 #![allow(clippy::module_name_repetitions)]
 
 //! A web app the search a set of images.
-
-pub(crate) mod file_lister;
-mod image_gallery;
+mod component;
 mod indexer;
 mod pages;
-mod settings;
 mod util;
 
 use clap::Parser;

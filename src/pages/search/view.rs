@@ -22,11 +22,11 @@ use leptos::Transition;
 ///
 #[component]
 pub fn Search() -> impl IntoView {
-    use crate::image_gallery::ImageGallery;
+    use crate::component::image_gallery::ImageGallery;
+    use crate::component::settings::pannel::Pannel as SettingsPannel;
     use crate::pages::search::get_query;
     use crate::pages::search::AddQuery;
     use crate::pages::search::SearchResult;
-    use crate::settings::pannel::Pannel as SettingsPannel;
 
     let search_query_action = create_server_action::<AddQuery>();
 

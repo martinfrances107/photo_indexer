@@ -10,11 +10,9 @@
 /// TODO public to that main can see this
 /// is this correct?
 pub mod app;
-pub(crate) mod file_lister;
-mod image_gallery;
+mod component;
 mod indexer;
 mod pages;
-mod settings;
 mod util;
 
 use cfg_if::cfg_if;

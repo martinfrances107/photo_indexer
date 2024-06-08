@@ -18,8 +18,8 @@ use leptos::SignalGet;
 use leptos::SignalSet;
 use leptos::Transition;
 
-use crate::file_lister::get_list_url;
-use crate::file_lister::AddListUrl;
+use crate::component::file_lister::get_list_url;
+use crate::component::file_lister::AddListUrl;
 use crate::pages::IMAGE_PREFIX;
 
 /// Right handside side bar.

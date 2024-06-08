@@ -19,10 +19,10 @@ use leptos_router::A;
 #[component]
 #[must_use]
 pub fn App() -> impl IntoView {
+    use crate::component::settings::button::Button as SettingsButton;
+    use crate::component::settings::SideBarState;
     use crate::pages::about::About;
     use crate::pages::search::view::Search;
-    use crate::settings::button::Button as SettingsButton;
-    use crate::settings::SideBarState;
 
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();

@@ -13,7 +13,7 @@ pub fn Button() -> impl IntoView {
     use leptos::SignalUpdate;
     use leptos::WriteSignal;
 
-    use crate::settings::SideBarState;
+    use crate::component::settings::SideBarState;
 
     let (_, sidebar_state_setter) =
         use_context::<(ReadSignal<SideBarState>, WriteSignal<SideBarState>)>()

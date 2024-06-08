@@ -5,7 +5,7 @@ use leptos::IntoView;
 /// Holds main search bar and results.
 #[component]
 pub fn About() -> impl IntoView {
-    use crate::settings::pannel::Pannel as SettingsPannel;
+    use crate::component::settings::pannel::Pannel as SettingsPannel;
     view! {
       <div class="flex">
         <div class="my-0 mx-auto">
