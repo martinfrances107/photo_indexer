@@ -92,7 +92,7 @@ pub fn Search() -> impl IntoView {
           <p class="m-6 text-right">{move || count_string.get()}</p>
         </Transition>
 
-        <div class="flex">
+        <div class="flex gap-2">
           <ImageGallery entries/>
           <SettingsPannel/>
         </div>
