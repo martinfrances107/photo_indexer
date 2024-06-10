@@ -121,13 +121,13 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
       </Transition>
       <div class="
       content-start
+      bg-slate-800
       dark:text-slate-950
       flex
       flex-wrap
       gap-y-2
+      justify-start
       min-h-full
-      bg-slate-800
-      justify-evenly
       rounded-lg
       w-full
       ">
