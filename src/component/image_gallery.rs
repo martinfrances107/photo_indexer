@@ -149,12 +149,10 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
               </figure>
               <button
                 class="absolute bg-black/50 font-mono p-3 rounded-full right-4 text-white text-right top-4"
-                on:click=move |_| {
-                    metadata_action
+                on:click=move |_| metadata_action
                         .dispatch(AddMetaData {
                             url: Some(data.url.clone()),
-                        });
-                }
+                        })
 
                 title="Open metadata"
               >
