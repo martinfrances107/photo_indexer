@@ -86,18 +86,15 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                     || view! { <div id="side-menu-empty" class="w-0"></div> },
                     |data| {
                         view! {
-                          <div id="side-menu" class="inline-block">
+                          <div id="side-menu" class="bg-slate-800 inline-block rounded shaddow-md">
                             <button
-                              class="text-right font-medium w-full"
-                              on:click=move |_| {
-                                  metadata_action.dispatch(AddMetaData { url: None });
-                              }
-
+                              class="font-medium pr-4 pt-2 text-right text-lg w-full"
+                              on:click=move |_| metadata_action.dispatch(AddMetaData { url: None })
                               title="close"
                             >
-
                               "X"
                             </button>
+                            <hr class="m-1"/>
                             <div class="
                             [&>*:nth-child(even)]:bg-gray-400
                             overflow-hidden
@@ -120,8 +117,8 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
 
       </Transition>
       <div class="
-      content-start
       bg-slate-800
+      content-start
       dark:text-slate-950
       flex
       flex-wrap
@@ -129,6 +126,8 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
       justify-start
       min-h-full
       rounded-lg
+      shadow-inner
+      shadow-slate-700
       w-full
       ">
 
@@ -149,10 +148,11 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
               </figure>
               <button
                 class="absolute bg-black/50 font-mono p-3 rounded-full right-4 text-white text-right top-4"
-                on:click=move |_|  metadata_action
-                  .dispatch(AddMetaData {
-                      url: Some(data.url.clone()),
-                  })
+                on:click=move |_| metadata_action
+                        .dispatch(AddMetaData {
+                            url: Some(data.url.clone()),
+                        })
+
                 title="Open metadata"
               >
 

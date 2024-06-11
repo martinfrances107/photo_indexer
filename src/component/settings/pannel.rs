@@ -20,7 +20,7 @@ pub fn Pannel() -> impl IntoView {
     view! {
       <div
         class:hidden=move || sidebar_state.get().is_hidden()
-        class="dark:bg-slate-800 p-2 max-w-80 mr-2 rounded"
+        class="dark:bg-slate-800 p-2 max-w-80 mr-2 rounded shadow-inner shadow-slate-700"
       >
         <h1 class="mb-2">"Settings Pannel"</h1>
         <FileLister/>
