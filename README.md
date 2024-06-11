@@ -12,7 +12,7 @@ Provides a HTTP Server which provides searching of a images hold in local storag
 
 ```bash
 cd photo_indexer
-npx tailwindcss -i ./input.css -o ./style/output.css --watch
+./tailwind.sh
 ```
 
 and
@@ -34,7 +34,7 @@ cargo-leptos build
 cargo-leptos serve
 ```
 
-then,visit
+then, visit
 
 [localhost](http://localhost:3000/)
 
