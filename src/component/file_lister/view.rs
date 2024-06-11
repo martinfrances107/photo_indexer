@@ -1,26 +1,5 @@
 use leptos::component;
-use leptos::create_local_resource;
-use leptos::create_node_ref;
-use leptos::create_server_action;
-use leptos::create_signal;
-use leptos::ev;
-use leptos::ev::MouseEvent;
-use leptos::html;
-use leptos::logging::log;
-
-use leptos::view;
-use leptos::For;
 use leptos::IntoView;
-use leptos::NodeRef;
-
-use leptos::Signal;
-use leptos::SignalGet;
-use leptos::SignalSet;
-use leptos::Transition;
-
-use crate::component::file_lister::get_list_url;
-use crate::component::file_lister::AddListUrl;
-use crate::pages::IMAGE_PREFIX;
 
 /// Right handside side bar.
 ///
@@ -29,6 +8,26 @@ use crate::pages::IMAGE_PREFIX;
 pub fn Lister() -> impl IntoView {
     use wasm_bindgen::JsCast;
     use web_sys::HtmlInputElement;
+
+    use leptos::create_local_resource;
+    use leptos::create_node_ref;
+    use leptos::create_server_action;
+    use leptos::create_signal;
+    use leptos::ev;
+    use leptos::ev::MouseEvent;
+    use leptos::html;
+    use leptos::logging::log;
+    use leptos::view;
+    use leptos::For;
+    use leptos::NodeRef;
+    use leptos::Signal;
+    use leptos::SignalGet;
+    use leptos::SignalSet;
+    use leptos::Transition;
+
+    use crate::component::file_lister::get_list_url;
+    use crate::component::file_lister::AddListUrl;
+    use crate::pages::IMAGE_PREFIX;
 
     let input_element: NodeRef<html::Input> = create_node_ref();
 
@@ -93,7 +92,7 @@ pub fn Lister() -> impl IntoView {
     };
 
     view! {
-      <div >
+      <div>
         <h2 class="mp-2 text-center">"Select a directory to index"</h2>
         <p>{move || current_selection.get()}</p>
         <ol class="flex flex-wrap gap-2 p-2 " on:click=selection_click>
