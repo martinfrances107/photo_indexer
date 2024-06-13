@@ -6,7 +6,9 @@ Provides a HTTP Server which provides searching of a images hold in local storag
 
 * A simple web interface allow search based on an images EXIF data.
 
-* A root directory is specified and the indexer collects data from all images from the root downwards.
+* An optional root directory is specified and the indexer collects data from all images from the root downwards. If no root directory is specified the current working directory will be used.
+
+
 
 ## Development
 
@@ -17,21 +19,19 @@ cd photo_indexer
 
 and
 
+Here for example ../exif-samples is the root directory.
+
 ```bash
-cargo-leptos watch
+cargo-leptos watch -- ../exif-samples
 ```
 
 ## Production
 
 TODO
 
-* How to select the root images directory.
-* Currently it is hard coded.
-
 ```bash
 cd photo_indexer
-cargo-leptos build
-cargo-leptos serve
+cargo-leptos serve --release -- ../exif-samples
 ```
 
 then, visit

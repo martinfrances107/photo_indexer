@@ -4,8 +4,6 @@
 
 ## Snags : -
 
-  Image card need to be rounded at the bottom.
-
   ImageGallery - "No Description" need padding ... left look tight.
   top and bottom need different padding.
 
