@@ -139,9 +139,9 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                 <img class="aspect-square mx-auto w-[274px] h-[160px]" src=data.url.clone()/>
                 <figcaption>
                   {if data.description.is_empty() {
-                      view! { <p>"No description"</p> }
+                      view! { <p class="break-words line-clamp-3 min-h-12 pt-4">"No description"</p> }
                   } else {
-                      view! { <p class="break-words">{data.description}</p> }
+                      view! { <p class="break-words line-clamp-3 min-h-12 pt-4">{data.description}</p> }
                   }}
 
                 </figcaption>
