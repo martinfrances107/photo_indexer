@@ -60,14 +60,6 @@ pub async fn get_query(version: usize) -> Result<SearchResult, ServerFnError> {
                 .enumerate()
                 .map(|(i, path_rank)| {
                     let key = cantor_pair(version, i);
-                    let description = match state
-                        .index
-                        .description_store
-                        .get(&path_rank.0.display().to_string())
-                    {
-                        Some(description) => description.to_string(),
-                        None => String::default(),
-                    };
 
                     // Construct url from filename
                     let url = match path_rank
@@ -81,6 +73,15 @@ pub async fn get_query(version: usize) -> Result<SearchResult, ServerFnError> {
                             )
                         }
                         Err(_) => String::default(),
+                    };
+
+                    let description = match state
+                        .index
+                        .description_store
+                        .get(&url)
+                    {
+                        Some(description) => description.to_string(),
+                        None => String::default(),
                     };
 
                     SRElem {
