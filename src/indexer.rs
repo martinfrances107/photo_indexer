@@ -11,7 +11,7 @@ pub struct Index {
 }
 
 /// Will error if the root directory is invalid.
-#[cfg(feature = "ssr")]
+#[cfg(any(feature = "ssr", test))]
 impl Index {
     pub(crate) fn new<P>(root: P, container_dir: P) -> Self
     where
@@ -180,7 +180,8 @@ mod test {
     #[test]
     fn no_results() {
         let path = Path::new(ROOT_DIR);
-        let index = Index::new(path);
+        let container_dir = Path::new(ROOT_DIR);
+        let index = Index::new(path, container_dir);
 
         let query = "socks";
 
@@ -197,7 +198,8 @@ mod test {
     #[test]
     fn found_in_filename() {
         let path = Path::new(ROOT_DIR);
-        let index = Index::new(path);
+        let container_dir = Path::new(ROOT_DIR);
+        let index = Index::new(path, container_dir);
 
         let query = "hdr";
 
@@ -219,7 +221,8 @@ mod test {
     #[test]
     fn found_in_description() {
         let path = Path::new(ROOT_DIR);
-        let index = Index::new(path);
+        let container_dir = Path::new(ROOT_DIR);
+        let index = Index::new(path, container_dir);
 
         // Other words berlin, chinook.
         let query = "Chinook";
@@ -243,7 +246,8 @@ mod test {
     #[test]
     fn found_in_metadata() {
         let path = Path::new(ROOT_DIR);
-        let index = Index::new(path);
+        let container_dir = Path::new(ROOT_DIR);
+        let index = Index::new(path, container_dir);
 
         // Other words sanyo, digital
         let query = "olymupus";
@@ -262,7 +266,8 @@ mod test {
     #[test]
     fn date() {
         let path = Path::new(ROOT_DIR);
-        let index = Index::new(path);
+        let container_dir = Path::new(ROOT_DIR);
+        let index = Index::new(path, container_dir);
 
         let query = "2018";
 
