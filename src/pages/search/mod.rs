@@ -75,14 +75,11 @@ pub async fn get_query(version: usize) -> Result<SearchResult, ServerFnError> {
                         Err(_) => String::default(),
                     };
 
-                    let description = match state
-                        .index
-                        .description_store
-                        .get(&url)
-                    {
-                        Some(description) => description.to_string(),
-                        None => String::default(),
-                    };
+                    let description =
+                        match state.index.description_store.get(&url) {
+                            Some(description) => description.to_string(),
+                            None => String::default(),
+                        };
 
                     SRElem {
                         description,
