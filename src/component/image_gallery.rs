@@ -137,7 +137,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
             <div class="hover:bg-slate-600 mx-2 my-4 relative rounded text-left w-[280px]">
               <figure class="bg-slate-100 pt-2 rounded-t">
               {
-               let description_escaped = data.description.clone().replace('"', "");
+               let description_escaped = data.description.replace('"', "");
                view!{
                  <img
                  alt={&description_escaped}
