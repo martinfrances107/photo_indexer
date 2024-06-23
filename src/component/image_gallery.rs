@@ -86,7 +86,10 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                     || view! { <div id="side-menu-empty" class="w-0"></div> },
                     |data| {
                         view! {
-                          <div id="side-menu" class="bg-slate-800 inline-block rounded shaddow-md">
+                          <div
+                            class="bg-slate-800 inline-block rounded shadow-inner shadow-slate-700"
+                            id="side-menu"
+                          >
                             <button
                               class="font-medium pr-4 pt-2 text-right text-lg w-full"
                               on:click=move |_| metadata_action.dispatch(AddMetaData { url: None })
