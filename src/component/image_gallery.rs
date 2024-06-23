@@ -143,10 +143,10 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                let description_escaped = data.description.replace('"', "");
                view!{
                  <img
-                 alt={&description_escaped}
-                 class="aspect-square mx-auto w-[274px] h-[160px]"
-                 src={&data.url}
-                 title={description_escaped}
+                   alt={&description_escaped}
+                   class="aspect-square mx-auto w-[274px] h-[160px]"
+                   src={&data.url}
+                   title={description_escaped}
                  />
                 }
               }
