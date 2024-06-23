@@ -136,7 +136,12 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
 
             <div class="hover:bg-slate-600 mx-2 my-4 relative rounded text-left w-[280px]">
               <figure class="bg-slate-100 pt-2 rounded-t">
-                <img class="aspect-square mx-auto w-[274px] h-[160px]" src=data.url.clone()/>
+                <img
+                  alt={data.description.clone().replace('"', "")}
+                  class="aspect-square mx-auto w-[274px] h-[160px]"
+                  src=data.url.clone()
+                  title={data.description.clone().replace('"', "")}
+                />
                 <figcaption>
                   {if data.description.is_empty() {
                       view! { <p class="break-words line-clamp-3 min-h-12 pt-4">"No description"</p> }
