@@ -24,7 +24,7 @@ cfg_if! {
     #[derive(Debug)]
     pub(crate) struct DirectorySetError{}
 
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, Default)]
     pub(crate) struct GlobalState {
       pub entries: Vec<SRElem>,
       pub index: Index,
@@ -39,24 +39,6 @@ cfg_if! {
       container_dir: PathBuf,
       list_dir: PathBuf,
       selected_dir: PathBuf,
-    }
-
-    impl Default for GlobalState {
-      fn default() -> Self {
-        // Initialisation value required for the period before initialisation
-        // from command line arguments.
-        let root_dir = PathBuf::from("../exif-samples") ;
-
-        Self {
-          container_dir: root_dir.clone(),
-          index: Index::new(root_dir.clone(), root_dir.clone()),
-          query: vec![],
-          entries: vec![],
-          list_dir: root_dir.clone(),
-          metadata: None,
-          selected_dir: root_dir,
-        }
-      }
     }
 
     impl GlobalState {
