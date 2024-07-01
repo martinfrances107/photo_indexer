@@ -1,6 +1,6 @@
 use leptos::component;
-use leptos::create_resource;
 use leptos::create_node_ref;
+use leptos::create_resource;
 use leptos::create_server_action;
 use leptos::ev::SubmitEvent;
 use leptos::html;
@@ -30,10 +30,8 @@ pub fn Search() -> impl IntoView {
 
     let search_query_action = create_server_action::<AddQuery>();
 
-    let images = create_resource(
-        move || search_query_action.version().get(),
-        get_query,
-    );
+    let images =
+        create_resource(move || search_query_action.version().get(), get_query);
 
     let entries = Signal::derive(move || match images.get() {
         Some(Ok(SearchResult { entries, .. })) => entries,

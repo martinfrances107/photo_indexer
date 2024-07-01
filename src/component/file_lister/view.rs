@@ -9,8 +9,8 @@ pub fn Lister() -> impl IntoView {
     use wasm_bindgen::JsCast;
     use web_sys::HtmlInputElement;
 
-    use leptos::create_resource;
     use leptos::create_node_ref;
+    use leptos::create_resource;
     use leptos::create_server_action;
     use leptos::create_signal;
     use leptos::ev;
@@ -36,10 +36,8 @@ pub fn Lister() -> impl IntoView {
 
     let list_url_action = create_server_action::<AddListUrl>();
 
-    let list_urls_resource = create_resource(
-        move || list_url_action.version().get(),
-        get_list_url,
-    );
+    let list_urls_resource =
+        create_resource(move || list_url_action.version().get(), get_list_url);
 
     let list_url = Signal::derive(move || match list_urls_resource.get() {
         Some(Ok(result)) => result.listed_urls,
