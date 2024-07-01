@@ -1,6 +1,6 @@
 use exif::Field;
 use leptos::component;
-use leptos::create_local_resource;
+use leptos::create_resource;
 use leptos::create_server_action;
 use leptos::server;
 use leptos::view;
@@ -65,7 +65,7 @@ pub struct SearchResult {
 #[component]
 pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
     let metadata_action = create_server_action::<AddMetaData>();
-    let metadata_resource = create_local_resource(
+    let metadata_resource = create_resource(
         move || metadata_action.version().get(),
         |_| get_metadata(),
     );

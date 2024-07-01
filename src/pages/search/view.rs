@@ -1,5 +1,5 @@
 use leptos::component;
-use leptos::create_local_resource;
+use leptos::create_resource;
 use leptos::create_node_ref;
 use leptos::create_server_action;
 use leptos::ev::SubmitEvent;
@@ -30,7 +30,7 @@ pub fn Search() -> impl IntoView {
 
     let search_query_action = create_server_action::<AddQuery>();
 
-    let images = create_local_resource(
+    let images = create_resource(
         move || search_query_action.version().get(),
         get_query,
     );
