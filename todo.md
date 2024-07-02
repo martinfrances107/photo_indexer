@@ -28,7 +28,17 @@
 No I am using cantor pairing things seem slow..
 network waterfall is still fast .. but client processing time is high.
 
+Memoise the indexer .. as per the leptos framework, on startup the indexer will be called twice.
+
 ## Conditions for PWA
 
 to be FULLY compliant add a PNG icon ( 512x512 ).
 Add a maskable icon for android.
+
+# Leptos 0.7
+
+I want to port to leptos 0.7 as soon a possible.
+
+One sticking point is that "leptos_routes" is not implemented for Actix. ( as of 29June alpha release )
+
+[Release Notes](https://github.com/leptos-rs/leptos/releases/tag/0.7.0-alpha)
