@@ -74,6 +74,9 @@ async fn main() -> std::io::Result<()> {
                 .container_dir_set(root_dir.clone())
                 .expect("Could not initialize container dir");
             state
+                .list_dir_set(root_dir.clone())
+                .expect("Could not initialize list dir");
+            state
                 .selected_dir_set(root_dir.clone())
                 .expect("Could not initialize selected dir");
         }

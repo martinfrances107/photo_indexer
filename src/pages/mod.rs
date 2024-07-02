@@ -66,6 +66,16 @@ cfg_if! {
           Ok(list_dir)
       }
 
+      pub(crate) fn list_dir_set(&mut self, dir: PathBuf) -> Result<(), DirectorySetError>{
+        if dir.is_dir() {
+          self.list_dir = dir;
+          Ok(())
+        }
+        else {
+          Err(DirectorySetError{})
+        }
+      }
+
       pub(crate) fn set_list_dir_from_url(&mut self, url: String) -> Result<(), UrlSanitizationError>{
         match self.sanitize_url(url) {
           Ok(dir) => {
