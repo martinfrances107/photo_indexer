@@ -24,6 +24,7 @@ pub fn Lister() -> impl IntoView {
     use leptos::SignalGet;
     use leptos::SignalSet;
     use leptos::Transition;
+    use log::error;
 
     use crate::component::file_lister::get_list_url;
     use crate::component::file_lister::AddListUrl;
@@ -46,12 +47,12 @@ pub fn Lister() -> impl IntoView {
         // Client side initial value
         // Response failure.
         Some(Err(e)) => {
-            log!("{e:#?}");
-            vec![(1usize, "client_error_x".into())]
+            error!("{e:#?}");
+            vec![]
         }
         None => {
             log!("FileLister/Lister: DerivedSignal - list_url - asked for resource got None");
-            vec![(1usize, "client_none_x".into())]
+            vec![]
         }
     });
 

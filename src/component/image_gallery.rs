@@ -1,15 +1,9 @@
 use exif::Field;
 use leptos::component;
-use leptos::create_local_resource;
-use leptos::create_server_action;
 use leptos::server;
-use leptos::view;
-use leptos::For;
 use leptos::IntoView;
 use leptos::ServerFnError;
 use leptos::Signal;
-use leptos::SignalGet;
-use leptos::Transition;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -64,6 +58,13 @@ pub struct SearchResult {
 
 #[component]
 pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
+    use leptos::create_local_resource;
+    use leptos::create_server_action;
+    use leptos::view;
+    use leptos::For;
+    use leptos::SignalGet;
+    use leptos::Transition;
+
     let metadata_action = create_server_action::<AddMetaData>();
     let metadata_resource = create_local_resource(
         move || metadata_action.version().get(),
@@ -75,9 +76,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
     });
 
     view! {
-      <Transition fallback=|| {
-          view! { <p>"SideBar..."</p> }
-      }>
+      <Transition fallback=|| view! { <p>"SideBar..."</p> } >
         // Sidebar
         {move || {
             metadata
@@ -100,6 +99,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                             <hr class="m-1"/>
                             <div class="
                             [&>*:nth-child(even)]:bg-gray-400
+                            [&>*:nth-child(even)]:text-black
                             overflow-hidden
                             w-[240px]
                             }}">
@@ -168,7 +168,6 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
 
                 title="Open metadata"
               >
-
                 "M"
               </button>
               <button
