@@ -8,6 +8,8 @@ Provides a HTTP Server which provides searching of a images hold in local storag
 
 * An optional root directory is specified and the indexer collects data from all images from the root downwards. If no root directory is specified the current working directory will be used.
 
+<image src="https://raw.githubusercontent.com/martinfrances107/photo_indexer/main/images/SearchPage.png">
+
 ## Development
 
 ```bash
