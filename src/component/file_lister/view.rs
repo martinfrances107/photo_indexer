@@ -93,7 +93,6 @@ pub fn Lister() -> impl IntoView {
     };
 
     view! {
-      <div >
         <h2 class="mp-2 text-center">"Select a directory to index"</h2>
         <p>{move || current_selection.get()}</p>
         <ol class="flex flex-wrap gap-2 p-2 " on:click=selection_click>
@@ -141,7 +140,5 @@ pub fn Lister() -> impl IntoView {
             value="UPDATE"
           />
         </form>
-
-      </div>
     }
 }
