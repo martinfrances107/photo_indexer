@@ -33,7 +33,6 @@ async fn main() -> std::io::Result<()> {
     use actix_web::middleware::Compress;
     use actix_web::App;
     use actix_web::HttpServer;
-    use clap::Parser;
     use leptos::get_configuration;
     use leptos::view;
     use leptos_actix::generate_route_list;
