@@ -8,7 +8,7 @@ Provides a HTTP Server which provides searching of a images held in local storag
 
 * The search is based on [tf–idf](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) indexer run a selected directory.
 
-<image title="Search Page" alt="SearchPage" src="https://raw.githubusercontent.com/martinfrances107/photo_indexer/main/images/SearchPage.png">
+![Alt Searc hPage](https://raw.githubusercontent.com/martinfrances107/photo_indexer/main/images/SearchPage.png "Search Page")
 
 ## Development
 
@@ -16,7 +16,7 @@ The have been testing against a set of images
 with a varied set of exif meta data.
 
 Download here.
-https://github.com/ianare/exif-samples
+<https://github.com/ianare/exif-samples>
 
 Watch the code base and update the tailwindcss file.
 
@@ -58,6 +58,13 @@ then, visit
 * Invalid root directory
 * No matching file in root, with a text file ignored.
 * Invalid exif data.
+
+## Known issues
+
+../exif-samples -- search for sony.
+
+* One of the descriptions looks like -- "", "", "" --
+* metadata look like 2 string are captured -- "DSC-D700", "" --
 
 ## Credits
 
