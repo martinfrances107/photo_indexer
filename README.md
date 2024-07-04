@@ -53,11 +53,12 @@ then, visit
 
 [localhost:3000](http://localhost:3000/)
 
-# Outline of test strategy
+## Outline of test strategy
 
 * Invalid root directory
 * No matching file in root, with a text file ignored.
 * Invalid exif data.
 
-Credits
-The tf-idf indexer, on a original idea by
+## Credits
+
+The tf-idf indexer, is based on a original idea by [tsoding](https://github.com/tsoding/seroost)
