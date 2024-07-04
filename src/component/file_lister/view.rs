@@ -100,14 +100,15 @@ pub fn Lister() -> impl IntoView {
           <Transition fallback=move || {
               view! {
                 <li>
-                  <button on:click=refresh_click>{"hello"}</button>
+                  <button on:click=refresh_click>"Refresh"</button>
                 </li>
               }
           }>
             <For each=move || { list_url.get().into_iter() } key=|(i, _)| { *i } let:data>
               <li>
+                <!-- "css issue - Want to set hover on input element, but conventional css fails" -->
                 <input
-                  class="dark:bg-neutral-400 dark:focus:bg-neutral-300 p-2 rounded"
+                  class="cursor-grab dark:bg-neutral-400 dark:focus:bg-neutral-300 dark:hover:bg-neutral-300 p-2 rounded"
                   name="dir"
                   readonly
                   type="text"
@@ -120,23 +121,24 @@ pub fn Lister() -> impl IntoView {
 
         <form
           on:submit=on_submit
-          class="dark:text-slate-700 flex flex-wrap flex-end px-6 py-2 text-center"
+          class="dark:text-slate-700 p-2"
         >
           <label class="hidden" for="fl">
             Search
           </label>
           <input
-            class="px-2"
+            class="block"
             id="fl"
             type="text"
             placeholder="select directory"
             node_ref=input_element
           />
+
           <input
-            class="bg-sky-700 cursor-grab rounded p-2 hover:bg-sky-600 w-[3.5rem]"
+            class="bg-sky-700 block cursor-grab dark:text-white rounded mt-3 p-2 hover:bg-sky-600"
             type="submit"
             title="Select"
-            value=""
+            value="UPDATE"
           />
         </form>
 
