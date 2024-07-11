@@ -32,6 +32,8 @@ pub fn Lister() -> impl IntoView {
 
     let input_element: NodeRef<html::Input> = create_node_ref();
 
+    let (select_value, select_value_set) = create_signal(String::from("AAA"));
+
     let (current_selection, current_selection_set) =
         create_signal::<String>(String::from(IMAGE_PREFIX));
 
@@ -65,6 +67,18 @@ pub fn Lister() -> impl IntoView {
                     list_url_action.dispatch(AddListUrl {
                         url: format!("{IMAGE_PREFIX}{value}"),
                     });
+
+                    // Move vlaue into the inputvalue
+                    match input_element.get() {
+                        Some(input) => {
+                            select_value_set.set(String::from(value));
+                        }
+                        None => {
+                            log::warn!(
+                                "file_lister: input not found in the DOM"
+                            );
+                        }
+                    }
                 }
                 None => {
                     log::warn!("selection_click() - Extracted a target that was not a HtmlInputElement");
@@ -128,9 +142,10 @@ pub fn Lister() -> impl IntoView {
           <input
             class="block"
             id="fl"
-            type="text"
             placeholder="select directory"
             node_ref=input_element
+            value={select_value.clone()}
+            type="text"
           />
 
           <input

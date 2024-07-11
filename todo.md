@@ -35,7 +35,7 @@ Memoise the indexer .. as per the leptos framework, on startup the indexer will 
 to be FULLY compliant add a PNG icon ( 512x512 ).
 Add a maskable icon for android.
 
-# Leptos 0.7
+## Leptos 0.7
 
 I want to port to leptos 0.7 as soon a possible.
 
