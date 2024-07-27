@@ -67,25 +67,38 @@ pub fn Search() -> impl IntoView {
     };
 
     view! {
-      <div class="my-0 mx-auto">
+      <div class="my-0 m-auto">
 
-        <form on:submit=on_submit class="dark:text-slate-700 px-6 py-2 text-center">
-          <label class="hidden" for="search">
+        <form
+          id="search"
+          on:submit=on_submit
+          class="justify-center dark:text-slate-700 flex h-[3.5rem]"
+        >
+          <label class="hidden" for="search-text">
             Search
           </label>
           <input
-            id="search"
             class="p-2"
-            type="text"
+            id="search-text"
             placeholder="Search EXIF data"
             node_ref=input_element
+            type="text"
           />
-          <input
-            type="submit"
-            title="Search"
-            value=" "
-            class="bg-sky-700 cursor-grab rounded-r-lg p-2 hover:bg-sky-600 w-[3.5rem]"
-          />
+          <button form="search" title="Search" value=" ">
+            <svg
+              id="searchSVG"
+              class="bg-sky-700 cursor-grab fill-sky-900 rounded-r-lg hover:bg-sky-600"
+              viewBox="0 0 512 512"
+              width="100%"
+              height="100%"
+              version="1.1"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:svg="http://www.w3.org/2000/svg"
+            >
+              <path d="m -610.98815,-246.28042 c 68.31986,0 247.34788,0 247.34788,0 0,0 0,185.290321 0,256.0000039 0,70.7096771 0,255.9999961 0,255.9999961 0,0 -179.02802,0 -247.34788,0 -68.31988,0 -247.34788,0 -247.34788,0 0,0 0,-185.290319 0,-255.9999961 0,-70.7096829 0,-256.0000039 0,-256.0000039 0,0 179.028,0 247.34788,0 z M -726.68312,55.138934 h 115.69497 v 73.187106 c 0,11.04518 12.96582,16.61935 20.4461,8.77419 L -476.54262,18.493776 c 4.68766,-4.851603 4.68766,-12.593542 0,-17.4451634 L -590.54205,-117.66106 c -7.58001,-7.84517 -20.4461,-2.27098 -20.4461,8.7742 v 73.187082 h -115.69497 c -6.58265,0 -11.96845,5.574196 -11.96845,12.387102 V 42.75184 c 0,6.812915 5.3858,12.387094 11.96845,12.387094 z"/>
+            </svg>
+          </button>
         </form>
 
         <Transition fallback=|| view! { <p>"Loading count"</p> }>

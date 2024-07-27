@@ -10,11 +10,24 @@
   FileLister -- text element must be 100% of width -- (small by default)
   Button is on a the line below right aligned.
 
+  Search bar has alignment issues, needs mag icon .. white slightly inset.
+
+  No descirption should be greyed out. description of "" should be converted to no sdescription.
+
+  M,F buttons -- should become black on hover ... leaving the white to look like an inset.
+
+  Define an ease in transition for metadata pannel.
+
+  Text in the about page looks weak, should at least mention my name.
+
 ## Functionality
 
   Demo "directory" button change the current selection.
 
   Demo active selection changing the indexer
+
+  Pressing the full screen button starts a model dialog
+  ( with a associated open close buttons )
 
 ## Meta data issues
 
