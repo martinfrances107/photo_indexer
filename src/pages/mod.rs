@@ -10,7 +10,8 @@ cfg_if! {
 
     use std::path::PathBuf;
     use std::sync::Mutex;
-    use lazy_static::lazy_static;
+    use std::sync::LazyLock;
+
     use exif::Field;
 
     use crate::pages::search::SRElem;
@@ -122,9 +123,11 @@ cfg_if! {
 
     }
 
-    lazy_static! {
-      pub(crate) static ref GLOBAL_STATE: Mutex<GlobalState> =
-      Mutex::new(GlobalState::default());
+
+      pub(crate) static GLOBAL_STATE: LazyLock<Mutex<GlobalState>> =
+      LazyLock::new(|| {
+        Mutex::new(GlobalState::default())
+      });
     }
-  }
+
 }

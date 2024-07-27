@@ -12,6 +12,9 @@ license = "MIT"
 repository = "https://github.com/martinfrances107/photo_indexer"
 version = "0.1.0"
 
+# MSRV this project makes use of LazyLock
+rust-version = "1.80"
+
 
 [lib]
 crate-type = ["cdylib", "rlib"]
@@ -54,7 +57,6 @@ seroost_lib = { git = "https://github.com/martinfrances107/seroost", branch = "P
 serde = { version = "~1", features = ["derive"] }
 log = "0.4.21"
 pretty_assertions = "1.4.0"
-lazy_static = "1.4.0"
 web-sys = "0.3"
 clap = { version = "4.5.4", features = ["derive"] }
 
