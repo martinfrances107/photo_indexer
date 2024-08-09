@@ -45,11 +45,11 @@ cfg_if! {
     impl GlobalState {
       // Reject urls without a prefix "/images"
       // Reject invalid DIRECTORY names ( within the container directory ).
-      fn sanitize_url(&self, url: String) -> Result<PathBuf, UrlSanitizationError> {
+      fn sanitize_url(&self, url: &str) -> Result<PathBuf, UrlSanitizationError> {
 
             let list_dir = match url.strip_prefix(IMAGE_PREFIX) {
               Some(filename_suffix) => {
-                  PathBuf::from(self.container_dir.join(filename_suffix))
+                  self.container_dir.join(filename_suffix)
               }
               None => {
                   // Malformed input.
@@ -77,7 +77,7 @@ cfg_if! {
         }
       }
 
-      pub(crate) fn set_list_dir_from_url(&mut self, url: String) -> Result<(), UrlSanitizationError>{
+      pub(crate) fn set_list_dir_from_url(&mut self, url: &str) -> Result<(), UrlSanitizationError>{
         match self.sanitize_url(url) {
           Ok(dir) => {
             self.list_dir = dir;

@@ -70,8 +70,8 @@ pub fn Lister() -> impl IntoView {
 
                     // Move vlaue into the inputvalue
                     match input_element.get() {
-                        Some(input) => {
-                            select_value_set.set(String::from(value));
+                        Some(_) => {
+                            select_value_set.set(value);
                         }
                         None => {
                             log::warn!(
@@ -144,7 +144,7 @@ pub fn Lister() -> impl IntoView {
             id="fl"
             placeholder="select directory"
             node_ref=input_element
-            value={select_value.clone()}
+            value={select_value}
             type="text"
           />
 

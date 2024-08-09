@@ -27,6 +27,7 @@ pub struct SearchResult {
     pub version: usize,
 }
 
+#[allow(clippy::unused_async)]
 #[server]
 pub async fn add_query(query: String) -> Result<(), ServerFnError> {
     use tracing::log;
@@ -48,6 +49,7 @@ pub async fn add_query(query: String) -> Result<(), ServerFnError> {
 // TODO wierd leptos default naming convention
 // get_query get the result of the last query
 // ie get a list of images.
+#[allow(clippy::unused_async)]
 #[server]
 pub async fn get_query(version: usize) -> Result<SearchResult, ServerFnError> {
     use crate::pages::IMAGE_PREFIX;
@@ -62,24 +64,21 @@ pub async fn get_query(version: usize) -> Result<SearchResult, ServerFnError> {
                     let key = cantor_pair(version, i);
 
                     // Construct url from filename
-                    let url = match path_rank
+                    let url = path_rank
                         .0
                         .strip_prefix(state.selected_dir.clone())
-                    {
-                        Ok(filename) => {
-                            format!(
-                                "{IMAGE_PREFIX}{}",
-                                filename.display().to_string()
-                            )
-                        }
-                        Err(_) => String::default(),
-                    };
+                        .map_or_else(
+                            |_| String::default(),
+                            |filename| {
+                                format!("{IMAGE_PREFIX}{}", filename.display())
+                            },
+                        );
 
-                    let description =
-                        match state.index.description_store.get(&url) {
-                            Some(description) => description.to_string(),
-                            None => String::default(),
-                        };
+                    let description = state
+                        .index
+                        .description_store
+                        .get(&url)
+                        .map_or_else(String::default, ToString::to_string);
 
                     SRElem {
                         description,

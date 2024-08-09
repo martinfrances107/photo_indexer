@@ -28,6 +28,7 @@ fn is_not_hidden(entry: &walkdir::DirEntry) -> bool {
 // IMAGE_PREFIX santitisation check.
 // [url] must map to a valid directory.
 //
+#[allow(clippy::unused_async)]
 #[server]
 pub async fn add_list_url(url: String) -> Result<String, ServerFnError> {
     use crate::pages::UrlSanitizationError;
@@ -37,8 +38,8 @@ pub async fn add_list_url(url: String) -> Result<String, ServerFnError> {
     leptos::logging::log!("server: entry add_root_url");
     match GLOBAL_STATE.lock() {
         Ok(mut state) => {
-            match state.set_list_dir_from_url(url) {
-                Ok(_) => Ok(String::from("add_list_url")),
+            match state.set_list_dir_from_url(&url) {
+                Ok(()) => Ok(String::from("add_list_url")),
                 Err(UrlSanitizationError::MissingPrefix) => {
                     Err(ServerFnError::Args(format!(
                         "URL must be prefixed with {IMAGE_PREFIX}"
@@ -59,6 +60,7 @@ pub async fn add_list_url(url: String) -> Result<String, ServerFnError> {
     }
 }
 
+#[allow(clippy::unused_async)]
 #[server]
 pub async fn get_list_url(
     version: usize,
@@ -69,11 +71,11 @@ pub async fn get_list_url(
     let version = version + 1;
     match crate::pages::GLOBAL_STATE.lock() {
         Ok(state) => {
-            let container_dir = state.container_dir().clone();
+            let container_dir = state.container_dir();
             let uuid_url = WalkDir::new(state.list_dir())
                 .max_depth(1)
                 .into_iter()
-                .filter_entry(|e| is_not_hidden(e))
+                .filter_entry(is_not_hidden)
                 .filter_map(|entry| match entry {
                     Ok(entry) => {
                         if entry.path().is_dir() {
@@ -85,10 +87,10 @@ pub async fn get_list_url(
                     Err(_e) => None,
                 })
                 .filter_map(|entry| {
-                    match entry.path().strip_prefix(container_dir.clone()) {
-                        Ok(url) => Some(url.display().to_string()),
-                        Err(_) => None,
-                    }
+                    entry
+                        .path()
+                        .strip_prefix(container_dir.clone())
+                        .map_or(None, |url| Some(url.display().to_string()))
                 })
                 .enumerate()
                 .map(|(i, url)| (cantor_pair(i, version), url))

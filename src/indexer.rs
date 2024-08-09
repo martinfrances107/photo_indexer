@@ -79,7 +79,6 @@ impl Index {
                     .strip_prefix(&container_dir)
                     .expect("indexer new_with_extension: strip_prefix failed")
                     .display()
-                    .to_string()
             );
 
             match std::fs::File::open(de.path()) {
@@ -163,7 +162,7 @@ impl Index {
 }
 
 /// Can I refactor?
-/// Drop the ROOT_DIR
+/// Drop the `ROOT_DIR`
 /// Inject two simulated files.
 /// then assert we can see only one returned by search.
 #[cfg(test)]
@@ -208,12 +207,12 @@ mod test {
         let result = index.model.search_query(&sq);
 
         let expected = vec![
-          (PathBuf::from("/home/martin/build/exif-samples/jpg/Sony_HDR-HC3.jpg"), 0.026654188),
-          (PathBuf::from("/home/martin/build/exif-samples/jpg/hdr/canon_hdr_YES.jpg"), 0.015657004),
-          (PathBuf::from("/home/martin/build/exif-samples/jpg/hdr/canon_hdr_NO.jpg"), 0.015657004),
-          (PathBuf::from("/home/martin/build/exif-samples/jpg/hdr/iphone_hdr_YES.jpg"), 0.009995321),
-          (PathBuf::from("/home/martin/build/exif-samples/jpg/hdr/iphone_hdr_NO.jpg"), 0.009906866),
-          (PathBuf::from("/home/martin/build/exif-samples/jpg/mobile/HMD_Nokia_8.3_5G_hdr.jpg"), 0.0073168357)]
+          (PathBuf::from("/home/martin/build/exif-samples/jpg/Sony_HDR-HC3.jpg"), 0.026_654_188),
+          (PathBuf::from("/home/martin/build/exif-samples/jpg/hdr/canon_hdr_YES.jpg"), 0.015_657_004),
+          (PathBuf::from("/home/martin/build/exif-samples/jpg/hdr/canon_hdr_NO.jpg"), 0.015_657_004),
+          (PathBuf::from("/home/martin/build/exif-samples/jpg/hdr/iphone_hdr_YES.jpg"), 0.009_995_321),
+          (PathBuf::from("/home/martin/build/exif-samples/jpg/hdr/iphone_hdr_NO.jpg"), 0.009_906_866),
+          (PathBuf::from("/home/martin/build/exif-samples/jpg/mobile/HMD_Nokia_8.3_5G_hdr.jpg"), 0.007_316_835_7)]
         ;
         assert_eq!(result, expected);
     }
@@ -237,7 +236,7 @@ mod test {
             PathBuf::from(
                 "/home/martin/build/exif-samples/jpg/long_description.jpg",
             ),
-            0.01150077_f32,
+            0.011_500_77_f32,
         )];
         assert_eq!(result, expected);
     }

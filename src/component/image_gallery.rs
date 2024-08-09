@@ -9,6 +9,7 @@ use serde::Serialize;
 
 use crate::pages::search::SRElem;
 
+#[allow(clippy::unused_async)]
 #[server]
 pub async fn add_meta_data(
     url: Option<String>,
@@ -19,25 +20,21 @@ pub async fn add_meta_data(
     log::debug!("server: entry metadata");
 
     match GLOBAL_STATE.lock() {
-        Ok(mut state) => match url {
-            Some(url) => {
-                state.metadata = match state.index.md_store.get(&url) {
-                    Some(metadata) => Some(metadata.clone()),
-                    None => None,
-                };
-                Ok(state.metadata.clone())
-            }
-            None => {
+        Ok(mut state) => {
+            if let Some(url) = url {
+                state.metadata = state.index.md_store.get(&url).cloned();
+            } else {
                 state.metadata = None;
-                Ok(state.metadata.clone())
             }
-        },
+            Ok(state.metadata.clone())
+        }
         Err(e) => {
             panic!("/search query - could not unlock {e}");
         }
     }
 }
 
+#[allow(clippy::unused_async)]
 #[server]
 pub async fn get_metadata() -> Result<Option<Vec<Field>>, ServerFnError> {
     use crate::pages::GLOBAL_STATE;
