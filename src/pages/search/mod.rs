@@ -8,7 +8,7 @@ use crate::pages::GLOBAL_STATE;
 #[cfg(feature = "ssr")]
 use crate::util::cantor_pair;
 
-pub(crate) mod view;
+pub mod view;
 
 // Search Result Element
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]

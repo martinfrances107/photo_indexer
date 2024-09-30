@@ -4,7 +4,7 @@ use leptos::ServerFnError;
 use serde::Deserialize;
 use serde::Serialize;
 
-pub(crate) mod view;
+pub mod view;
 
 // A request by the client to to change the root directory.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]

@@ -1,5 +1,5 @@
-pub(crate) mod button;
-pub(crate) mod pannel;
+pub mod button;
+pub mod pannel;
 
 #[derive(Clone, Debug)]
 pub enum SideBarState {

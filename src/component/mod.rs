@@ -1,3 +1,3 @@
-pub(crate) mod file_lister;
-pub(crate) mod image_gallery;
-pub(crate) mod settings;
+pub mod file_lister;
+pub mod image_gallery;
+pub mod settings;
