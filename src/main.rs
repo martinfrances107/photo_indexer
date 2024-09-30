@@ -130,7 +130,7 @@ async fn main() -> std::io::Result<()> {
 
 #[cfg(not(any(feature = "ssr", feature = "csr")))]
 /// Entry point not sure if this is reasonable yet....
-pub fn main() {
+pub const fn main() {
     // no client-side main function
     // unless we want this to work with e.g., Trunk for pure client-side testing
     // see lib.rs for hydration function instead
