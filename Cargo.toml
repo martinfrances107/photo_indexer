@@ -38,7 +38,7 @@ lto = true
 # [patch.crates-io] override.
 #
 # It must be replaced directly with this line :-
-exif = { version = "0.5", git = "https://github.com/martinfrances107/exif-rs", branch = "PartialEq" }
+exif = { git = "https://github.com/martinfrances107/exif-rs", branch = "PartialEq" }
 
 actix-files = { version = "~0.6", optional = true }
 actix-web = { version = "4", optional = true, features = ["macros"] }
