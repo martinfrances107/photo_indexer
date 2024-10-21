@@ -68,7 +68,7 @@ pub fn Lister() -> impl IntoView {
                         url: format!("{IMAGE_PREFIX}{value}"),
                     });
 
-                    // Move vlaue into the inputvalue
+                    // Move value into the input value
                     match input_element.get() {
                         Some(_) => {
                             select_value_set.set(value);
