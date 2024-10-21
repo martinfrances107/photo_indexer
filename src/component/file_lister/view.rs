@@ -107,53 +107,50 @@ pub fn Lister() -> impl IntoView {
     };
 
     view! {
-        <h2 class="mp-2 text-center">"Select a directory to index"</h2>
-        <p>{move || current_selection.get()}</p>
-        <ol class="flex flex-wrap gap-2 p-2 " on:click=selection_click>
-          <Transition fallback=move || {
-              view! {
-                <li>
-                  <button on:click=refresh_click>"Refresh"</button>
-                </li>
-              }
-          }>
-            <For each=move || { list_url.get().into_iter() } key=|(i, _)| { *i } let:data>
-              <li>
-                <!-- "css issue - Want to set hover on input element, but conventional css fails" -->
-                <input
-                  class="cursor-grab dark:bg-neutral-400 dark:focus:bg-neutral-300 dark:hover:bg-neutral-300 p-2 rounded"
-                  name="dir"
-                  readonly
-                  type="text"
-                  value=data.1
-                />
-              </li>
-            </For>
-          </Transition>
-        </ol>
+      <h2 class="mp-2 text-center">"Select a directory to index"</h2>
+      <p>{move || current_selection.get()}</p>
+      <ol class="flex flex-wrap gap-2 p-2 " on:click=selection_click>
+        <Transition fallback=move || {
+          view! {
+            <li>
+              <button on:click=refresh_click>"Refresh"</button>
+            </li>
+          }
+        }>
+          <For each=move || { list_url.get().into_iter() } key=|(i, _)| { *i } let:data>
+            <li>
+              <!-- "css issue - Want to set hover on input element, but conventional css fails" -->
+              <input
+                class="cursor-grab dark:bg-neutral-400 dark:focus:bg-neutral-300 dark:hover:bg-neutral-300 p-2 rounded"
+                name="dir"
+                readonly
+                type="text"
+                value=data.1
+              />
+            </li>
+          </For>
+        </Transition>
+      </ol>
 
-        <form
-          on:submit=on_submit
-          class="dark:text-slate-700 p-2"
-        >
-          <label class="hidden" for="fl">
-            Search
-          </label>
-          <input
-            class="block"
-            id="fl"
-            placeholder="select directory"
-            node_ref=input_element
-            value={select_value}
-            type="text"
-          />
+      <form on:submit=on_submit class="dark:text-slate-700 p-2">
+        <label class="hidden" for="fl">
+          Search
+        </label>
+        <input
+          class="block"
+          id="fl"
+          placeholder="select directory"
+          node_ref=input_element
+          value=select_value
+          type="text"
+        />
 
-          <input
-            class="bg-sky-700 block cursor-grab dark:text-white rounded mt-3 p-2 hover:bg-sky-600"
-            type="submit"
-            title="Select"
-            value="UPDATE"
-          />
-        </form>
+        <input
+          class="bg-sky-700 block cursor-grab dark:text-white rounded mt-3 p-2 hover:bg-sky-600"
+          type="submit"
+          title="Select"
+          value="UPDATE"
+        />
+      </form>
     }
 }

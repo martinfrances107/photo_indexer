@@ -31,16 +31,16 @@ pub fn App() -> impl IntoView {
     provide_context(sidebar_signal);
 
     view! {
-      <Html lang="en"/>
-      <Meta name="description" content="Search images metadata."/>
-      <Meta name="viewport" content="width=device-width, initial-scale=1"/>
-      <Meta name="theme-color" content="#319197"/>
-      <Link rel="icon" type_="image/svg+xml" href="/mag.svg"/>
-      <Link rel="manifest" href="/manifest.json"/>
-      <Title text="Photo Indexer"/>
+      <Html lang="en" />
+      <Meta name="description" content="Search images metadata." />
+      <Meta name="viewport" content="width=device-width, initial-scale=1" />
+      <Meta name="theme-color" content="#319197" />
+      <Link rel="icon" type_="image/svg+xml" href="/mag.svg" />
+      <Link rel="manifest" href="/manifest.json" />
+      <Title text="Photo Indexer" />
 
-      <Stylesheet id="leptos" href="/pkg/pi.css"/>
-      <Body class="dark:bg-slate-950 dark:text-white font-roboto"/>
+      <Stylesheet id="leptos" href="/pkg/pi.css" />
+      <Body class="dark:bg-slate-950 dark:text-white font-roboto" />
       <Router>
 
         <Routes>
@@ -48,40 +48,40 @@ pub fn App() -> impl IntoView {
           <Route
             path=""
             view=|| {
-                view! {
-                  // TODO work out wrapping for mobile nav is below the header
-                  // for desktop nav is right justified.
-                  <header class="flex gap-8 item-center justify-between m-none px-6 ">
-                    <h1 class="font-light grow" style="font-size: clamp(1rem, 8vw, 4rem);">
-                      "SEARCH"
-                    </h1>
-                    <nav class="self-center" style="font-size: clamp(.75rem, 4vw, 2rem);">
-                      <A href="/about">"ABOUT"</A>
-                    </nav>
-                    <SettingsButton/>
-                  </header>
-                  <Search/>
-                }
+              view! {
+                // TODO work out wrapping for mobile nav is below the header
+                // for desktop nav is right justified.
+                <header class="flex gap-8 item-center justify-between m-none px-6 ">
+                  <h1 class="font-light grow" style="font-size: clamp(1rem, 8vw, 4rem);">
+                    "SEARCH"
+                  </h1>
+                  <nav class="self-center" style="font-size: clamp(.75rem, 4vw, 2rem);">
+                    <A href="/about">"ABOUT"</A>
+                  </nav>
+                  <SettingsButton />
+                </header>
+                <Search />
+              }
             }
           />
 
           <Route
             path="/about"
             view=|| {
-                view! {
-                  // TODO work out wrapping for mobile nav is below the header
-                  // for desktop nav is right justified.
-                  <header class="border-none flex gap-8 item-center justify-between m-none px-6 ">
-                    <h1 class="font-light grow" style="font-size: clamp(1rem, 8vw, 4rem);">
-                      "ABOUT"
-                    </h1>
-                    <nav class="self-center" style="font-size: clamp(.75rem, 4vw, 2rem);">
-                      <A href="/">"SEARCH"</A>
-                    </nav>
-                    <SettingsButton/>
-                  </header>
-                  <About/>
-                }
+              view! {
+                // TODO work out wrapping for mobile nav is below the header
+                // for desktop nav is right justified.
+                <header class="border-none flex gap-8 item-center justify-between m-none px-6 ">
+                  <h1 class="font-light grow" style="font-size: clamp(1rem, 8vw, 4rem);">
+                    "ABOUT"
+                  </h1>
+                  <nav class="self-center" style="font-size: clamp(.75rem, 4vw, 2rem);">
+                    <A href="/">"SEARCH"</A>
+                  </nav>
+                  <SettingsButton />
+                </header>
+                <About />
+              }
             }
           />
 

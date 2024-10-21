@@ -12,7 +12,7 @@ pub fn About() -> impl IntoView {
           <p>"Search a directory for images query exif-meta data"</p>
           <p>"Subdirectories are included."</p>
         </div>
-        <SettingsPannel/>
+        <SettingsPannel />
       </div>
     }
 }

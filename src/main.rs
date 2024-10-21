@@ -95,7 +95,7 @@ async fn main() -> std::io::Result<()> {
     };
 
     // Generate the list of routes in your Leptos App
-    let routes = generate_route_list(|| view! { <App/> });
+    let routes = generate_route_list(|| view! { <App /> });
 
     let addr = conf.leptos_options.site_addr;
     match HttpServer::new(move || {
@@ -108,7 +108,7 @@ async fn main() -> std::io::Result<()> {
             .leptos_routes(
                 leptos_options.to_owned(),
                 routes.to_owned(),
-                || view! { <App/> },
+                || view! { <App /> },
             )
             // TODO can I filter by extension rather than expose
             // all files from this directory.

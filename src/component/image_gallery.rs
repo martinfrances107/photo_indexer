@@ -73,46 +73,44 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
     });
 
     view! {
-      <Transition fallback=|| view! { <p>"SideBar..."</p> } >
+      <Transition fallback=|| {
+        view! { <p>"SideBar..."</p> }
+      }>
         // Sidebar
         {move || {
-            metadata
-                .get()
-                .map_or_else(
-                    || view! { <div id="side-menu-empty" class="w-0"></div> },
-                    |data| {
-                        view! {
-                          <div
-                            class="bg-slate-800 inline-block rounded shadow-inner shadow-slate-700"
-                            id="side-menu"
-                          >
-                            <button
-                              class="font-medium pr-4 pt-2 text-right text-lg w-full"
-                              on:click=move |_| metadata_action.dispatch(AddMetaData { url: None })
-                              title="close"
-                            >
-                              "X"
-                            </button>
-                            <hr class="m-1"/>
-                            <div class="
-                            [&>*:nth-child(even)]:bg-gray-400
-                            [&>*:nth-child(even)]:text-black
-                            overflow-hidden
-                            w-[240px]
-                            }}">
-                              <For
-                                each=move || data.clone()
-                                key=|field| { field.ifd_num }
-                                let:field
-                              >
-                                <p class="ps-0.5">{field.tag.to_string()}</p>
-                                <p class="pe-2.5 text-right">{field.display_value().to_string()}</p>
-                              </For>
-                            </div>
-                          </div>
-                        }
-                    },
-                )
+          metadata
+            .get()
+            .map_or_else(
+              || view! { <div id="side-menu-empty" class="w-0"></div> },
+              |data| {
+                view! {
+                  <div
+                    class="bg-slate-800 inline-block rounded shadow-inner shadow-slate-700"
+                    id="side-menu"
+                  >
+                    <button
+                      class="font-medium pr-4 pt-2 text-right text-lg w-full"
+                      on:click=move |_| metadata_action.dispatch(AddMetaData { url: None })
+                      title="close"
+                    >
+                      "X"
+                    </button>
+                    <hr class="m-1" />
+                    <div class="
+                    [&>*:nth-child(even)]:bg-gray-400
+                    [&>*:nth-child(even)]:text-black
+                    overflow-hidden
+                    w-[240px]
+                    }}">
+                      <For each=move || data.clone() key=|field| { field.ifd_num } let:field>
+                        <p class="ps-0.5">{field.tag.to_string()}</p>
+                        <p class="pe-2.5 text-right">{field.display_value().to_string()}</p>
+                      </For>
+                    </div>
+                  </div>
+                }
+              },
+            )
         }}
 
       </Transition>
@@ -136,32 +134,36 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
 
             <div class="hover:bg-slate-600 mx-2 my-4 relative rounded text-left w-[280px]">
               <figure class="bg-slate-100 pt-2 rounded-t">
-              {
-               let description_escaped = data.description.replace('"', "");
-               view!{
-                 <img
-                   alt={&description_escaped}
-                   class="aspect-square mx-auto w-[274px] h-[160px]"
-                   src={&data.url}
-                   title={description_escaped}
-                 />
+                {
+                  let description_escaped = data.description.replace('"', "");
+                  view! {
+                    <img
+                      alt=&description_escaped
+                      class="aspect-square mx-auto w-[274px] h-[160px]"
+                      src=&data.url
+                      title=description_escaped
+                    />
+                  }
                 }
-              }
                 <figcaption>
                   {if data.description.is_empty() {
-                      view! { <p class="break-words line-clamp-3 min-h-12 pt-4">"No description"</p> }
+                    view! { <p class="break-words line-clamp-3 min-h-12 pt-4">"No description"</p> }
                   } else {
-                      view! { <p class="break-words line-clamp-3 min-h-12 pt-4">{data.description}</p> }
+                    view! {
+                      <p class="break-words line-clamp-3 min-h-12 pt-4">{data.description}</p>
+                    }
                   }}
 
                 </figcaption>
               </figure>
               <button
                 class="absolute bg-black/50 font-mono p-3 rounded-full right-4 text-white text-right top-4"
-                on:click=move |_| metadata_action
-                        .dispatch(AddMetaData {
-                            url: Some(data.url.clone()),
-                        })
+                on:click=move |_| {
+                  metadata_action
+                    .dispatch(AddMetaData {
+                      url: Some(data.url.clone()),
+                    })
+                }
 
                 title="Open metadata"
               >

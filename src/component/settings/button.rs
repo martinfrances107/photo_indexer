@@ -23,7 +23,7 @@ pub fn Button() -> impl IntoView {
       <button
         class="text-white"
         on:click=move |_| {
-            sidebar_state_setter.update(|state| *state = state.toggle());
+          sidebar_state_setter.update(|state| *state = state.toggle());
         }
 
         title="Open settings"
