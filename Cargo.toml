@@ -15,7 +15,6 @@ version = "0.1.0"
 # MSRV this project makes use of LazyLock
 rust-version = "1.80"
 
-
 [lib]
 crate-type = ["cdylib", "rlib"]
 
@@ -40,19 +39,18 @@ lto = true
 # It must be replaced directly with this line :-
 exif = { git = "https://github.com/martinfrances107/exif-rs", branch = "PartialEq" }
 
-actix-files = { version = "~0.6", optional = true }
+leptos_router = { version = "0.7.2" }
+leptos_meta = { version = "0.7.2" }
+leptos = { version = "0.7.2" }
+actix-files = { version = "0.6", optional = true }
 actix-web = { version = "4", optional = true, features = ["macros"] }
 cfg-if = "1"
-console_error_panic_hook = "~0.1"
-leptos_actix = { version = "~0.6", optional = true }
-leptos_meta = { version = "~0.6", default-features = false }
-leptos = { version = "~0.6", default-features = false, features = ["serde"] }
-leptos_router = { version = "~0.6", default-features = false }
+console_error_panic_hook = "0.1"
+leptos_actix = { version = "0.7.2", optional = true }
 tracing = "~0.1"
 tracing-subscriber = "~0.3"
-wasm-bindgen = "0.2"
+wasm-bindgen = "0.2.99"
 walkdir = "2"
-# uuid = { version = "~1", features = ["v4", "js", "serde"] }
 seroost_lib = { git = "https://github.com/martinfrances107/seroost", branch = "PartialEq" }
 serde = { version = "~1", features = ["derive"] }
 log = "0.4.21"
@@ -61,8 +59,8 @@ web-sys = "0.3"
 clap = { version = "4.5.4", features = ["derive"] }
 
 [features]
-csr = ["leptos/csr", "leptos_meta/csr", "leptos_router/csr"]
-hydrate = ["leptos/hydrate", "leptos_meta/hydrate", "leptos_router/hydrate"]
+csr = ["leptos/csr"]
+hydrate = ["leptos/hydrate"]
 ssr = [
   "dep:actix-files",
   "dep:actix-web",
@@ -71,11 +69,14 @@ ssr = [
   "leptos_meta/ssr",
   "leptos_router/ssr",
 ]
-nightly = ["leptos/nightly", "leptos_router/nightly"]
 
-[package.metadata.cargo-all-features]
-denylist = ["actix-files", "actix-web", "leptos_actix", "nightly"]
-skip_feature_sets = [["ssr", "hydrate"]]
+# Defines a size-optimized profile for the WASM bundle in release mode
+[profile.wasm-release]
+inherits = "release"
+opt-level = 'z'
+lto = true
+codegen-units = 1
+panic = "abort"
 
 [package.metadata.leptos]
 # The name used by wasm-bindgen/cargo-leptos for the JS/WASM bundle. Defaults to the crate name
@@ -101,10 +102,9 @@ reload-port = 3001
 #   This binary name can be checked in Powershell with Get-Command npx
 end2end-cmd = "npx playwright test"
 end2end-dir = "end2end"
-#  The browserlist query used for optimizing the CSS.
+#  browser list query used for optimizing the CSS.
 browserquery = "defaults"
-# Set by cargo-leptos watch when building with that tool. Controls whether autoreload JS will be included in the head
-watch = false
+
 # The environment Leptos will run in, usually either "DEV" or "PROD"
 env = "DEV"
 # The features to use when compiling the bin target
@@ -127,8 +127,14 @@ lib-features = ["hydrate"]
 # Optional. Defaults to false.
 lib-default-features = false
 
+# The profile to use for the lib target when compiling for release
+#
+# Optional. Defaults to "release".
+lib-profile-release = "wasm-release"
+
+
 # https://benw.is/posts/how-i-improved-my-rust-compile-times-by-seventy-five-percent
-# Optimisation suggested by
+# Optimization suggested by
 [profile.dev]
 opt-level = 1
 

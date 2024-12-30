@@ -6,43 +6,41 @@ use leptos::IntoView;
 /// Form is used to set the indexer to a new value.
 #[component]
 pub fn Lister() -> impl IntoView {
+    use leptos::logging::log;
+    use leptos::prelude::signal;
+    use leptos::prelude::ClassAttribute;
+    use leptos::prelude::ElementChild;
+    use leptos::prelude::For;
+    use leptos::prelude::Get;
+    use leptos::prelude::GlobalAttributes;
+    use leptos::prelude::NodeRef;
+    use leptos::prelude::NodeRefAttribute;
+    use leptos::prelude::OnAttribute;
+    use leptos::prelude::Resource;
+    use leptos::prelude::ServerAction;
+    use leptos::prelude::Set;
+    use leptos::prelude::Signal;
+    use leptos::prelude::Transition;
+    use leptos::view;
+    use log::error;
     use wasm_bindgen::JsCast;
     use web_sys::HtmlInputElement;
-
-    use leptos::create_local_resource;
-    use leptos::create_node_ref;
-    use leptos::create_server_action;
-    use leptos::create_signal;
-    use leptos::ev;
-    use leptos::ev::MouseEvent;
-    use leptos::html;
-    use leptos::logging::log;
-    use leptos::view;
-    use leptos::For;
-    use leptos::NodeRef;
-    use leptos::Signal;
-    use leptos::SignalGet;
-    use leptos::SignalSet;
-    use leptos::Transition;
-    use log::error;
 
     use crate::component::file_lister::get_list_url;
     use crate::component::file_lister::AddListUrl;
     use crate::pages::IMAGE_PREFIX;
 
-    let input_element: NodeRef<html::Input> = create_node_ref();
+    let input_element = NodeRef::new();
 
-    let (select_value, select_value_set) = create_signal(String::from("AAA"));
+    let (select_value, select_value_set) = signal(String::from("AAA"));
 
     let (current_selection, current_selection_set) =
-        create_signal::<String>(String::from(IMAGE_PREFIX));
+        signal::<String>(String::from(IMAGE_PREFIX));
 
-    let list_url_action = create_server_action::<AddListUrl>();
+    let list_url_action: ServerAction<AddListUrl> = ServerAction::new();
 
-    let list_urls_resource = create_local_resource(
-        move || list_url_action.version().get(),
-        get_list_url,
-    );
+    let list_urls_resource =
+        Resource::new(move || list_url_action.version().get(), get_list_url);
 
     let list_url = Signal::derive(move || match list_urls_resource.get() {
         Some(Ok(result)) => result.listed_urls,
@@ -58,7 +56,7 @@ pub fn Lister() -> impl IntoView {
         }
     });
 
-    let selection_click = move |event: MouseEvent| {
+    let selection_click = move |event: web_sys::MouseEvent| {
         event.prevent_default();
         match event.target() {
             Some(target) => match target.dyn_ref::<HtmlInputElement>() {
@@ -90,18 +88,18 @@ pub fn Lister() -> impl IntoView {
         };
     };
 
-    let on_submit = move |ev: ev::SubmitEvent| {
+    let on_submit = move |ev: leptos::ev::SubmitEvent| {
         ev.prevent_default();
-        let url = input_element
-            .get()
-            .expect("<input> should be mounted.")
-            .value();
+        // let url = input_element
+        //     .get()
+        //     .expect("<input> should be mounted.")
+        //     .value();
 
-        current_selection_set.set(url.clone());
-        list_url_action.dispatch(AddListUrl { url });
+        // current_selection_set.set(url.clone());
+        // list_url_action.dispatch(AddListUrl { url });
     };
 
-    let refresh_click = move |ev: MouseEvent| {
+    let refresh_click = move |ev: web_sys::MouseEvent| {
         ev.prevent_default();
         log!("refresh {ev:#?}");
     };

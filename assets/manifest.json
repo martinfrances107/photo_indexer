@@ -3,23 +3,28 @@
   "dir": "ltr",
   "name": "Photo Indexer",
   "short_name": "PI",
-  "icons": [{
-    "src": "/mag-64x64.svg",
-    "sizes": "64x64",
-    "type": "image/svg+xml"
-  }, {
-    "src": "/mag-128x128.svg",
-    "sizes": "128x128",
-    "type": "image/svg+xml"
-  }, {
-    "src": "/mag-144x144.svg",
-    "sizes": "144x144",
-    "type": "image/svg+xml"
-  }, {
-    "src": "/mag-512x512.png",
-    "sizes": "512x512",
-    "type": "image/png"
-  }],
+  "icons": [
+    {
+      "src": "/site/mag-64x64.svg",
+      "sizes": "64x64",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/site/mag-128x128.svg",
+      "sizes": "128x128",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/site/mag-144x144.svg",
+      "sizes": "144x144",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/site/mag-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
   "scope": "/",
   "id": "photoindexer",
   "start_url": "/",
@@ -30,13 +35,13 @@
   "description": "Image Search",
   "screenshots": [
     {
-      "src": "/mag-540x720.svg",
+      "src": "/site/mag-540x720.svg",
       "type": "image/svg+xml",
       "sizes": "540x720",
       "form_factor": "narrow"
     },
     {
-      "src": "/mag-720x540.svg",
+      "src": "/site/mag-720x540.svg",
       "type": "image/svg+xml",
       "sizes": "720x540",
       "form_factor": "wide"

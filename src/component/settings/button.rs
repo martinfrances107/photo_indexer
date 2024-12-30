@@ -1,19 +1,14 @@
 use leptos::component;
-use leptos::use_context;
-use leptos::view;
-use leptos::IntoView;
+use leptos::prelude::*;
 
 /// App level Button
 ///
-/// The hambuger icon is used to open a settings tray on the right
+/// The hamburger icon is used to open a settings tray on the right
 /// hand side.
 #[component]
 pub fn Button() -> impl IntoView {
-    use leptos::ReadSignal;
-    use leptos::SignalUpdate;
-    use leptos::WriteSignal;
-
     use crate::component::settings::SideBarState;
+    use leptos::prelude::*;
 
     let (_, sidebar_state_setter) =
         use_context::<(ReadSignal<SideBarState>, WriteSignal<SideBarState>)>()

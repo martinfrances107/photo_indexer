@@ -32,7 +32,7 @@ cfg_if! {
       pub metadata: Option<Vec<Field>>,
       pub query: Vec<char>,
 
-    // PRIVATE: setters ensure all drectories must be valid.
+    // PRIVATE: setters ensure all directories must be valid.
     // at time of writing.
     //
     // TODO: Could watch/notify these directories incase

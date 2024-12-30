@@ -1,15 +1,6 @@
 use leptos::component;
-use leptos::create_local_resource;
-use leptos::create_node_ref;
-use leptos::create_server_action;
-use leptos::ev::SubmitEvent;
-use leptos::html;
-use leptos::view;
+
 use leptos::IntoView;
-use leptos::NodeRef;
-use leptos::Signal;
-use leptos::SignalGet;
-use leptos::Transition;
 
 /// A settings form calls root_path_set ( Todo: it hard coded for now ).
 ///
@@ -22,18 +13,21 @@ use leptos::Transition;
 ///
 #[component]
 pub fn Search() -> impl IntoView {
+    use leptos::ev::SubmitEvent;
+    use leptos::html;
+    use leptos::prelude::*;
+    use leptos::view;
+
     use crate::component::image_gallery::ImageGallery;
-    use crate::component::settings::pannel::Pannel as SettingsPannel;
+    use crate::component::settings::panel::Panel as SettingsPanel;
     use crate::pages::search::get_query;
     use crate::pages::search::AddQuery;
     use crate::pages::search::SearchResult;
 
-    let search_query_action = create_server_action::<AddQuery>();
+    let search_query_action = ServerAction::<AddQuery>::new();
 
-    let images = create_local_resource(
-        move || search_query_action.version().get(),
-        get_query,
-    );
+    let images =
+        Resource::new(move || search_query_action.version().get(), get_query);
 
     let entries = Signal::derive(move || match images.get() {
         Some(Ok(SearchResult { entries, .. })) => entries,
@@ -53,7 +47,7 @@ pub fn Search() -> impl IntoView {
         }
     });
 
-    let input_element: NodeRef<html::Input> = create_node_ref();
+    let input_element: NodeRef<html::Input> = NodeRef::new();
 
     let on_submit = move |ev: SubmitEvent| {
         ev.prevent_default();
@@ -107,7 +101,7 @@ pub fn Search() -> impl IntoView {
 
         <div class="flex gap-2">
           <ImageGallery entries />
-          <SettingsPannel />
+          <SettingsPanel />
         </div>
 
       </div>

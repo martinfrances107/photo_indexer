@@ -24,21 +24,23 @@ if #[cfg(feature = "hydrate")] {
     use tracing_subscriber::FmtSubscriber;
     use wasm_bindgen::prelude::wasm_bindgen;
     use leptos::view;
+    use leptos::prelude::*;
     use crate::app::App;
 
-    /// Hydrate entry function logging initialisation
+    /// Hydrate entry function logging initialization
     /// and mount point for App.
     #[wasm_bindgen]
     pub fn hydrate() {
       console_error_panic_hook::set_once();
+
     FmtSubscriber::builder()
         // all spans/events with a level higher than TRACE (e.g, debug, info, warn, etc.)
         // will be written to stdout.
         .with_max_level(Level::TRACE)
         // completes the builder.
         .finish();
-      leptos::mount_to_body(move || {
-          view! { <App/> }
+      mount_to_body(move || {
+          view! { <App /> }
       });
     }
 }

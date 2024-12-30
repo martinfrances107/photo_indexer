@@ -1,9 +1,5 @@
 use exif::Field;
-use leptos::component;
-use leptos::server;
-use leptos::IntoView;
-use leptos::ServerFnError;
-use leptos::Signal;
+use leptos::prelude::*;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -34,18 +30,15 @@ pub async fn add_meta_data(
     }
 }
 
-#[allow(clippy::unused_async)]
 #[server]
 pub async fn get_metadata() -> Result<Option<Vec<Field>>, ServerFnError> {
     use crate::pages::GLOBAL_STATE;
-    let metadata = match GLOBAL_STATE.lock() {
-        Ok(state) => state.metadata.clone(),
-        Err(e) => {
-            panic!("get_query - could not unlock {e}");
-        }
-    };
-
-    Ok(metadata)
+    match GLOBAL_STATE.lock() {
+        Ok(state) => Ok(state.metadata.clone()),
+        Err(_) => Err(ServerFnError::ServerError(
+            "Global state unavailable".to_string(),
+        )),
+    }
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -55,64 +48,72 @@ pub struct SearchResult {
 
 #[component]
 pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
-    use leptos::create_local_resource;
-    use leptos::create_server_action;
+    use leptos::prelude::*;
     use leptos::view;
-    use leptos::For;
-    use leptos::SignalGet;
-    use leptos::Transition;
 
-    let metadata_action = create_server_action::<AddMetaData>();
-    let metadata_resource = create_local_resource(
+    let metadata_action: ServerAction<AddMetaData> = ServerAction::new();
+
+    let metadata_resource = Resource::new(
         move || metadata_action.version().get(),
-        |_| get_metadata(),
+        |_| async move {
+            // as
+            let a = get_metadata().await;
+
+            match a {
+                Ok(a) => a.unwrap_or_default(),
+                Err(_e) => {
+                    vec![]
+                }
+            }
+        },
     );
-    let metadata = Signal::derive(move || match metadata_resource.get() {
-        Some(Ok(metadata)) => metadata,
-        _ => None,
-    });
 
     view! {
       <Transition fallback=|| {
         view! { <p>"SideBar..."</p> }
       }>
         // Sidebar
-        {move || {
-          metadata
-            .get()
-            .map_or_else(
-              || view! { <div id="side-menu-empty" class="w-0"></div> },
-              |data| {
-                view! {
-                  <div
-                    class="bg-slate-800 inline-block rounded shadow-inner shadow-slate-700"
-                    id="side-menu"
-                  >
-                    <button
-                      class="font-medium pr-4 pt-2 text-right text-lg w-full"
-                      on:click=move |_| metadata_action.dispatch(AddMetaData { url: None })
-                      title="close"
-                    >
-                      "X"
-                    </button>
-                    <hr class="m-1" />
-                    <div class="
-                    [&>*:nth-child(even)]:bg-gray-400
-                    [&>*:nth-child(even)]:text-black
-                    overflow-hidden
-                    w-[240px]
-                    }}">
-                      <For each=move || data.clone() key=|field| { field.ifd_num } let:field>
-                        <p class="ps-0.5">{field.tag.to_string()}</p>
-                        <p class="pe-2.5 text-right">{field.display_value().to_string()}</p>
-                      </For>
-                    </div>
-                  </div>
-                }
-              },
-            )
-        }}
 
+        <Show
+          when=move || { metadata_resource.read().as_ref().map_or(false, |v| !v.is_empty()) }
+          fallback=|| {
+            view! { <div id="side-menu-empty" class="w-0"></div> }
+          }
+        >
+
+          <div
+            class="bg-slate-800 inline-block rounded shadow-inner shadow-slate-700"
+            id="side-menu"
+          >
+            <button
+              class="font-medium pr-4 pt-2 text-right text-lg w-full"
+              on:click=move |_| {
+                metadata_action.dispatch(AddMetaData { url: None });
+              }
+              title="close"
+            >
+              "X"
+            </button>
+            <hr class="m-1" />
+            <div class="
+            [&>*:nth-child(even)]:bg-gray-400
+            [&>*:nth-child(even)]:text-black
+            overflow-hidden
+            w-[240px]
+            }}">
+              <For
+                each=move || { metadata_resource.get().unwrap() }
+
+                key=|field| { field.ifd_num }
+                let:field
+              >
+                <p class="ps-0.5">{field.tag.to_string()}</p>
+                <p class="pe-2.5 text-right">{field.display_value().to_string()}</p>
+              </For>
+            </div>
+          </div>
+
+        </Show>
       </Transition>
       <div class="
       bg-slate-800
@@ -133,51 +134,63 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
           <For each=move || entries.get().into_iter() key=|e| e.key let:data>
 
             <div class="hover:bg-slate-600 mx-2 my-4 relative rounded text-left w-[280px]">
-              <figure class="bg-slate-100 pt-2 rounded-t">
-                {
-                  let description_escaped = data.description.replace('"', "");
-                  view! {
+              {
+                let image_alt = data.description.replace('"', "");
+                let url = data.url.clone();
+                let button_url = data.url.clone();
+                let show_description = !data.description.is_empty();
+                let img_title = data.description.replace('"', "");
+                // Search for "taliban" and the description still starts with a "
+                let caption_description = data.description.replace('"', "");
+
+                view! {
+                  <figure class="bg-slate-100 pt-2 rounded-t">
                     <img
-                      alt=&description_escaped
+                      alt=move || image_alt.clone()
                       class="aspect-square mx-auto w-[274px] h-[160px]"
-                      src=&data.url
-                      title=description_escaped
+                      src=url
+                      title=move || img_title.clone()
                     />
-                  }
-                }
-                <figcaption>
-                  {if data.description.is_empty() {
-                    view! { <p class="break-words line-clamp-3 min-h-12 pt-4">"No description"</p> }
-                  } else {
-                    view! {
-                      <p class="break-words line-clamp-3 min-h-12 pt-4">{data.description}</p>
+
+                    <figcaption>
+                      <Show
+                        when=move || (show_description)
+                        fallback=|| {
+                          view! {
+                            <p class="break-words line-clamp-3 min-h-12 pt-4">"No description"</p>
+                          }
+                        }
+                      >
+                        <p class="break-words line-clamp-3 min-h-12 pt-4">
+                          {caption_description.clone()}
+                        </p>
+
+                      </Show>
+                    </figcaption>
+                  </figure>
+                  <button
+                    class="absolute bg-black/50 font-mono p-3 rounded-full right-4 text-white text-right top-4"
+                    on:click=move |_| {
+                      metadata_action
+                        .dispatch(AddMetaData {
+                          url: Some(button_url.clone()),
+                        });
                     }
-                  }}
 
-                </figcaption>
-              </figure>
-              <button
-                class="absolute bg-black/50 font-mono p-3 rounded-full right-4 text-white text-right top-4"
-                on:click=move |_| {
-                  metadata_action
-                    .dispatch(AddMetaData {
-                      url: Some(data.url.clone()),
-                    })
+                    title="Open metadata"
+                  >
+                    "M"
+                  </button>
+                  <button
+                    class="absolute bg-black/50 font-mono p-3 rounded-full right-4 text-white text-right top-20"
+                    on:click=move |_| {}
+                    title="FULLSCREEN"
+                  >
+                    "F"
+                  </button>
                 }
-
-                title="Open metadata"
-              >
-                "M"
-              </button>
-              <button
-                class="absolute bg-black/50 font-mono p-3 rounded-full right-4 text-white text-right top-20"
-                on:click=move |_| {}
-                title="FULLSCREEN"
-              >
-                "F"
-              </button>
+              }
             </div>
-
           </For>
         </Transition>
       </div>

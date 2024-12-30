@@ -1,6 +1,4 @@
-use leptos::server;
-use leptos::ServerFnError;
-
+use leptos::prelude::*;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -24,8 +22,8 @@ fn is_not_hidden(entry: &walkdir::DirEntry) -> bool {
 // Ingest and sanitize url.
 //
 // Errors: -
-// timeout aquiring lock.
-// IMAGE_PREFIX santitisation check.
+// timeout acquiring lock.
+// IMAGE_PREFIX sanitization check.
 // [url] must map to a valid directory.
 //
 #[allow(clippy::unused_async)]

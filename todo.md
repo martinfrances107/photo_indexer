@@ -1,6 +1,13 @@
 # TODO
 
+Style guide
+look at [dark table]( <https://www.darktable.org/>)
+Is the level of compactness ok?
+How to I display portrait and landscape side by side.
+
 ## Known bugs
+
+ Pannel is spelt panel
 
 ## Snags : -
 
@@ -12,11 +19,11 @@
 
   Search bar has alignment issues, needs mag icon .. white slightly inset.
 
-  No descirption should be greyed out. description of "" should be converted to no sdescription.
+  No description should be greyed out. description of "" should be converted to no description.
 
   M,F buttons -- should become black on hover ... leaving the white to look like an inset.
 
-  Define an ease in transition for metadata pannel.
+  Define an ease in transition for metadata panel.
 
   Text in the about page looks weak, should at least mention my name.
 
