@@ -1,5 +1,6 @@
 use leptos::component;
 
+use leptos::prelude::NodeRef;
 use leptos::IntoView;
 
 /// A settings form calls root_path_set ( Todo: it hard coded for now ).
@@ -15,19 +16,42 @@ use leptos::IntoView;
 pub fn Search() -> impl IntoView {
     use leptos::ev::SubmitEvent;
     use leptos::html;
-    use leptos::prelude::*;
+    use leptos::prelude::Action;
+    use leptos::prelude::ClassAttribute;
+    use leptos::prelude::ElementChild;
+    use leptos::prelude::Get;
+    use leptos::prelude::GlobalAttributes;
+    use leptos::prelude::NodeRefAttribute;
+    use leptos::prelude::OnAttribute;
+    use leptos::prelude::Resource;
+    use leptos::prelude::Signal;
+    use leptos::prelude::Transition;
+    use leptos::prelude::View;
+
     use leptos::view;
 
     use crate::component::image_gallery::ImageGallery;
     use crate::component::settings::panel::Panel as SettingsPanel;
     use crate::pages::search::get_query;
-    use crate::pages::search::AddQuery;
+    use crate::pages::search::update_query;
+    use crate::pages::AddQuery;
+
     use crate::pages::search::SearchResult;
 
-    let search_query_action = ServerAction::<AddQuery>::new();
+    // let search_query_action = ServerAction::<AddQuery>::new();
+    let search_query_action =
+        Action::new(|aq: &AddQuery| update_query(aq.clone()));
 
-    let images =
-        Resource::new(move || search_query_action.version().get(), get_query);
+    let images = Resource::new(
+        move || {
+            // inputs.
+            search_query_action.version().get()
+        },
+        |_| {
+            // fetcher
+            get_query()
+        },
+    );
 
     let entries = Signal::derive(move || match images.get() {
         Some(Ok(SearchResult { entries, .. })) => entries,
@@ -56,8 +80,10 @@ pub fn Search() -> impl IntoView {
             .get()
             .expect("<input> should be mounted.")
             .value();
-
-        search_query_action.dispatch(AddQuery { query });
+        let aq = AddQuery {
+            query: query.chars().collect(),
+        };
+        search_query_action.dispatch(aq);
     };
 
     view! {

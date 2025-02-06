@@ -1,14 +1,24 @@
-// use leptos::server;
-// use leptos::ServerFnError;
-use leptos::prelude::*;
+use leptos::prelude::ServerFnError;
+use leptos::server;
+use tracing::instrument;
+
+#[cfg(feature = "ssr")]
+use actix_web::get;
+#[cfg(feature = "ssr")]
+use actix_web::http::StatusCode;
+#[cfg(feature = "ssr")]
+use actix_web::HttpResponse;
+
+use leptos::server_fn::response::Res;
 use serde::Deserialize;
 use serde::Serialize;
+
+use crate::pages::AddQuery;
 
 #[cfg(feature = "ssr")]
 use crate::pages::GLOBAL_STATE;
 #[cfg(feature = "ssr")]
 use crate::util::cantor_pair;
-
 pub mod view;
 
 // Search Result Element
@@ -24,21 +34,17 @@ pub struct SRElem {
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct SearchResult {
     pub entries: Vec<SRElem>,
-    // counter that increments every for query.
-    pub version: usize,
 }
 
 #[allow(clippy::unused_async)]
 #[server]
-pub async fn add_query(query: String) -> Result<(), ServerFnError> {
+pub async fn update_query(aq: AddQuery) -> Result<(), ServerFnError> {
     use tracing::log;
-    log::debug!("server: entry search_query");
-
-    let sq = query.chars().collect::<Vec<char>>();
 
     match GLOBAL_STATE.lock() {
         Ok(mut state) => {
-            state.query = sq;
+            state.query = aq.query;
+            state.query_version = state.query_version + 1;
             Ok(())
         }
         Err(e) => {
@@ -47,12 +53,12 @@ pub async fn add_query(query: String) -> Result<(), ServerFnError> {
     }
 }
 
-// TODO wierd leptos default naming convention
+// TODO weird leptos default naming convention
 // get_query get the result of the last query
 // ie get a list of images.
-#[allow(clippy::unused_async)]
 #[server]
-pub async fn get_query(version: usize) -> Result<SearchResult, ServerFnError> {
+#[cfg_attr(feature = "ssr", instrument)]
+pub async fn get_query() -> Result<SearchResult, ServerFnError> {
     use crate::pages::IMAGE_PREFIX;
 
     match GLOBAL_STATE.lock() {
@@ -62,9 +68,9 @@ pub async fn get_query(version: usize) -> Result<SearchResult, ServerFnError> {
                 .iter()
                 .enumerate()
                 .map(|(i, path_rank)| {
-                    let key = cantor_pair(version, i);
+                    let key = cantor_pair(state.query_version, i);
 
-                    // Construct url from filename
+                    // Construct URL from filename
                     let url = path_rank
                         .0
                         .strip_prefix(state.selected_dir.clone())
@@ -90,7 +96,6 @@ pub async fn get_query(version: usize) -> Result<SearchResult, ServerFnError> {
                 .collect();
             Ok(SearchResult {
                 entries: state.entries.clone(),
-                version,
             })
         }
         Err(e) => {

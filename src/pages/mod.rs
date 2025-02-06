@@ -5,6 +5,14 @@ use cfg_if::cfg_if;
 
 pub static IMAGE_PREFIX: &str = r"images/";
 
+use serde::Deserialize;
+use serde::Serialize;
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct AddQuery {
+    query: Vec<char>,
+}
+
 cfg_if! {
   if #[cfg(feature="ssr")]{
 
@@ -16,6 +24,7 @@ cfg_if! {
 
     use crate::pages::search::SRElem;
     use crate::indexer::Index;
+
 
     pub(crate) enum UrlSanitizationError {
       MissingPrefix,
@@ -31,6 +40,7 @@ cfg_if! {
       pub index: Index,
       pub metadata: Option<Vec<Field>>,
       pub query: Vec<char>,
+      pub query_version: usize,
 
     // PRIVATE: setters ensure all directories must be valid.
     // at time of writing.
@@ -122,7 +132,6 @@ cfg_if! {
       }
 
     }
-
 
       pub(crate) static GLOBAL_STATE: LazyLock<Mutex<GlobalState>> =
       LazyLock::new(|| {

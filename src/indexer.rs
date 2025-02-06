@@ -40,13 +40,13 @@ impl Index {
 
         use crate::pages::IMAGE_PREFIX;
 
-        // TODO If availble load model from file.
+        // TODO If available load model from file.
         let mut model = Model::default();
         // URL as key.
         let mut md_store = HashMap::default();
         let mut description_store = HashMap::default();
 
-        //this is the same as let glob = glob("**/*.{png, jpg}");
+        //This is the same as let glob = glob("**/*.{png, jpg}");
         let image_entries = WalkDir::new(root)
             .follow_links(true)
             .into_iter()
@@ -193,7 +193,6 @@ mod test {
     // and from test to test can change position.
     // canon_hdr_YES.jpg
     // canon_hdr_NO.jpg
-    #[ignore]
     #[test]
     fn found_in_filename() {
         let path = Path::new(ROOT_DIR);
@@ -241,7 +240,6 @@ mod test {
         assert_eq!(result, expected);
     }
 
-    #[ignore]
     #[test]
     fn found_in_metadata() {
         let path = Path::new(ROOT_DIR);
@@ -249,7 +247,7 @@ mod test {
         let index = Index::new(path, container_dir);
 
         // Other words sanyo, digital
-        let query = "olymupus";
+        let query = "olympus";
 
         let sq = query.chars().collect::<Vec<char>>();
 

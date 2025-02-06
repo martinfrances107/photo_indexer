@@ -140,8 +140,8 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                 let button_url = data.url.clone();
                 let show_description = !data.description.is_empty();
                 let img_title = data.description.replace('"', "");
-                // Search for "taliban" and the description still starts with a "
                 let caption_description = data.description.replace('"', "");
+                // Search for "taliban" and the description still starts with a "
 
                 view! {
                   <figure class="bg-slate-100 pt-2 rounded-t">
