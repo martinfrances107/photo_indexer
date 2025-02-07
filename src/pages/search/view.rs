@@ -26,8 +26,6 @@ pub fn Search() -> impl IntoView {
     use leptos::prelude::Resource;
     use leptos::prelude::Signal;
     use leptos::prelude::Transition;
-    use leptos::prelude::View;
-
     use leptos::view;
 
     use crate::component::image_gallery::ImageGallery;
@@ -53,6 +51,8 @@ pub fn Search() -> impl IntoView {
         },
     );
 
+    // I want to simplify this by removing this Signal::derive()
+    // but I need to find a way of making a async resource.
     let entries = Signal::derive(move || match images.get() {
         Some(Ok(SearchResult { entries, .. })) => entries,
         _ => {
