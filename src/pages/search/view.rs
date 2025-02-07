@@ -36,7 +36,6 @@ pub fn Search() -> impl IntoView {
 
     use crate::pages::search::SearchResult;
 
-    // let search_query_action = ServerAction::<AddQuery>::new();
     let search_query_action =
         Action::new(|aq: &AddQuery| update_query(aq.clone()));
 
@@ -98,7 +97,7 @@ pub fn Search() -> impl IntoView {
             Search
           </label>
           <input
-            class="p-2"
+            class="p-2 focus:outline-none"
             id="search-text"
             placeholder="Search EXIF data"
             node_ref=input_element
