@@ -16,13 +16,15 @@ pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
 
+    let sidebar_signal = signal::<SideBarState>(SideBarState::Close);
+    provide_context(sidebar_signal);
+
     view! {
       <Router>
         <main>
           <Routes fallback=move || "Not found.">
             <Route path=StaticSegment("") view=HomePage />
             <Route path=StaticSegment("/about") view=AboutPage />
-            <Route path=WildcardSegment("any") view=NotFound />
           </Routes>
         </main>
       </Router>
