@@ -1,7 +1,7 @@
 use leptos::component;
 use leptos::IntoView;
 
-/// Right handside side bar.
+/// Right hand side side bar.
 ///
 /// Form is used to set the indexer to a new value.
 #[component]
@@ -21,11 +21,10 @@ pub fn Lister() -> impl IntoView {
     use leptos::prelude::Set;
     use leptos::prelude::Signal;
     use leptos::prelude::Transition;
+    use leptos::ev::MouseEvent;
     use leptos::view;
     use log::error;
-    use wasm_bindgen::JsCast;
-    use web_sys::HtmlInputElement;
-
+    // use wasm_bindgen::JsCast;
     use crate::component::file_lister::get_list_url;
     use crate::component::file_lister::AddListUrl;
     use crate::pages::IMAGE_PREFIX;
@@ -56,36 +55,36 @@ pub fn Lister() -> impl IntoView {
         }
     });
 
-    let selection_click = move |event: web_sys::MouseEvent| {
+    let selection_click = move |event: MouseEvent| {
         event.prevent_default();
-        match event.target() {
-            Some(target) => match target.dyn_ref::<HtmlInputElement>() {
-                Some(input) => {
-                    let value = input.value();
-                    list_url_action.dispatch(AddListUrl {
-                        url: format!("{IMAGE_PREFIX}{value}"),
-                    });
+        // match event.target() {
+        //     Some(target) => match target {
+        //         Some(Some(input)) => {
+        //             let value = input.value();
+        //             list_url_action.dispatch(AddListUrl {
+        //                 url: format!("{IMAGE_PREFIX}{value}"),
+        //             });
 
-                    // Move value into the input value
-                    match input_element.get() {
-                        Some(_) => {
-                            select_value_set.set(value);
-                        }
-                        None => {
-                            log::warn!(
-                                "file_lister: input not found in the DOM"
-                            );
-                        }
-                    }
-                }
-                None => {
-                    log::warn!("selection_click() - Extracted a target that was not a HtmlInputElement");
-                }
-            },
-            None => {
-                log::warn!("selection_click() - Could not extract a target");
-            }
-        };
+        //             // Move value into the input value
+        //             match input_element.get() {
+        //                 Some(_) => {
+        //                     select_value_set.set(value);
+        //                 }
+        //                 None => {
+        //                     log::warn!(
+        //                         "file_lister: input not found in the DOM"
+        //                     );
+        //                 }
+        //             }
+        //         }
+        //         None => {
+        //             log::warn!("selection_click() - Extracted a target that was not a HtmlInputElement");
+        //         }
+        //     },
+        //     _ => {
+        //         log::warn!("selection_click() - Could not extract a target");
+        //     }
+        // };
     };
 
     let on_submit = move |ev: leptos::ev::SubmitEvent| {
@@ -99,7 +98,7 @@ pub fn Lister() -> impl IntoView {
         // list_url_action.dispatch(AddListUrl { url });
     };
 
-    let refresh_click = move |ev: web_sys::MouseEvent| {
+    let refresh_click = move |ev: MouseEvent| {
         ev.prevent_default();
         log!("refresh {ev:#?}");
     };
