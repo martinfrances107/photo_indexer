@@ -75,7 +75,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
         // Sidebar
 
         <Show
-          when=move || { metadata_resource.read().as_ref().map_or(false, |v| !v.is_empty()) }
+          when=move || { metadata_resource.read().as_ref().is_some_and(|v| !v.is_empty()) }
           fallback=|| {
             view! { <div id="side-menu-empty" class="w-0"></div> }
           }
