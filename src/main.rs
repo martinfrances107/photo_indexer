@@ -42,6 +42,7 @@ async fn main() -> std::io::Result<()> {
     use leptos_actix::{generate_route_list, LeptosRoutes};
     use leptos_meta::MetaTags;
     use leptos_meta::Stylesheet;
+    use leptos_meta::Title;
 
     let args: Args = Args::parse();
 
@@ -126,7 +127,7 @@ async fn main() -> std::io::Result<()> {
                           <MetaTags />
                           <link rel="icon" type_="image/svg+xml" href="/mag.svg" />
                           <link rel="manifest" href="/manifest.json" />
-                          <title text="Photo Indexer" />
+                          <Title text="Search Image MetaTags"/>
                           <Stylesheet id="leptos" href="/pkg/pi.css" />
                         </head>
                         <body class="dark:bg-slate-950 dark:text-white font-roboto">
