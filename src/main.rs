@@ -39,7 +39,9 @@ async fn main() -> std::io::Result<()> {
     use actix_web::*;
     use leptos::config::get_configuration;
     use leptos::prelude::*;
+    use leptos::prelude::LeptosOptions;
     use leptos_actix::{generate_route_list, LeptosRoutes};
+    use leptos_meta::provide_meta_context;
     use leptos_meta::MetaTags;
     use leptos_meta::Stylesheet;
     use leptos_meta::Title;
@@ -107,7 +109,7 @@ async fn main() -> std::io::Result<()> {
             .service(Files::new("/images", &root_dir))
             .service(Files::new("/pkg", format!("{site_root}/pkg")))
             // serve other assets from the `assets` directory
-            .service(Files::new("/assets", &site_root))
+            .service(Files::new("/assets", format!("{site_root}")))
             // serve the favicon from /favicon.ico
             .service(favicon)
             .route("/api/{tail:.*}", leptos_actix::handle_server_fns())
@@ -125,10 +127,6 @@ async fn main() -> std::io::Result<()> {
                           <AutoReload options=leptos_options.clone() />
                           <HydrationScripts options=leptos_options.clone() />
                           <MetaTags />
-                          <link rel="icon" type_="image/svg+xml" href="/mag.svg" />
-                          <link rel="manifest" href="/manifest.json" />
-                          <Title text="Search Image MetaTags"/>
-                          <Stylesheet id="leptos" href="/pkg/pi.css" />
                         </head>
                         <body class="dark:bg-slate-950 dark:text-white font-roboto">
                           <App />
@@ -138,7 +136,7 @@ async fn main() -> std::io::Result<()> {
                 }
             })
             .app_data(web::Data::new(leptos_options.to_owned()))
-        //.wrap(middleware::Compress::default())
+        .wrap(middleware::Compress::default())
     })
     .bind(&addr)?
     .run()
@@ -162,16 +160,13 @@ async fn favicon(
 /// see lib.rs for hydration function instead
 /// see optional feature `csr` instead
 #[cfg(not(any(feature = "ssr", feature = "csr")))]
-pub fn main() {
-
-}
+pub fn main() {}
 
 /// a client-side main function is required for using `trunk serve`
 /// prefer using `cargo leptos serve` instead
 /// to run: `trunk serve --open --features csr`
 #[cfg(all(not(feature = "ssr"), feature = "csr"))]
 pub fn main() {
-
     use start_actix::app::*;
 
     console_error_panic_hook::set_once();

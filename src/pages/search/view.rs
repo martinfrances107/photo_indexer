@@ -1,5 +1,6 @@
 use leptos::component;
 
+use leptos::prelude::IntoMaybeErased;
 use leptos::prelude::NodeRef;
 use leptos::IntoView;
 

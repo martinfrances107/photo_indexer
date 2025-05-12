@@ -6,6 +6,7 @@ use leptos::IntoView;
 /// Form is used to set the indexer to a new value.
 #[component]
 pub fn Lister() -> impl IntoView {
+    use leptos::ev::MouseEvent;
     use leptos::logging::log;
     use leptos::prelude::signal;
     use leptos::prelude::ClassAttribute;
@@ -13,6 +14,7 @@ pub fn Lister() -> impl IntoView {
     use leptos::prelude::For;
     use leptos::prelude::Get;
     use leptos::prelude::GlobalAttributes;
+    use leptos::prelude::IntoMaybeErased;
     use leptos::prelude::NodeRef;
     use leptos::prelude::NodeRefAttribute;
     use leptos::prelude::OnAttribute;
@@ -21,7 +23,6 @@ pub fn Lister() -> impl IntoView {
     use leptos::prelude::Set;
     use leptos::prelude::Signal;
     use leptos::prelude::Transition;
-    use leptos::ev::MouseEvent;
     use leptos::view;
     use log::error;
     // use wasm_bindgen::JsCast;

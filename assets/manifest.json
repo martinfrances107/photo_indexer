@@ -10,17 +10,17 @@
       "type": "image/svg+xml"
     },
     {
-      "src": "/site/mag-128x128.svg",
+      "src": "/assets/mag-128x128.svg",
       "sizes": "128x128",
       "type": "image/svg+xml"
     },
     {
-      "src": "/site/mag-144x144.svg",
+      "src": "/assets/mag-144x144.svg",
       "sizes": "144x144",
       "type": "image/svg+xml"
     },
     {
-      "src": "/site/mag-512x512.png",
+      "src": "/assets/mag-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
@@ -35,13 +35,13 @@
   "description": "Image Search",
   "screenshots": [
     {
-      "src": "/site/mag-540x720.svg",
+      "src": "/assets/mag-540x720.svg",
       "type": "image/svg+xml",
       "sizes": "540x720",
       "form_factor": "narrow"
     },
     {
-      "src": "/site/mag-720x540.svg",
+      "src": "/assets/mag-720x540.svg",
       "type": "image/svg+xml",
       "sizes": "720x540",
       "form_factor": "wide"

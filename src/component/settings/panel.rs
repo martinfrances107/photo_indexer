@@ -4,6 +4,7 @@ use leptos::prelude::view;
 use leptos::prelude::ClassAttribute;
 use leptos::prelude::ElementChild;
 use leptos::prelude::Get;
+use leptos::prelude::IntoMaybeErased;
 use leptos::prelude::IntoView;
 use leptos::prelude::ReadSignal;
 use leptos::prelude::WriteSignal;

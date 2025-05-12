@@ -1,5 +1,8 @@
 use leptos::prelude::*;
 use leptos_meta::provide_meta_context;
+use leptos_meta::Link;
+use leptos_meta::Stylesheet;
+use leptos_meta::Title;
 use leptos_router::{
     components::{Route, Router, Routes},
     StaticSegment, WildcardSegment,
@@ -15,14 +18,20 @@ use crate::pages::search::view::Search;
 pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
+    let fallback = || view! { "Page not found." }.into_view();
 
     let sidebar_signal = signal::<SideBarState>(SideBarState::Close);
     provide_context(sidebar_signal);
 
     view! {
+      <Link rel="icon" type_="image/svg+xml" href="/mag.svg" />
+      <Link rel="manifest" href="/assets/manifest.json" />
+      <Title text="Search Image MetaTags"/>
+      <Stylesheet id="leptos" href="/pkg/pi.css" />
+
       <Router>
         <main>
-          <Routes fallback=move || "Not found.">
+          <Routes fallback>
             <Route path=StaticSegment("") view=HomePage />
             <Route path=StaticSegment("/about") view=AboutPage />
           </Routes>
