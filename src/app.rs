@@ -24,7 +24,7 @@ pub fn App() -> impl IntoView {
     provide_context(sidebar_signal);
 
     view! {
-      <Link rel="icon" type_="image/svg+xml" href="/mag.svg" />
+      <Link rel="icon" type_="image/svg+xml" href="/assets/mag.svg" />
       <Link rel="manifest" href="/assets/manifest.json" />
       <Title text="Search Image MetaTags"/>
       <Stylesheet id="leptos" href="/pkg/pi.css" />

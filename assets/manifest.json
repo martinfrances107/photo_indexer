@@ -5,7 +5,7 @@
   "short_name": "PI",
   "icons": [
     {
-      "src": "/site/mag-64x64.svg",
+      "src": "/assets/mag-64x64.svg",
       "sizes": "64x64",
       "type": "image/svg+xml"
     },
