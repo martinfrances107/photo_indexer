@@ -1,6 +1,5 @@
 use leptos::component;
 
-use leptos::prelude::IntoMaybeErased;
 use leptos::prelude::NodeRef;
 use leptos::IntoView;
 
@@ -18,6 +17,7 @@ pub fn Search() -> impl IntoView {
     use leptos::ev::SubmitEvent;
     use leptos::html;
     use leptos::prelude::Action;
+    use leptos::prelude::IntoMaybeErased;
     use leptos::prelude::ClassAttribute;
     use leptos::prelude::ElementChild;
     use leptos::prelude::Get;

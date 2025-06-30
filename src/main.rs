@@ -33,18 +33,15 @@ async fn main() -> std::io::Result<()> {
     use std::io::Error;
     use std::io::ErrorKind;
 
-    use crate::indexer::Index;
-    use crate::pages::GLOBAL_STATE;
     use actix_files::Files;
     use actix_web::*;
     use leptos::config::get_configuration;
     use leptos::prelude::*;
-    use leptos::prelude::LeptosOptions;
     use leptos_actix::{generate_route_list, LeptosRoutes};
-    use leptos_meta::provide_meta_context;
     use leptos_meta::MetaTags;
-    use leptos_meta::Stylesheet;
-    use leptos_meta::Title;
+
+    use crate::indexer::Index;
+    use crate::pages::GLOBAL_STATE;
 
     let args: Args = Args::parse();
 

@@ -9,7 +9,6 @@ use actix_web::http::StatusCode;
 #[cfg(feature = "ssr")]
 use actix_web::HttpResponse;
 
-use leptos::server_fn::response::Res;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -39,8 +38,6 @@ pub struct SearchResult {
 #[allow(clippy::unused_async)]
 #[server]
 pub async fn update_query(aq: AddQuery) -> Result<(), ServerFnError> {
-    use tracing::log;
-
     match GLOBAL_STATE.lock() {
         Ok(mut state) => {
             state.query = aq.query;

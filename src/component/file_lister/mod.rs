@@ -7,6 +7,7 @@ pub mod view;
 // A request by the client to to change the root directory.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct ListUrlResult {
+    root_url: String,
     listed_urls: Vec<(usize, String)>,
     version: usize,
 }
@@ -70,6 +71,10 @@ pub async fn get_list_url(
     match crate::pages::GLOBAL_STATE.lock() {
         Ok(state) => {
             let container_dir = state.container_dir();
+            let root_url = state
+                .list_dir()
+                .strip_prefix(container_dir.clone())
+                .map_or(String::default(), |root| root.display().to_string());
             let uuid_url = WalkDir::new(state.list_dir())
                 .max_depth(1)
                 .into_iter()
@@ -96,6 +101,7 @@ pub async fn get_list_url(
 
             // state.listed_urls = listed_urls;
             Ok(ListUrlResult {
+                root_url,
                 listed_urls: uuid_url,
                 version,
             })
