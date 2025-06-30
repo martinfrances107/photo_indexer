@@ -12,10 +12,10 @@ pub fn Lister() -> impl IntoView {
     use leptos::logging::log;
     use leptos::prelude::ClassAttribute;
     use leptos::prelude::ElementChild;
-    use leptos::prelude::IntoMaybeErased;
     use leptos::prelude::For;
     use leptos::prelude::Get;
     use leptos::prelude::GlobalAttributes;
+    use leptos::prelude::IntoMaybeErased;
     use leptos::prelude::NodeRef;
     use leptos::prelude::NodeRefAttribute;
     use leptos::prelude::OnAttribute;
@@ -36,7 +36,7 @@ pub fn Lister() -> impl IntoView {
     let list_url_action: ServerAction<AddListUrl> = ServerAction::new();
     // Currently this is triggers on page load.
     // TODO: Could trigger this on first open of the tray.
-    list_url_action.dispatch(format!("{IMAGE_PREFIX}").into());
+    list_url_action.dispatch(IMAGE_PREFIX.to_string().into());
 
     let list_urls_resource =
         Resource::new(move || list_url_action.version().get(), get_list_url);
@@ -61,25 +61,24 @@ pub fn Lister() -> impl IntoView {
         // Response failure.
         Some(Err(e)) => {
             error!("{e:#?}");
-            String::from("")
+            String::new()
         }
         None => {
             log!("FileLister/Lister: DerivedSignal - list_root - asked for resource got None");
-            String::from("")
+            String::new()
         }
     });
 
     let selection_click = move |event: MouseEvent| {
         event.prevent_default();
         if let Some(target) = event.target() {
-          if let Ok(input) = target.dyn_into::<HtmlInputElement>(){
-            let value = input.value();
-            log!("input value {}", value);
-            list_url_action
-            .dispatch(format!("{IMAGE_PREFIX}{value}").into());
-          }
+            if let Ok(input) = target.dyn_into::<HtmlInputElement>() {
+                let value = input.value();
+                log!("input value {}", value);
+                list_url_action
+                    .dispatch(format!("{IMAGE_PREFIX}{value}").into());
+            }
         }
-
     };
 
     let on_submit = move |ev: leptos::ev::SubmitEvent| {
@@ -93,7 +92,7 @@ pub fn Lister() -> impl IntoView {
             None => {
                 log::warn!("input_ref has been dropped");
             }
-        };
+        }
     };
 
     let refresh_click = move |ev: MouseEvent| {
