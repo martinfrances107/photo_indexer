@@ -5,7 +5,7 @@ use leptos_meta::Stylesheet;
 use leptos_meta::Title;
 use leptos_router::{
     components::{Route, Router, Routes},
-    StaticSegment, WildcardSegment,
+    StaticSegment
 };
 
 use crate::component::settings::{

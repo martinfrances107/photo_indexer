@@ -12,7 +12,6 @@ use std::path::PathBuf;
 
 use clap::command;
 use clap::Parser;
-use photo_indexer::app::App;
 
 mod component;
 mod indexer;
@@ -42,6 +41,7 @@ async fn main() -> std::io::Result<()> {
 
     use crate::indexer::Index;
     use crate::pages::GLOBAL_STATE;
+    use photo_indexer::app::App;
 
     let args: Args = Args::parse();
 
