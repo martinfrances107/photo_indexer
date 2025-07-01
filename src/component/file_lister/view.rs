@@ -135,7 +135,7 @@ pub fn Lister() -> impl IntoView {
         <Transition fallback = || {
           view!{
             <input
-            class="block"
+            class="block dark:bg-slate-100"
             id="fl"
             placeholder="select directory"
             type="text"
@@ -143,7 +143,7 @@ pub fn Lister() -> impl IntoView {
           }
         }>
           <input
-            class="block"
+            class="block dark:bg-slate-100"
             id="fl"
             node_ref=input_ref
             value=list_root

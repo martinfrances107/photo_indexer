@@ -94,7 +94,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
             >
               "X"
             </button>
-            <hr class="m-1" />
+            <hr class="m-1 dark:bg-slate-100" />
             <div class="
             [&>*:nth-child(even)]:dark:bg-neutral-400
             [&>*:nth-child(even)]:text-slate-950
