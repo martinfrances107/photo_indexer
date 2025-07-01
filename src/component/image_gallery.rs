@@ -96,8 +96,8 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
             </button>
             <hr class="m-1" />
             <div class="
-            [&>*:nth-child(even)]:bg-gray-400
-            [&>*:nth-child(even)]:text-black
+            [&>*:nth-child(even)]:dark:bg-neutral-400
+            [&>*:nth-child(even)]:text-slate-950
             overflow-hidden
             w-[240px]
             }}">
@@ -169,7 +169,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                     </figcaption>
                   </figure>
                   <button
-                    class="absolute bg-black/50 font-mono p-3 rounded-full right-4 text-white text-right top-4"
+                    class="absolute bg-slate-950/50 font-mono p-3 rounded-full right-4 text-white text-right top-4"
                     on:click=move |_| {
                       metadata_action
                         .dispatch(AddMetaData {
@@ -182,7 +182,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                     "M"
                   </button>
                   <button
-                    class="absolute bg-black/50 font-mono p-3 rounded-full right-4 text-white text-right top-20"
+                    class="absolute bg-slate-950/50 font-mono p-3 rounded-full right-4 text-white text-right top-20"
                     on:click=move |_| {}
                     title="FULLSCREEN"
                   >

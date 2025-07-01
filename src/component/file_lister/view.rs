@@ -128,7 +128,7 @@ pub fn Lister() -> impl IntoView {
         </Transition>
       </ol>
 
-      <form on:submit=on_submit class="dark:text-slate-700 p-2">
+      <form on:submit=on_submit class="dark:text-slate-950 p-2">
         <label class="hidden" for="fl">
           Search
         </label>

@@ -92,13 +92,13 @@ pub fn Search() -> impl IntoView {
         <form
           id="search"
           on:submit=on_submit
-          class="justify-center dark:text-slate-700 flex h-[3.5rem]"
+          class="justify-center dark:text-slate-950 flex h-[3.5rem]"
         >
           <label class="hidden" for="search-text">
             Search
           </label>
           <input
-            class="p-2 focus:outline-none"
+            class="p-2 focus:outline-none dark:bg-slate-100"
             id="search-text"
             placeholder="Search EXIF data"
             node_ref=input_element

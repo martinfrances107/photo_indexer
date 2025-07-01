@@ -115,7 +115,7 @@ async fn main() -> std::io::Result<()> {
                 move || {
                     view! {
                       <!DOCTYPE html>
-                      <html lang="en">
+                      <html lang="en" class="dark:bg-slate-950 dark:text-white font-roboto">
                         <head>
                           <meta charset="utf-8" />
                           <meta name="description" content="Search images metadata." />
@@ -125,7 +125,7 @@ async fn main() -> std::io::Result<()> {
                           <HydrationScripts options=leptos_options.clone() />
                           <MetaTags />
                         </head>
-                        <body class="dark:bg-slate-950 dark:text-white font-roboto">
+                        <body>
                           <App />
                         </body>
                       </html>
