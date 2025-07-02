@@ -8,7 +8,7 @@ Provides a HTTP Server which provides searching of a images held in local storag
 
 * The search is based on [tf–idf](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) indexer run a selected directory.
 
-![Alt Searc hPage](https://raw.githubusercontent.com/martinfrances107/photo_indexer/main/images/SearchPage.png "Search Page")
+![Alt SearchPage](https://raw.githubusercontent.com/martinfrances107/photo_indexer/main/images/SearchPage.png "Search Page")
 
 ## Development
 
@@ -32,15 +32,6 @@ cargo-leptos watch -- ../exif-samples
 ```
 
  If no root directory is specified the current working directory will be used.
-
-## Migration to leptos 0.7
-
-This modules used leptos 0.6. leptos 0.7-alpha is availble but the following features are yet to be implemented/ported
-
-* ACTIX support
-* create_local_reource.
-
-I will be migrating to 0.7 as soon as possible.
 
 ## Production
 
