@@ -6,7 +6,7 @@
 #![warn(missing_debug_implementations)]
 #![allow(clippy::module_name_repetitions)]
 
-//! A web app the search a set of images.
+//! A web app to search a set of images.
 //!
 use std::path::PathBuf;
 
@@ -59,7 +59,9 @@ async fn main() -> std::io::Result<()> {
         None => match std::env::current_dir() {
             Ok(root_dir) => root_dir,
             Err(_) => {
-                log::error!("Could not read the current working directory.");
+                tracing::error!(
+                    "Could not read the current working directory."
+                );
                 return Err(Error::new(ErrorKind::Other, "No root directory supplied and could not read the current directory"));
             }
         },

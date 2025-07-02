@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use exif::Field;
 use seroost_lib::model::Model;
+use tracing::info;
 
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Index {
@@ -63,10 +64,10 @@ impl Index {
             })
             .collect::<Vec<DirEntry>>();
 
-        log::info!("Indexing complete: About to start server");
+        info!("Indexing complete: About to start server");
 
         let n_files = image_entries.len();
-        log::info!("{}", format!("n files {}", n_files));
+        info!("{}", format!("n files {}", n_files));
 
         // TODO Make multithreaded
         // Given a list of files spawn a new thread for each file loading.

@@ -1,6 +1,6 @@
 use leptos::component;
+use leptos::web_sys::HtmlInputElement;
 use leptos::IntoView;
-use web_sys::HtmlInputElement;
 
 /// Right hand side side bar.
 ///
@@ -24,8 +24,9 @@ pub fn Lister() -> impl IntoView {
     use leptos::prelude::Signal;
     use leptos::prelude::Transition;
     use leptos::view;
-    use log::error;
-    use web_sys::wasm_bindgen::JsCast;
+    use leptos::web_sys::wasm_bindgen::JsCast;
+    use tracing::error;
+    use tracing::warn;
 
     use crate::component::file_lister::get_list_url;
     use crate::component::file_lister::AddListUrl;
@@ -90,7 +91,7 @@ pub fn Lister() -> impl IntoView {
                     .dispatch(format!("{IMAGE_PREFIX}{value}").into());
             }
             None => {
-                log::warn!("input_ref has been dropped");
+                warn!("input_ref has been dropped");
             }
         }
     };

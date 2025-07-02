@@ -1,7 +1,7 @@
 use leptos::prelude::*;
 use serde::Deserialize;
 use serde::Serialize;
-
+use tracing::error;
 pub mod view;
 
 // A request by the client to to change the root directory.
@@ -110,7 +110,7 @@ pub async fn get_list_url(
             let err_msg = format!(
                 "get_list_url() failed to unlock() global state {e:#?}"
             );
-            log::error!("{}", err_msg);
+            error!("{}", err_msg);
             // TODO: In production, this will leak infomation to an attacker
             // Should I emmit a bland Internal Server error message?
             Err(ServerFnError::ServerError(err_msg))
