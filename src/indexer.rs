@@ -2,7 +2,6 @@ use std::collections::HashMap;
 
 use exif::Field;
 use seroost_lib::model::Model;
-use tracing::info;
 
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Index {
@@ -32,6 +31,7 @@ impl Index {
     where
         P: AsRef<std::path::Path>,
     {
+        use leptos::logging::error;
         use std::time::SystemTime;
 
         use exif::Tag;
@@ -144,7 +144,7 @@ impl Index {
                             }
                         }
                         Err(e) => {
-                            info!("skipping invalid field entry");
+                            error!("skipping invalid field entry");
                             eprintln!("---- Skipping invalid field entry ---");
                             eprintln!("{e}");
                             eprintln!("-------------------------------------");

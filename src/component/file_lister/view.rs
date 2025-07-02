@@ -2,36 +2,36 @@ use leptos::component;
 use leptos::web_sys::HtmlInputElement;
 use leptos::IntoView;
 
+use leptos::ev::MouseEvent;
+use leptos::html::Input;
+use leptos::logging::error;
+use leptos::logging::log;
+use leptos::logging::warn;
+use leptos::prelude::ClassAttribute;
+use leptos::prelude::ElementChild;
+use leptos::prelude::For;
+use leptos::prelude::Get;
+use leptos::prelude::GlobalAttributes;
+use leptos::prelude::IntoMaybeErased;
+use leptos::prelude::NodeRef;
+use leptos::prelude::NodeRefAttribute;
+use leptos::prelude::OnAttribute;
+use leptos::prelude::Resource;
+use leptos::prelude::ServerAction;
+use leptos::prelude::Signal;
+use leptos::prelude::Transition;
+use leptos::view;
+use leptos::web_sys::wasm_bindgen::JsCast;
+
+use crate::component::file_lister::get_list_url;
+use crate::component::file_lister::AddListUrl;
+use crate::pages::IMAGE_PREFIX;
+
 /// Right hand side side bar.
 ///
 /// Form is used to set the indexer to a new value.
 #[component]
 pub fn Lister() -> impl IntoView {
-    use leptos::ev::MouseEvent;
-    use leptos::html::Input;
-    use leptos::logging::log;
-    use leptos::prelude::ClassAttribute;
-    use leptos::prelude::ElementChild;
-    use leptos::prelude::For;
-    use leptos::prelude::Get;
-    use leptos::prelude::GlobalAttributes;
-    use leptos::prelude::IntoMaybeErased;
-    use leptos::prelude::NodeRef;
-    use leptos::prelude::NodeRefAttribute;
-    use leptos::prelude::OnAttribute;
-    use leptos::prelude::Resource;
-    use leptos::prelude::ServerAction;
-    use leptos::prelude::Signal;
-    use leptos::prelude::Transition;
-    use leptos::view;
-    use leptos::web_sys::wasm_bindgen::JsCast;
-    use tracing::error;
-    use tracing::warn;
-
-    use crate::component::file_lister::get_list_url;
-    use crate::component::file_lister::AddListUrl;
-    use crate::pages::IMAGE_PREFIX;
-
     let input_ref = NodeRef::<Input>::new();
 
     let list_url_action: ServerAction<AddListUrl> = ServerAction::new();
@@ -104,7 +104,7 @@ pub fn Lister() -> impl IntoView {
     view! {
       <h2 class="mp-2 text-center">"Select a directory to index"</h2>
       <Transition>
-        <p>{move || list_root}</p>
+        <p>{list_root}</p>
       </Transition>
       <ol class="flex flex-wrap gap-2 p-2 " on:click=selection_click>
         <Transition fallback=move || {
@@ -116,7 +116,6 @@ pub fn Lister() -> impl IntoView {
         }>
           <For each=move || { list_url.get().into_iter() } key=|(i, _)| { *i } let:data>
             <li>
-              <!-- "css issue - Want to set hover on input element, but conventional css fails" -->
               <input
                 class="cursor-grab dark:bg-neutral-400 dark:focus:bg-neutral-300 dark:hover:bg-neutral-300 p-2 rounded"
                 name="dir"

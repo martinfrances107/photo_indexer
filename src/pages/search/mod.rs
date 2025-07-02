@@ -1,6 +1,5 @@
 use leptos::prelude::ServerFnError;
 use leptos::server;
-use tracing::instrument;
 
 #[cfg(feature = "ssr")]
 use actix_web::get;
@@ -54,7 +53,7 @@ pub async fn update_query(aq: AddQuery) -> Result<(), ServerFnError> {
 // get_query get the result of the last query
 // ie get a list of images.
 #[server]
-#[cfg_attr(feature = "ssr", instrument)]
+#[cfg_attr(feature = "ssr", tracing::instrument)]
 pub async fn get_query() -> Result<SearchResult, ServerFnError> {
     use crate::pages::IMAGE_PREFIX;
 

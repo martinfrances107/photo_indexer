@@ -122,7 +122,7 @@ pub fn Search() -> impl IntoView {
         </form>
 
         <Transition fallback=|| view! { <p>"Loading count"</p> }>
-          <p class="m-6 text-right">{move || count_string.get()}</p>
+          <p class="m-6 text-right">{count_string}</p>
         </Transition>
 
         <div class="flex gap-2">

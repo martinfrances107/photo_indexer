@@ -103,7 +103,6 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
             }}">
               <For
                 each=move || { metadata_resource.get().unwrap() }
-
                 key=|field| { field.ifd_num }
                 let:field
               >
@@ -129,7 +128,6 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
       shadow-slate-700
       w-full
       ">
-
         <Transition fallback=|| view! { <div></div> }>
           <For each=move || entries.get().into_iter() key=|e| e.key let:data>
 
@@ -141,8 +139,6 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                 let show_description = !data.description.is_empty();
                 let img_title = data.description.replace('"', "");
                 let caption_description = data.description.replace('"', "");
-                // Search for "taliban" and the description still starts with a "
-
                 view! {
                   <figure class="bg-slate-100 pt-2 rounded-t">
                     <img
@@ -151,7 +147,6 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                       src=url
                       title=move || img_title.clone()
                     />
-
                     <figcaption>
                       <Show
                         when=move || (show_description)
@@ -164,7 +159,6 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                         <p class="break-words line-clamp-3 min-h-12 pt-4">
                           {caption_description.clone()}
                         </p>
-
                       </Show>
                     </figcaption>
                   </figure>
@@ -176,7 +170,6 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                           url: Some(button_url.clone()),
                         });
                     }
-
                     title="Open metadata"
                   >
                     "M"

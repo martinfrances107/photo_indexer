@@ -1,7 +1,6 @@
 use leptos::prelude::*;
 use serde::Deserialize;
 use serde::Serialize;
-use tracing::error;
 pub mod view;
 
 // A request by the client to to change the root directory.
@@ -110,71 +109,10 @@ pub async fn get_list_url(
             let err_msg = format!(
                 "get_list_url() failed to unlock() global state {e:#?}"
             );
-            error!("{}", err_msg);
-            // TODO: In production, this will leak infomation to an attacker
-            // Should I emmit a bland Internal Server error message?
+            leptos::logging::error!("{}", err_msg);
+            // TODO: In production, this will leak information to an attacker
+            // Should I emit a bland Internal Server error message?
             Err(ServerFnError::ServerError(err_msg))
         }
     }
 }
-
-// #[server]
-// pub async fn add_selected_url(url: String) -> Result<(), ServerFnError> {
-
-//     use crate::indexer::Index;
-//     use crate::pages::GLOBAL_STATE;
-
-//     leptos::logging::log!("server: entry add_root_dir");
-//     // SANITIZE: Reject if not a valid directory
-//     // ALSO check access permissions.
-//     match GLOBAL_STATE.lock() {
-//         Ok(mut state) => {
-//             // SANITIZATION
-//             // Reject urls without a prefix "/images"
-//             // Reject invalid directory names ( within the container directory ).
-//             let selected_dir = match url.strip_prefix(IMAGE_PREFIX) {
-//                 Some(filename_suffix) => {
-//                     state.container_dir.join(filename_suffix)
-//                 }
-//                 None => {
-//                     // malformed input.
-//                     return Err(ServerFnError::Args(format!(
-//                         "URL must be prefixed with {IMAGE_PREFIX}"
-//                     )));
-//                 }
-//             };
-
-//             if selected_dir.is_dir() {
-//                 // reject suspicious input.
-//                 return Err(ServerFnError::Args(String::from(
-//                     "rejecting selected url",
-//                 )));
-//             }
-
-//             state.index =
-//                 Index::new(selected_dir.clone(), state.container_dir.clone());
-//             state.entries = vec![];
-//             state.selected_dir = selected_dir;
-//             Ok(())
-//         }
-//         Err(e) => {
-//             panic!("/search query - could not unlock {e}");
-//         }
-//     }
-// }
-
-// #[server]
-// pub async fn get_selected_dir() -> Result<SelectedUrlResult, ServerFnError> {
-//     use crate::pages::GLOBAL_STATE;
-
-//     let selected_dir = match GLOBAL_STATE.lock() {
-//         Ok(state) => state.selected_dir.clone(),
-//         Err(e) => {
-//             panic!("get_root_dir() - could not unlock {e}");
-//         }
-//     };
-
-//     Ok(SelectedUrlResult {
-//         url: selected_dir.display().to_string(),
-//     })
-// }
