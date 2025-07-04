@@ -15,8 +15,6 @@ use crate::pages::AddQuery;
 
 #[cfg(feature = "ssr")]
 use crate::pages::GLOBAL_STATE;
-#[cfg(feature = "ssr")]
-use crate::util::cantor_pair;
 pub mod view;
 
 // Search Result Element
@@ -53,7 +51,6 @@ pub async fn update_query(aq: AddQuery) -> Result<(), ServerFnError> {
 // get_query get the result of the last query
 // ie get a list of images.
 #[server]
-#[cfg_attr(feature = "ssr", tracing::instrument)]
 pub async fn get_query() -> Result<SearchResult, ServerFnError> {
     use crate::pages::IMAGE_PREFIX;
 
@@ -64,7 +61,7 @@ pub async fn get_query() -> Result<SearchResult, ServerFnError> {
                 .iter()
                 .enumerate()
                 .map(|(i, path_rank)| {
-                    let key = cantor_pair(state.query_version, i);
+                    let key = crate::util::cantor_pair(state.query_version, i);
 
                     // Construct URL from filename
                     let url = path_rank
