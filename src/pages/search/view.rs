@@ -33,9 +33,8 @@ pub fn Search() -> impl IntoView {
     use crate::component::settings::panel::Panel as SettingsPanel;
     use crate::pages::search::get_query;
     use crate::pages::search::update_query;
-    use crate::pages::AddQuery;
-
     use crate::pages::search::SearchResult;
+    use crate::pages::AddQuery;
 
     let search_query_action =
         Action::new(|aq: &AddQuery| update_query(aq.clone()));

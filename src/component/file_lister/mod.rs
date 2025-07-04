@@ -44,8 +44,8 @@ pub async fn add_list_url(url: String) -> Result<String, ServerFnError> {
                     )))
                 }
                 Err(UrlSanitizationError::InvalidDirectory) => {
-                    // TODO: In production, this will leak infomation to an attacker
-                    // Should I emmit a bland Internal Server error message?
+                    // TODO: In production, this will leak information to an attacker
+                    // Should I emit a bland Internal Server error message?
                     Err(ServerFnError::ServerError(String::from(
                         "Not a valid images url",
                     )))

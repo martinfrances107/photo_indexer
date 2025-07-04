@@ -13,6 +13,7 @@ use std::path::PathBuf;
 use clap::command;
 use clap::Parser;
 
+mod app;
 mod component;
 mod indexer;
 mod pages;
@@ -39,13 +40,11 @@ async fn main() -> std::io::Result<()> {
     use leptos_actix::{generate_route_list, LeptosRoutes};
     use leptos_meta::MetaTags;
 
+    use crate::app::App;
     use crate::indexer::Index;
     use crate::pages::GLOBAL_STATE;
-    use photo_indexer::app::App;
 
-    let args: Args = Args::parse();
-
-    let root_dir = match args.root_dir {
+    let root_dir = match Args::parse().root_dir {
         Some(root_dir) => {
             if root_dir.is_dir() {
                 root_dir

@@ -32,6 +32,7 @@ pub struct SearchResult {
     pub entries: Vec<SRElem>,
 }
 
+/// Accepts Search keywords.
 #[allow(clippy::unused_async)]
 #[server]
 pub async fn update_query(aq: AddQuery) -> Result<(), ServerFnError> {
@@ -47,9 +48,7 @@ pub async fn update_query(aq: AddQuery) -> Result<(), ServerFnError> {
     }
 }
 
-// TODO weird leptos default naming convention
-// get_query get the result of the last query
-// ie get a list of images.
+/// Returns the result of the last query
 #[server]
 pub async fn get_query() -> Result<SearchResult, ServerFnError> {
     use crate::pages::IMAGE_PREFIX;

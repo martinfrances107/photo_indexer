@@ -14,6 +14,7 @@ use crate::component::settings::{
 use crate::pages::about::About;
 use crate::pages::search::view::Search;
 
+/// App level entry point.
 #[component]
 pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.

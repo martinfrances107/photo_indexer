@@ -57,7 +57,7 @@ cfg_if! {
       // Reject invalid DIRECTORY names ( within the container directory ).
       fn sanitize_url(&self, url: &str) -> Result<PathBuf, UrlSanitizationError> {
 
-            let list_dir = match url.strip_prefix(IMAGE_PREFIX) {
+            let mut list_dir = match url.strip_prefix(IMAGE_PREFIX) {
               Some(filename_suffix) => {
                   self.container_dir.join(filename_suffix)
               }
@@ -67,11 +67,16 @@ cfg_if! {
               }
           };
 
-          // TODO stop potential leak.
           // SECURITY: MUST confirm directory is a SUB directory of the container.
           if !list_dir.is_dir() {
-              // Reject suspicious input.
-              return Err(UrlSanitizationError::InvalidDirectory);
+            // Reject suspicious input.
+            return Err(UrlSanitizationError::InvalidDirectory);
+          }
+
+          // Clamp list_dir to only sub-folders of the container_dir.
+          // DO not want the use to input "../" and get access to something like  /etc/passwords/
+          if list_dir < self.container_dir {
+            list_dir = self.container_dir.clone()
           }
 
           Ok(list_dir)
