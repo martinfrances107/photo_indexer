@@ -163,7 +163,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                     </figcaption>
                   </figure>
                   <button
-                    class="absolute bg-slate-950/50 font-mono p-3 rounded-full right-4 text-white text-right top-4"
+                    class="absolute bg-slate-950/50 hover:bg-slate-950 font-mono p-3 rounded-full right-4 text-white text-right top-4"
                     on:click=move |_| {
                       metadata_action
                         .dispatch(AddMetaData {
@@ -175,7 +175,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                     "M"
                   </button>
                   <button
-                    class="absolute bg-slate-950/50 font-mono p-3 rounded-full right-4 text-white text-right top-20"
+                    class="absolute bg-slate-950/50 hover:bg-slate-950 font-mono p-3 rounded-full right-4 text-white text-right top-20"
                     on:click=move |_| {}
                     title="FULLSCREEN"
                   >
