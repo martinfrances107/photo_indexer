@@ -1,0 +1,5 @@
+Trying to reduce build time
+
+leptos 0.8.3 has smaller set of dependencies.
+Dropped crates tracing and tracing subscriber
+  Now using leptos::logging::log.

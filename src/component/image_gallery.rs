@@ -11,9 +11,9 @@ pub async fn add_meta_data(
     url: Option<String>,
 ) -> Result<Option<Vec<Field>>, ServerFnError> {
     use crate::pages::GLOBAL_STATE;
+    use leptos::logging::debug_warn;
 
-    use tracing::log;
-    log::debug!("server: entry metadata");
+    debug_warn!("server: entry metadata");
 
     match GLOBAL_STATE.lock() {
         Ok(mut state) => {

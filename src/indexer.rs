@@ -32,10 +32,10 @@ impl Index {
         P: AsRef<std::path::Path>,
     {
         use leptos::logging::error;
+        use leptos::logging::log;
         use std::time::SystemTime;
 
         use exif::Tag;
-        use tracing::info;
         use walkdir::DirEntry;
         use walkdir::WalkDir;
 
@@ -64,10 +64,10 @@ impl Index {
             })
             .collect::<Vec<DirEntry>>();
 
-        info!("Indexing complete: About to start server");
+        log!("Indexing complete: About to start server");
 
         let n_files = image_entries.len();
-        info!("{}", format!("n files {}", n_files));
+        log!("{}", format!("n files {}", n_files));
 
         // TODO Make multithreaded
         // Given a list of files spawn a new thread for each file loading.

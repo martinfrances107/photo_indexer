@@ -33,7 +33,7 @@ pub async fn add_list_url(url: String) -> Result<String, ServerFnError> {
     use crate::pages::GLOBAL_STATE;
     use crate::pages::IMAGE_PREFIX;
 
-    leptos::logging::log!("server: entry add_root_url");
+    leptos::logging::log!("server: entry add_list_url {url}");
     match GLOBAL_STATE.lock() {
         Ok(mut state) => {
             match state.set_list_dir_from_url(&url) {

@@ -35,21 +35,19 @@ crate-type = ["cdylib", "rlib"]
 # It must be replaced directly with this line :-
 exif = { git = "https://github.com/martinfrances107/exif-rs", branch = "PartialEq" }
 
-actix-files = { version = "0.6", optional = true }
+actix-files = { version = "0.6.6", optional = true }
 actix-web = { version = "4.11", optional = true, features = ["macros"] }
-clap = { version = "4.5.39", features = ["derive"] }
-cfg-if = "1"
+clap = { version = "4.5.41", features = ["derive"] }
+cfg-if = "1.0.1"
 console_error_panic_hook = "0.1"
-leptos = { version = "0.8.2"}
-leptos_actix = { version = "0.8.2", optional = true }
-leptos_meta = { version = "0.8.2" }
-leptos_router = { version = "0.8.2" }
-server_fn ={ version = "0.8.2"}
+leptos = { version = "0.8.3"}
+leptos_actix = { version = "0.8.3", optional = true }
+leptos_meta = { version = "0.8.3" }
+leptos_router = { version = "0.8.3" }
+server_fn ={ version = "0.8.3"}
 pretty_assertions = "1.4.1"
 seroost_lib = { git = "https://github.com/martinfrances107/seroost", branch = "main" }
-tracing = "~0.1"
-tracing-subscriber = "~0.3"
-walkdir = "2"
+walkdir = "2.5.0"
 wasm-bindgen = { version = "0.2.100", optional = true }
 serde = "1.0.219"
 
