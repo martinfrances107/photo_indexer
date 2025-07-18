@@ -156,7 +156,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                   <figure class="bg-slate-100 pt-2 rounded-t">
                     <img
                       alt=move || image_alt.clone()
-                      class="aspect-square inline mx-auto w-[274px] h-[160px]"
+                      class="block mx-auto w-[274px] h-[160px]"
                       src=url
                       title=move || img_title.clone()
                     />
