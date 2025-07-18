@@ -87,7 +87,6 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
         view! { <p>"SideBar..."</p> }
       }>
         // Sidebar
-
         <Show
           when=move || { metadata_resource.read().as_ref().is_some_and(|v| !v.is_empty()) }
           fallback=|| {
@@ -100,7 +99,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
             id="side-menu"
           >
             <button
-              class="font-medium pr-4 pt-2 text-right text-lg w-full"
+              class="font-medium pr-4 pt-2 text-right text-lg w-full text-neutral-400 hover:text-neutral-300"
               on:click=move |_| {
                 metadata_action.dispatch(AddMetaData { url: None });
               }
@@ -163,7 +162,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                     />
                     <figcaption>
                       <Show
-                        when=move || (show_description)
+                        when=move || show_description
                         fallback=|| {
                           view! {
                             <p class="break-words line-clamp-3 min-h-12 pt-4">"No description"</p>
