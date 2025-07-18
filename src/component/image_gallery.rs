@@ -134,6 +134,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
       flex
       flex-wrap
       gap-y-2
+      gap-x-2
       justify-start
       min-h-full
       rounded-lg
@@ -144,7 +145,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
         <Transition fallback=|| view! { <div></div> }>
           <For each=move || entries.get().into_iter() key=|e| e.key let:data>
 
-            <div class="hover:bg-slate-600 mx-2 my-4 relative rounded text-left w-[280px]">
+            <div class="hover:bg-slate-600 relative rounded text-left w-[280px]">
               {
                 let image_alt = data.description.replace('"', "");
                 let url = data.url.clone();
