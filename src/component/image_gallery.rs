@@ -1,5 +1,9 @@
 use exif::Field;
-use leptos::prelude::*;
+use leptos::prelude::component;
+use leptos::prelude::server;
+use leptos::prelude::IntoView;
+use leptos::prelude::ServerFnError;
+use leptos::prelude::Signal;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -48,7 +52,17 @@ pub struct SearchResult {
 
 #[component]
 pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
-    use leptos::prelude::*;
+    use leptos::prelude::ClassAttribute;
+    use leptos::prelude::ElementChild;
+    use leptos::prelude::For;
+    use leptos::prelude::Get;
+    use leptos::prelude::GlobalAttributes;
+    use leptos::prelude::OnAttribute;
+    use leptos::prelude::Read;
+    use leptos::prelude::Resource;
+    use leptos::prelude::ServerAction;
+    use leptos::prelude::Show;
+    use leptos::prelude::Transition;
     use leptos::view;
 
     let metadata_action: ServerAction<AddMetaData> = ServerAction::new();

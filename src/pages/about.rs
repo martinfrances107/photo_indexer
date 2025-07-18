@@ -1,5 +1,6 @@
 use leptos::component;
-use leptos::prelude::*;
+use leptos::prelude::ClassAttribute;
+use leptos::prelude::ElementChild;
 use leptos::view;
 use leptos::IntoView;
 

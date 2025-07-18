@@ -1,4 +1,5 @@
-use leptos::prelude::*;
+use leptos::prelude::server;
+use leptos::prelude::ServerFnError;
 use serde::Deserialize;
 use serde::Serialize;
 pub mod view;

@@ -1,4 +1,9 @@
-use leptos::prelude::*;
+use leptos::prelude::component;
+use leptos::prelude::provide_context;
+use leptos::prelude::signal;
+use leptos::prelude::view;
+use leptos::prelude::ElementChild;
+use leptos::prelude::IntoView;
 use leptos_meta::provide_meta_context;
 use leptos_meta::Link;
 use leptos_meta::Stylesheet;
@@ -43,6 +48,7 @@ pub fn App() -> impl IntoView {
 
 #[component]
 fn HomePage() -> impl IntoView {
+    use leptos::prelude::ClassAttribute;
     let sidebar_signal = signal::<SideBarState>(SideBarState::Close);
     provide_context(sidebar_signal);
 
@@ -64,6 +70,7 @@ fn HomePage() -> impl IntoView {
 
 #[component]
 fn AboutPage() -> impl IntoView {
+    use leptos::prelude::ClassAttribute;
     view! {
       // TODO work out wrapping for mobile nav is below the header
       // for desktop nav is right justified.
@@ -91,6 +98,7 @@ fn NotFound() -> impl IntoView {
     // to the server
     #[cfg(feature = "ssr")]
     {
+        use leptos::prelude::expect_context;
         // this can be done inline because it's synchronous
         // if it were async, we'd use a server function
         let resp = expect_context::<leptos_actix::ResponseOptions>();

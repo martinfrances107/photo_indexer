@@ -36,8 +36,13 @@ async fn main() -> std::io::Result<()> {
     use actix_files::Files;
     use actix_web::*;
     use leptos::config::get_configuration;
-    use leptos::prelude::*;
     use leptos::logging::error;
+    use leptos::prelude::view;
+    use leptos::prelude::AutoReload;
+    use leptos::prelude::ClassAttribute;
+    use leptos::prelude::ElementChild;
+    use leptos::prelude::GlobalAttributes;
+    use leptos::prelude::HydrationScripts;
     use leptos_actix::{generate_route_list, LeptosRoutes};
     use leptos_meta::MetaTags;
 
@@ -59,9 +64,7 @@ async fn main() -> std::io::Result<()> {
         None => match std::env::current_dir() {
             Ok(root_dir) => root_dir,
             Err(_) => {
-                error!(
-                    "Could not read the current working directory."
-                );
+                error!("Could not read the current working directory.");
                 return Err(Error::new(ErrorKind::Other, "No root directory supplied and could not read the current directory"));
             }
         },

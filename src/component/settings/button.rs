@@ -1,5 +1,5 @@
-use leptos::component;
-use leptos::prelude::*;
+use leptos::prelude::component;
+use leptos::prelude::IntoView;
 
 /// App level Button
 ///
@@ -8,7 +8,14 @@ use leptos::prelude::*;
 #[component]
 pub fn Button() -> impl IntoView {
     use crate::component::settings::SideBarState;
-    use leptos::prelude::*;
+    use leptos::prelude::use_context;
+    use leptos::prelude::view;
+    use leptos::prelude::ElementChild;
+    use leptos::prelude::GlobalAttributes;
+    use leptos::prelude::OnAttribute;
+    use leptos::prelude::ReadSignal;
+    use leptos::prelude::Update;
+    use leptos::prelude::WriteSignal;
 
     let (_, sidebar_state_setter) =
         use_context::<(ReadSignal<SideBarState>, WriteSignal<SideBarState>)>()
