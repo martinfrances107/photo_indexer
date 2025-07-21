@@ -40,11 +40,11 @@ actix-web = { version = "4.11", optional = true, features = ["macros"] }
 clap = { version = "4.5.41", features = ["derive"] }
 cfg-if = "1.0.1"
 console_error_panic_hook = "0.1"
-leptos = { version = "0.8.3"}
-leptos_actix = { version = "0.8.3", optional = true }
-leptos_meta = { version = "0.8.3" }
-leptos_router = { version = "0.8.3" }
-server_fn ={ version = "0.8.3"}
+leptos = { version = "0.8.5" }
+leptos_actix = { version = "0.8.5", optional = true }
+leptos_meta = { version = "0.8.5" }
+leptos_router = { version = "0.8.5" }
+server_fn = { version = "0.8.5" }
 pretty_assertions = "1.4.1"
 seroost_lib = { git = "https://github.com/martinfrances107/seroost", branch = "main" }
 walkdir = "2.5.0"
