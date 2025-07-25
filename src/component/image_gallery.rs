@@ -152,7 +152,6 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                 let button_url = data.url.clone();
                 let show_description = !data.description.is_empty();
                 let img_title = data.description.replace('"', "");
-                let caption_description = data.description.replace('"', "");
                 view! {
                   <figure class="bg-slate-100 pt-2 rounded-t">
                     <img
@@ -166,12 +165,12 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                         when=move || show_description
                         fallback=|| {
                           view! {
-                            <p class="break-words line-clamp-3 min-h-12 pt-4">"No description"</p>
+                            <p class="break-words line-clamp-3 min-h-12 ml-1 pt-4">"No description"</p>
                           }
                         }
                       >
-                        <p class="break-words line-clamp-3 min-h-12 pt-4">
-                          {caption_description.clone()}
+                        <p class="break-words line-clamp-3 min-h-12 ml-1 pt-4">
+                          {data.description.replace('"', "")}
                         </p>
                       </Show>
                     </figcaption>
