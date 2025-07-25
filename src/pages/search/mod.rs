@@ -10,7 +10,7 @@ use crate::pages::AddQuery;
 use crate::pages::GLOBAL_STATE;
 pub mod view;
 
-// Search Result Element
+/// Search Result Element
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct SRElem {
     pub description: String,
