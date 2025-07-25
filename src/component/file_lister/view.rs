@@ -12,7 +12,6 @@ use leptos::prelude::ElementChild;
 use leptos::prelude::For;
 use leptos::prelude::Get;
 use leptos::prelude::GlobalAttributes;
-use leptos::prelude::IntoMaybeErased;
 use leptos::prelude::NodeRef;
 use leptos::prelude::NodeRefAttribute;
 use leptos::prelude::OnAttribute;
@@ -32,6 +31,8 @@ use crate::pages::IMAGE_PREFIX;
 /// Form is used to set the indexer to a new value.
 #[component]
 pub fn Lister() -> impl IntoView {
+    // use leptos::prelude::IntoMaybeErased;
+
     let input_ref = NodeRef::<Input>::new();
 
     let list_url_action: ServerAction<AddListUrl> = ServerAction::new();

@@ -1,13 +1,6 @@
 use leptos::prelude::ServerFnError;
 use leptos::server;
 
-#[cfg(feature = "ssr")]
-use actix_web::get;
-#[cfg(feature = "ssr")]
-use actix_web::http::StatusCode;
-#[cfg(feature = "ssr")]
-use actix_web::HttpResponse;
-
 use serde::Deserialize;
 use serde::Serialize;
 

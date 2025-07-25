@@ -21,7 +21,6 @@ pub fn Search() -> impl IntoView {
     use leptos::prelude::ElementChild;
     use leptos::prelude::Get;
     use leptos::prelude::GlobalAttributes;
-    use leptos::prelude::IntoMaybeErased;
     use leptos::prelude::NodeRefAttribute;
     use leptos::prelude::OnAttribute;
     use leptos::prelude::Resource;
