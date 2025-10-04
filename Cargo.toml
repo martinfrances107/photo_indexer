@@ -13,7 +13,7 @@ repository = "https://github.com/martinfrances107/photo_indexer"
 version = "0.1.0"
 
 # MSRV this project makes use of LazyLock
-rust-version = "1.80"
+rust-version = "1.88"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
@@ -35,21 +35,21 @@ crate-type = ["cdylib", "rlib"]
 # It must be replaced directly with this line :-
 exif = { git = "https://github.com/martinfrances107/exif-rs", branch = "PartialEq" }
 
-actix-files = { version = "0.6.6", optional = true }
+actix-files = { version = "0.6.8", optional = true }
 actix-web = { version = "4.11", optional = true, features = ["macros"] }
-clap = { version = "4.5.41", features = ["derive"] }
-cfg-if = "1.0.1"
-console_error_panic_hook = "0.1"
-leptos = { version = "0.8.5" }
+clap = { version = "4.5.48", features = ["derive"] }
+cfg-if = "1.0.3"
+console_error_panic_hook = "0.1.7"
+leptos = { version = "0.8.10" }
 leptos_actix = { version = "0.8.5", optional = true }
 leptos_meta = { version = "0.8.5" }
-leptos_router = { version = "0.8.5" }
-server_fn = { version = "0.8.5" }
+leptos_router = { version = "0.8.8" }
+server_fn = { version = "0.8.7" }
 pretty_assertions = "1.4.1"
 seroost_lib = { git = "https://github.com/martinfrances107/seroost", branch = "main" }
 walkdir = "2.5.0"
-wasm-bindgen = { version = "0.2.100", optional = true }
-serde = "1.0.219"
+wasm-bindgen = { version = "0.2.104", optional = true }
+serde = "1.0.228"
 
 [features]
 csr = ["leptos/csr"]

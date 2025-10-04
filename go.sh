@@ -1,1 +1,1 @@
-RUST_BACTRACE=1 cargo-leptos  watch -v -- ../exif-samples/
+RUST_BACTRACE=all cargo-leptos  watch -v -- ../exif-samples/
