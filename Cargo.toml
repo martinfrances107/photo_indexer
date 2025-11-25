@@ -37,10 +37,10 @@ exif = { git = "https://github.com/martinfrances107/exif-rs", branch = "PartialE
 
 actix-files = { version = "0.6.8", optional = true }
 actix-web = { version = "4.11", optional = true, features = ["macros"] }
-clap = { version = "4.5.48", features = ["derive"] }
-cfg-if = "1.0.3"
+clap = { version = "4.5.53", features = ["derive"] }
+cfg-if = "1.0.4"
 console_error_panic_hook = "0.1.7"
-leptos = { version = "0.8.10" }
+leptos = { version = "0.8.14" }
 leptos_actix = { version = "0.8.5", optional = true }
 leptos_meta = { version = "0.8.5" }
 leptos_router = { version = "0.8.8" }
@@ -48,7 +48,7 @@ server_fn = { version = "0.8.7" }
 pretty_assertions = "1.4.1"
 seroost_lib = { git = "https://github.com/martinfrances107/seroost", branch = "main" }
 walkdir = "2.5.0"
-wasm-bindgen = { version = "0.2.104", optional = true }
+wasm-bindgen = { version = "0.2.105", optional = true }
 serde = "1.0.228"
 
 [features]
