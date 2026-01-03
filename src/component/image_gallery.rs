@@ -75,9 +75,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
 
             match a {
                 Ok(a) => a.unwrap_or_default(),
-                Err(_e) => {
-                    vec![]
-                }
+                Err(_e) => Vec::new(),
             }
         },
     );
@@ -147,11 +145,12 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
 
             <div class="hover:bg-slate-600 relative rounded text-left w-[280px]">
               {
-                let image_alt = data.description.replace('"', "");
+                let cleaned_description = data.description.replace('"', "");
+                let image_alt = cleaned_description.clone();
                 let url = data.url.clone();
                 let button_url = data.url.clone();
                 let show_description = !data.description.is_empty();
-                let img_title = data.description.replace('"', "");
+                let img_title = cleaned_description.clone();
                 view! {
                   <figure class="bg-slate-100 pt-2 rounded-t">
                     <img
@@ -170,7 +169,7 @@ pub fn ImageGallery(entries: Signal<Vec<SRElem>>) -> impl IntoView {
                         }
                       >
                         <p class="break-words line-clamp-3 min-h-12 ml-1 pt-4">
-                          {data.description.replace('"', "")}
+                          {cleaned_description.clone()}
                         </p>
                       </Show>
                     </figcaption>

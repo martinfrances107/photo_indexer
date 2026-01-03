@@ -58,7 +58,7 @@ pub async fn get_query() -> Result<SearchResult, ServerFnError> {
                     // Construct URL from filename
                     let url = path_rank
                         .0
-                        .strip_prefix(state.selected_dir.clone())
+                        .strip_prefix(&state.selected_dir)
                         .map_or_else(
                             |_| String::default(),
                             |filename| {

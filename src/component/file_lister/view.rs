@@ -49,11 +49,11 @@ pub fn Lister() -> impl IntoView {
         // Response failure.
         Some(Err(e)) => {
             error!("{e:#?}");
-            vec![]
+            Vec::new()
         }
         None => {
             log!("FileLister/Lister: DerivedSignal - list_url - asked for resource got None");
-            vec![]
+            Vec::new()
         }
     });
 
