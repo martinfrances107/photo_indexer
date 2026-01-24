@@ -12,8 +12,8 @@ license = "MIT"
 repository = "https://github.com/martinfrances107/photo_indexer"
 version = "0.1.0"
 
-# MSRV this project makes use of LazyLock
-rust-version = "1.88"
+# MSRV this project makes use of LazyLock ( 1.88 )
+rust-version = "1.93"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
