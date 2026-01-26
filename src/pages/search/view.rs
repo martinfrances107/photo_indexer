@@ -53,9 +53,7 @@ pub fn Search() -> impl IntoView {
     // but I need to find a way of making a async resource.
     let entries = Signal::derive(move || match images.get() {
         Some(Ok(SearchResult { entries, .. })) => entries,
-        _ => {
-            Vec::new()
-        }
+        _ => Vec::new(),
     });
 
     let count_string = Signal::derive(move || {
